@@ -63,6 +63,12 @@ public abstract class OneNextConfigurationSlide implements ConfigurationSlide
     public void setJob(Job theJob)
     {
         job = theJob;
+        update();
+    }
+
+    public void update()
+    {
+
     }
 
     @Override

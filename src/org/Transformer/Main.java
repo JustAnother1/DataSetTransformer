@@ -19,10 +19,6 @@ package org.Transformer;
 
 import java.io.File;
 
-import org.Transformer.dataset.DataFilter;
-import org.Transformer.dataset.DataSet;
-import org.Transformer.exporter.Exporter;
-import org.Transformer.importer.Importer;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Layout;
@@ -43,64 +39,6 @@ public class Main
      */
     public Main()
     {
-    }
-
-    public static void printDataSetArray(DataSet[] theData)
-    {
-        System.out.println("Data Set Entries:");
-        for(int k = 0; k < theData.length; k++)
-        {
-            DataSet curSet = theData[k];
-            if(null != curSet)
-            {
-                System.out.println("Entry " + k + " has " + theData[k].getNumberOfAtoms() + " Data Atoms !");
-                String[] names = theData[k].getNamesOfAllDataAtoms();
-                // System.out.println("Data Atoms : ");
-                for (int h = 0; h < names.length; h++)
-                {
-                    System.out.println("(" + names[h] + " : " + theData[k].getDataAtom(names[h]) + ")");
-                }
-            }
-            else
-            {
-                System.out.println("DataSet number " + k + " is null !");
-            }
-        }
-    }
-
-    public static void executeJob(Job curJob)
-    {
-        // Import Data using Import Filter
-            Importer imp = curJob.getImporter();
-            imp.importData(curJob.getImportSelector());
-            if(false == imp.wasSuccessfull())
-            {
-                System.err.println("Import Failed");
-                return;
-            }
-            // Importing worked !
-        // Get Data Set from Importer
-            DataSet theData[] = imp.getTheData();
-
-            printDataSetArray(theData);
-
-        // Filter the Data
-            DataFilter filter = curJob.getDataFilter();
-            if(null != filter)
-            {
-                theData = filter.applyFilterTo(theData);
-            }
-
-            printDataSetArray(theData);
-
-        // export
-            Exporter exp = curJob.getExporter();
-            exp.export(theData, curJob.getExportStyle());
-            if(false == exp.wasSuccessfull())
-            {
-                System.err.println("Export Failed");
-                return;
-            }
     }
 
     public static void execute(String Parameter)
@@ -124,7 +62,8 @@ public class Main
         for(int i = 0; i < jobs.length; i++)
         {
             Job curJob = jobs[i];
-            executeJob(curJob);
+            Executor exec = new Executor();
+            exec.executeJob(curJob);
         }
     }
 
@@ -143,7 +82,7 @@ public class Main
         {
             // Fall Back - No log4j.xml to configure Logging
             rootlog = Logger.getRootLogger();
-            rootlog.setLevel(Level.ERROR);
+            rootlog.setLevel(Level.DEBUG); // TODO ERROR
             final Layout layout = new SimpleLayout();
             final Appender app = new ConsoleAppender(layout);
             rootlog.addAppender(app);
@@ -151,7 +90,16 @@ public class Main
 
         if(0 < args.length)
         {
-            execute(args[0]);
+            if(false == "-edit".equals(args[0]))
+            {
+                execute(args[0]);
+            }
+            else
+            {
+                Job job[] = Job.readFromFile(new File(args[1]));
+                final BaseWindow ConfigCreator = new BaseWindow(job[0]);
+                javax.swing.SwingUtilities.invokeLater(ConfigCreator);
+            }
         }
         else
         {

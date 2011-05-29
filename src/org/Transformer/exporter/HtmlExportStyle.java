@@ -31,6 +31,7 @@ import javax.swing.JTextField;
 
 import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
+import org.apache.log4j.Logger;
 import org.jdom.CDATA;
 import org.jdom.Element;
 
@@ -40,6 +41,7 @@ import org.jdom.Element;
  */
 public class HtmlExportStyle extends ExportStyle
 {
+    private final Logger log = Logger.getLogger(this.getClass().getName());
     private String GlobalStyleDefinition = "";
     private String RowStyleDefinition = "";
     private JTextField glob;
@@ -61,7 +63,7 @@ public class HtmlExportStyle extends ExportStyle
             if(0 == i%2)
             {
                 // Text
-                out.write(parts[i].getBytes()); // Todo charset ?
+                out.write(parts[i].getBytes()); // TODO charset ?
             }
             else
             {
@@ -72,7 +74,7 @@ public class HtmlExportStyle extends ExportStyle
                     System.err.println("Could not resolve Variable ! (" + parts[i] + ") !");
                     return false;
                 }
-                out.write(variable.toString().getBytes());// Todo charset ?
+                out.write(variable.toString().getBytes());// TODO charset ?
             }
         }
         return true;
@@ -82,9 +84,14 @@ public class HtmlExportStyle extends ExportStyle
     public boolean formatTheData(DataSet[] theData, OutputStream out) throws IOException
     {
         String usedStyle = GlobalStyleDefinition;
+        log.debug("Using Global Style : " + usedStyle);
         String[] globalParts = usedStyle.split("%", 3);
+        for(int i = 0; i < globalParts.length; i++)
+        {
+            log.debug("globalParts[" + i + "] = " + globalParts[i]);
+        }
         // Global Prefix
-        out.write(globalParts[0].getBytes()); // Todo charset ?
+        out.write(globalParts[0].getBytes()); // TODO charset ?
         if(globalParts.length > 1)
         {
             if(false == "ROW".equalsIgnoreCase(globalParts[1]))
@@ -105,7 +112,7 @@ public class HtmlExportStyle extends ExportStyle
         if(globalParts.length > 2)
         {
             // Global Postfix
-            out.write(globalParts[2].getBytes()); // Todo charset ?
+            out.write(globalParts[2].getBytes()); // TODO charset ?
         }
         return true;
     }

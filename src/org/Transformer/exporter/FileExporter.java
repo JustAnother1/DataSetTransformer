@@ -58,7 +58,6 @@ public class FileExporter extends Exporter
             out = new FileOutputStream(target);
             if(true == expStyle.formatTheData(theData, out))
             {
-
                 out.flush();
                 ExportSuccessfullyExecuted = true;
                 System.out.println("Export successfully !");

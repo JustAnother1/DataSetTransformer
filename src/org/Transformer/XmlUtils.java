@@ -47,15 +47,15 @@ public class XmlUtils
         String curContent = "";
         boolean reachedEnd = false;
         int i = 0;
-        System.out.println("Scanning Element : " + child.getName());
+        // System.out.println("Scanning Element : " + child.getName());
         do
         {
             Element curChild = child.getChild("id" + i);
             if(null != curChild)
             {
-                System.out.println("Found id" + i + " !");
+                // System.out.println("Found id" + i + " !");
                 curContent = curChild.getText();
-                System.out.println("Found Content : " + curContent);
+                // System.out.println("Found Content : " + curContent);
                 if(curContent.length() > 0)
                 {
                     res.add(curContent);
@@ -63,7 +63,7 @@ public class XmlUtils
             }
             else
             {
-                System.out.println("Could not find id" + i + " !");
+                // System.out.println("Could not find id" + i + " !");
                 curContent = "";
                 reachedEnd = true;
             }

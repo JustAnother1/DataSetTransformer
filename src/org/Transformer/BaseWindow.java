@@ -64,9 +64,10 @@ public class BaseWindow implements ActionListener, Runnable
     private ImageIcon finishIcon;
     private JPanel slidePanel;
     private CardLayout slideLayout;
-    private final CardStack stack;
+    private CardStack stack;
     private String curLocale;
     private Job theJob;
+
     /**
      * The String-based action command for the 'Next' button.
      */
@@ -81,12 +82,22 @@ public class BaseWindow implements ActionListener, Runnable
     public static final String CANCEL_BUTTON_ACTION_COMMAND = "CancelButtonActionCommand";
 
     /**
-     * @param fs
      *
      */
     public BaseWindow()
     {
         theJob = new Job();
+        init();
+    }
+
+    public BaseWindow(Job job)
+    {
+        theJob = job;
+        init();
+    }
+
+    private void init()
+    {
         curLocale = getLocale();
         slideHistory = new Vector<ConfigurationSlide>();
         dialog =  new JFrame();
@@ -111,7 +122,7 @@ public class BaseWindow implements ActionListener, Runnable
         final Image logo = new ImageIcon("logo.gif").getImage();
         if(null == logo)
         {
-            System.err.println("Could not read Logo !");
+            log.error("Could not read Logo !");
         }
         dialog.setIconImage(logo);
 
@@ -175,16 +186,16 @@ public class BaseWindow implements ActionListener, Runnable
     {
         this.msg = newMsg;
         dialog.setTitle(msg.tr("CreateConfiguration"));
-        backButton.setText(msg.tr("ccBackButton"));
-        nextButton.setText(msg.tr("ccNextButton"));
-        cancelButton.setText(msg.tr("ccCancelButton"));
+        backButton.setText(msg.tr("Back"));
+        nextButton.setText(msg.tr("Next"));
+        cancelButton.setText(msg.tr("Cancel"));
         if(false == curSlide.hasNextSlide())
         {
-            nextButton.setText(msg.tr("ccFinishButton"));
+            nextButton.setText(msg.tr("Finish"));
         }
         else
         {
-            nextButton.setText(msg.tr("ccNextButton"));
+            nextButton.setText(msg.tr("Next"));
         }
         stack.updateLanguage(msg);
     }
@@ -203,9 +214,9 @@ public class BaseWindow implements ActionListener, Runnable
         backButton.setActionCommand(BACK_BUTTON_ACTION_COMMAND);
         nextButton.setActionCommand(NEXT_BUTTON_ACTION_COMMAND);
         cancelButton.setActionCommand(CANCEL_BUTTON_ACTION_COMMAND);
-        backButton.setText(msg.tr("ccBackButton"));
-        nextButton.setText(msg.tr("ccNextButton"));
-        cancelButton.setText(msg.tr("ccCancelButton"));
+        backButton.setText(msg.tr("Back"));
+        nextButton.setText(msg.tr("Next"));
+        cancelButton.setText(msg.tr("Cancel"));
 
         backButton.addActionListener(this);
         nextButton.addActionListener(this);
@@ -243,12 +254,12 @@ public class BaseWindow implements ActionListener, Runnable
         if(false == curSlide.hasNextSlide())
         {
             nextButton.setIcon(finishIcon);
-            nextButton.setText(msg.tr("ccFinishButton"));
+            nextButton.setText(msg.tr("Finish"));
         }
         else
         {
             nextButton.setIcon(nextIcon);
-            nextButton.setText(msg.tr("ccNextButton"));
+            nextButton.setText(msg.tr("Next"));
         }
         // Back Enable / Disabled on first Slide
         if(1 > slideHistory.size())
@@ -283,7 +294,7 @@ public class BaseWindow implements ActionListener, Runnable
         }
         else
         {
-            System.err.println(e.getActionCommand());
+            log.error(e.getActionCommand());
         }
     }
 
@@ -306,6 +317,7 @@ public class BaseWindow implements ActionListener, Runnable
         if(null != next)
         {
             slideHistory.add(curSlide);
+            next.setJob(theJob);
             setCurrentPanel(next);
         }
         else
@@ -338,6 +350,7 @@ public class BaseWindow implements ActionListener, Runnable
         }
         if(null != last)
         {
+            last.setJob(theJob);
             setCurrentPanel(last);
         }
     }

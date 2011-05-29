@@ -66,6 +66,11 @@ public abstract class SelectOneFromManySlide extends OneNextConfigurationSlide i
         return choices.get(selectedSlide);
     }
 
+    protected void setSelectedChoice(String Name)
+    {
+        selectedSlide = Name;
+    }
+
     protected void closeCurrentSlide()
     {
         ConfigurationSlide curSlide = getSelectedChoice();
@@ -92,7 +97,6 @@ public abstract class SelectOneFromManySlide extends OneNextConfigurationSlide i
             choiceArray = g.toArray(new String[1]);
             JComboBox dropDown = new JComboBox(choiceArray);
             dropDown.setSelectedIndex(0);
-            selectedSlide = choiceArray[0];
             dropDown.addActionListener(this);
             slide.add(dropDown);
         }

@@ -1,3 +1,17 @@
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 2
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, see <http://www.gnu.org/licenses/>
+ *
+ */
 /**
  *
  */
@@ -9,21 +23,21 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 import org.Transformer.BaseWindow;
+import org.Transformer.Executor;
+import org.Transformer.IntReporter;
 import org.Transformer.Job;
-import org.Transformer.dataset.DataFilter;
-import org.Transformer.dataset.DataSet;
-import org.Transformer.exporter.Exporter;
-import org.Transformer.importer.Importer;
 
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public class JobExecutorTask extends SwingWorker<Integer, Integer>
+public class JobExecutorTask extends SwingWorker<Integer, Integer> implements IntReporter
 {
+
     private JProgressBar pb;
     private Job job;
     private BaseWindow baseWindow;
+    private int curProgress = 0;
 
     /**
      * @param baseWindow
@@ -39,51 +53,10 @@ public class JobExecutorTask extends SwingWorker<Integer, Integer>
     @Override
     protected Integer doInBackground() throws Exception
     {
-        publish(new Integer(0));
-        if(true == isCancelled()){return 0;}
-        Importer imp = job.getImporter();
-        publish(new Integer(1));
-        if(true == isCancelled()){return 1;}
-        // Import Data using Import Filter
-        imp.importData(job.getImportSelector());
-        publish(new Integer(20));
-        if(true == isCancelled()){return 20;}
-        if(false == imp.wasSuccessfull())
-        {
-            System.err.println("Import Failed");
-            return 21;
-        }
-        publish(new Integer(33));
-        if(true == isCancelled()){return 33;}
-        // Importing worked !
-        // Get Data Set from Importer
-        DataSet theData[] = imp.getTheData();
-        publish(new Integer(35));
-        if(true == isCancelled()){return 35;}
-
-        DataFilter filter = job.getDataFilter();
-        if(null != filter)
-        {
-            theData = filter.applyFilterTo(theData);
-        }
-
-        publish(new Integer(66));
-        if(true == isCancelled()){return 66;}
-
-        // export
-        Exporter exp = job.getExporter();
-        publish(new Integer(68));
-        if(true == isCancelled()){return 68;}
-        exp.export(theData, job.getExportStyle());
-        publish(new Integer(98));
-        if(true == isCancelled()){return 98;}
-        if(false == exp.wasSuccessfull())
-        {
-            System.err.println("Export Failed");
-            return 99;
-        }
-        publish(new Integer(100));
-        return 100;
+        Executor exec = new Executor();
+        exec.addProgressReporter(this);
+        exec.executeJob(job);
+        return curProgress;
     }
 
     @Override
@@ -97,6 +70,13 @@ public class JobExecutorTask extends SwingWorker<Integer, Integer>
     protected void done()
     {
         baseWindow.nextButtonPressed();
+    }
+
+    @Override
+    public void reportProgress(int progress)
+    {
+        curProgress = progress;
+        publish(new Integer(progress));
     }
 
 

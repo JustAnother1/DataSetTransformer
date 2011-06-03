@@ -33,7 +33,6 @@ import org.Transformer.Job;
  */
 public class JobExecutorTask extends SwingWorker<Integer, Integer> implements IntReporter
 {
-
     private JProgressBar pb;
     private Job job;
     private BaseWindow baseWindow;

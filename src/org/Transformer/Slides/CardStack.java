@@ -23,7 +23,8 @@ import java.util.Vector;
 import org.Transformer.BaseWindow;
 import org.Transformer.Translator;
 
-/**
+/** The Card Stack holds all the Windows that the Wizard consists of.
+ *
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
@@ -34,13 +35,11 @@ public class CardStack
     private Container displayArea;
     private OneNextConfigurationSlide lastSlide;
 
-    /**
-     * @param fs
-     * @param msg
-     * @param curLocale
-     * @param baseWindow
-     * @param displayArea
-     *
+    /** Construct the Card Stack.
+     * @param displayArea The Component Owning the window Area that the Slides will be drawn into.
+     * @param msg  Translator for I18n Message output
+     * @param baseWindow Window that contains the displayarea.
+     * @param curLocale currently active Locale.
      */
     public CardStack(final Container displayArea,
                      final Translator msg,

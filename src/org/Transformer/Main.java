@@ -27,7 +27,9 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
 import org.apache.log4j.xml.DOMConfigurator;
 
-/**
+/** Main Class of DataSet Transformer Project.
+ * parses the command line and then starts Job Processing or the Wizard(GUI).
+ *
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
@@ -41,6 +43,10 @@ public class Main
     {
     }
 
+    /** Executes the Jobs specified in the Parameter.
+     *
+     * @param Parameter Filename of File containing Job definitions
+     */
     public static void execute(String Parameter)
     {
         Job[] jobs = null;
@@ -67,8 +73,8 @@ public class Main
         }
     }
 
-    /**
-     * @param args
+    /** Main function of DataSet Transformer Project.
+     * @param args command line parameters
      */
     public static void main(String[] args)
     {

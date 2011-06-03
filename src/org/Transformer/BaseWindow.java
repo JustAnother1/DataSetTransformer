@@ -46,7 +46,8 @@ import org.Transformer.Slides.CardStack;
 import org.Transformer.Slides.ConfigurationSlide;
 import org.apache.log4j.Logger;
 
-/**
+/** Main Class of Configuration Wizard (GUI).
+ *
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
@@ -68,21 +69,17 @@ public class BaseWindow implements ActionListener, Runnable
     private String curLocale;
     private Job theJob;
 
-    /**
-     * The String-based action command for the 'Next' button.
+    /** The String-based action command for the 'Next' button.
      */
     public static final String NEXT_BUTTON_ACTION_COMMAND = "NextButtonActionCommand";
-    /**
-     * The String-based action command for the 'Back' button.
+    /** The String-based action command for the 'Back' button.
      */
     public static final String BACK_BUTTON_ACTION_COMMAND = "BackButtonActionCommand";
-    /**
-     * The String-based action command for the 'Cancel' button.
+    /** The String-based action command for the 'Cancel' button.
      */
     public static final String CANCEL_BUTTON_ACTION_COMMAND = "CancelButtonActionCommand";
 
-    /**
-     *
+    /** Construct Wizard with new empty Job.
      */
     public BaseWindow()
     {
@@ -90,6 +87,10 @@ public class BaseWindow implements ActionListener, Runnable
         init();
     }
 
+    /** Construct Wizard with the provided Job.
+     *
+     * @param job The Job that shall be loaded into the Wizard.
+     */
     public BaseWindow(Job job)
     {
         theJob = job;
@@ -126,7 +127,6 @@ public class BaseWindow implements ActionListener, Runnable
         }
         dialog.setIconImage(logo);
 
-
         slidePanel = new JPanel();
         slideLayout = new CardLayout();
 
@@ -134,7 +134,6 @@ public class BaseWindow implements ActionListener, Runnable
         slidePanel.setOpaque(true);
         slidePanel.setBackground(Color.RED);
         slidePanel.setMinimumSize(new Dimension(300, 300));
-
 
         stack = new CardStack(slidePanel, msg, this, curLocale);
         curSlide = stack.getFirstSlide();
@@ -179,8 +178,6 @@ public class BaseWindow implements ActionListener, Runnable
         }
         return locstr;
     }
-
-
 
     public final void updateLanguage(final Translator newMsg)
     {
@@ -237,7 +234,6 @@ public class BaseWindow implements ActionListener, Runnable
         buttonPanel.setOpaque(true);
         return buttonPanel;
     }
-
 
     public final void run()
     {

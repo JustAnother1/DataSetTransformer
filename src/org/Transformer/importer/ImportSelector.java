@@ -21,7 +21,7 @@ package org.Transformer.importer;
 import java.io.InputStream;
 
 import org.Transformer.Job;
-import org.Transformer.XmlSerialize;
+import org.Transformer.JobSerialize;
 import org.Transformer.Slides.ConfigurationSlide;
 import org.Transformer.dataset.DataSet;
 
@@ -29,7 +29,7 @@ import org.Transformer.dataset.DataSet;
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public abstract class ImportSelector implements XmlSerialize, ConfigurationSlide
+public abstract class ImportSelector implements JobSerialize, ConfigurationSlide
 {
     protected DataSet[] data = new DataSet[1];
 

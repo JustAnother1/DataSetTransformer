@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,7 +32,6 @@ import javax.swing.JTextField;
 
 import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -98,19 +98,15 @@ public class FileExporter extends Exporter
 
 
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element src = new org.jdom.Element("target");
-        src.setText(target);
-        res.addContent(src);
-        return res;
+        return "target = " + target;
     }
 
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
-        target = cfg.getChildText("target");
+        target = cfg.get("target");
     }
 
     @Override

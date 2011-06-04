@@ -20,6 +20,7 @@ package org.Transformer.importer;
 
 import java.awt.Component;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -28,11 +29,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import org.Transformer.JobUtils;
 import org.Transformer.Tool;
 import org.Transformer.Translator;
-import org.Transformer.XmlUtils;
 import org.Transformer.dataset.DataSet;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -98,21 +98,17 @@ public class TreeImportSelector extends ImportSelector
     }
 
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element pos = XmlUtils.getElementFor(Mapping_Position, "MappingPosition");
-        res.addContent(pos);
-        org.jdom.Element name = XmlUtils.getElementFor(Mapping_Name, "MappingName");
-        res.addContent(name);
-        return res;
+        return "" + JobUtils.getConfigTextFor(Mapping_Position, "Mapping_Position") + "\n"
+                  + JobUtils.getConfigTextFor(Mapping_Name, "Mapping_Name");
     }
 
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
-        Mapping_Position = XmlUtils.getStringArrayFrom(cfg.getChild("MappingPosition"));
-        Mapping_Name = XmlUtils.getStringArrayFrom(cfg.getChild("MappingName"));
+        Mapping_Position = JobUtils.getStringArrayFromSettingMap(cfg, "Mapping_Position");
+        Mapping_Name = JobUtils.getStringArrayFromSettingMap(cfg, "Mapping_Name");
     }
 
     @Override

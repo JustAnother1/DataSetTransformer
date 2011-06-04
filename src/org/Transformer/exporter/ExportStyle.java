@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.Transformer.Job;
-import org.Transformer.XmlSerialize;
+import org.Transformer.JobSerialize;
 import org.Transformer.Slides.ConfigurationSlide;
 import org.Transformer.dataset.DataSet;
 
@@ -30,7 +30,7 @@ import org.Transformer.dataset.DataSet;
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public abstract class ExportStyle implements XmlSerialize, ConfigurationSlide
+public abstract class ExportStyle implements JobSerialize, ConfigurationSlide
 {
     public abstract boolean formatTheData(DataSet[] theData, OutputStream out) throws IOException;
 

@@ -21,6 +21,7 @@ package org.Transformer.exporter;
 import java.awt.Component;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -32,8 +33,6 @@ import javax.swing.JTextField;
 import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
 import org.apache.log4j.Logger;
-import org.jdom.CDATA;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -130,25 +129,17 @@ public class HtmlExportStyle extends ExportStyle
         }
     }
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element row = new org.jdom.Element("RowStyleDefinition");
-        CDATA rowdata = new CDATA(RowStyleDefinition);
-        row.addContent(rowdata);
-        res.addContent(row);
-        org.jdom.Element glo = new org.jdom.Element("GlobalStyleDefinition");
-        CDATA glodata = new CDATA(GlobalStyleDefinition);
-        glo.addContent(glodata);
-        res.addContent(glo);
-        return res;
+        return "GlobalStyleDefinition = " + GlobalStyleDefinition + "\n"
+               + "RowStyleDefinition = " + RowStyleDefinition;
     }
 
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
-        GlobalStyleDefinition = cfg.getChildText("GlobalStyleDefinition");
-        RowStyleDefinition = cfg.getChildText("RowStyleDefinition");
+        GlobalStyleDefinition = cfg.get("GlobalStyleDefinition");
+        RowStyleDefinition = cfg.get("RowStyleDefinition");
     }
 
     @Override

@@ -19,6 +19,7 @@
 package org.Transformer.dataset;
 
 import java.awt.Component;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -28,7 +29,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.Transformer.Translator;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -83,23 +83,18 @@ public class RegExpFilter extends DataFilter
 
 
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element regexp = new org.jdom.Element("RegularExpression");
-        regexp.setText(RegularExpression);
-        res.addContent(regexp);
-        org.jdom.Element name = new org.jdom.Element("NameOfAtom");
-        name.setText(NameOfAtom);
-        res.addContent(name);
-        return res;
+        return "NameOfAtom = " + NameOfAtom + "\n"
+               + "RegularExpression = " + RegularExpression;
     }
 
+
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
-        RegularExpression = cfg.getChildText("RegularExpression");
-        NameOfAtom = cfg.getChildText("NameOfAtom");
+        NameOfAtom = cfg.get("NameOfAtom");
+        RegularExpression = cfg.get("RegularExpression");
     }
 
     @Override

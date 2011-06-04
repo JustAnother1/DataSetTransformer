@@ -1,3 +1,17 @@
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 2
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, see <http://www.gnu.org/licenses/>
+ *
+ */
 /**
  *
  */
@@ -8,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,11 +31,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.Transformer.Translator;
-import org.jdom.Element;
 
 /**
- * @author lars
- *
+ * @author Lars P&ouml;tter
+ * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
 public class FileImporter extends Importer
 {
@@ -38,22 +52,9 @@ public class FileImporter extends Importer
      * @see org.Transformer.XmlSerialize#getConfig()
      */
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element src = new org.jdom.Element("FileName");
-        src.setText(FileName);
-        res.addContent(src);
-        return res;
-    }
-
-    /* (non-Javadoc)
-     * @see org.Transformer.XmlSerialize#setConfig(org.jdom.Element)
-     */
-    @Override
-    public void setConfig(Element cfg)
-    {
-        FileName = cfg.getChildText("FileName");
+        return "FileName = " + FileName;
     }
 
     /* (non-Javadoc)
@@ -159,6 +160,12 @@ public class FileImporter extends Importer
             e.printStackTrace();
             ImportSuccessfullyCompleted = false;
         }
+    }
+
+    @Override
+    public void setConfig(Map<String, String> cfg)
+    {
+        FileName = cfg.get("FileName");
     }
 
 }

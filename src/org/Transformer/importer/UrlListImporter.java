@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -33,7 +34,6 @@ import javax.swing.JTextField;
 
 import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -147,19 +147,15 @@ public class UrlListImporter extends Importer
 
 
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element src = new org.jdom.Element("source");
-        src.setText(source);
-        res.addContent(src);
-        return res;
+        return "source = " + source;
     }
 
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
-        source = cfg.getChildText("source");
+        source = cfg.get("source");
     }
 
     @Override

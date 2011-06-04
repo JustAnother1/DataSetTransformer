@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -35,7 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.Transformer.Translator;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -161,19 +161,15 @@ public class UrlImporter extends Importer
     }
 
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element src = new org.jdom.Element("SourceURL");
-        src.setText(SourceUrl);
-        res.addContent(src);
-        return res;
+        return "SourceUrl = " + SourceUrl;
     }
 
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
-        SourceUrl = cfg.getChildText("SourceURL");
+        SourceUrl = cfg.get("SourceUrl");
     }
 
     @Override

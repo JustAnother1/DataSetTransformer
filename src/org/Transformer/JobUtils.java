@@ -13,53 +13,39 @@
  *
  */
 
-/**
- *
- */
-package org.Transformer.dataset;
+package org.Transformer;
 
-import org.Transformer.Job;
-import org.Transformer.JobSerialize;
-import org.Transformer.Slides.ConfigurationSlide;
-
+import java.util.Map;
+import java.util.Vector;
 
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public abstract class DataFilter implements JobSerialize, ConfigurationSlide
+public class JobUtils
 {
 
-    /**
-     *
-     */
-    public DataFilter()
+    public static String getConfigTextFor(String[] arr, String Name)
     {
+        String res = "";
+        for(int i = 0; i < arr.length; i++)
+        {
+            res = res + Name + "_" + i + " = " + arr[i] + "\n";
+        }
+        return res;
     }
 
-    public abstract DataSet[] applyFilterTo(DataSet theData[]);
-
-    @Override
-    public ConfigurationSlide getNextSlide()
+    public static String[] getStringArrayFromSettingMap(Map<String, String> cfg, String Name)
     {
-        return null;
+        Vector<String> vec = new Vector<String>();
+        String val = cfg.get(Name + "_0");
+        int i = 0;
+        while(val != null)
+        {
+            vec.add(val);
+            i++;
+            val = cfg.get(Name + "_" + i);
+        }
+        return vec.toArray(new String[1]);
     }
-
-    @Override
-    public boolean hasNextSlide()
-    {
-        return false;
-    }
-
-    @Override
-    public void setJob(Job theJob)
-    {
-    }
-
-    @Override
-    public Job getJob()
-    {
-        return null;
-    }
-
 }

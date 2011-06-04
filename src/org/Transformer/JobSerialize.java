@@ -15,13 +15,15 @@
 
 package org.Transformer;
 
+import java.util.Map;
+
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public interface XmlSerialize
+public interface JobSerialize
 {
-    org.jdom.Element getConfig();
-    void setConfig(org.jdom.Element cfg);
+    String getConfig();
+    void setConfig(Map<String,String> cfg);
     String getName();
 }

@@ -19,7 +19,7 @@
 package org.Transformer.exporter;
 
 import org.Transformer.Job;
-import org.Transformer.XmlSerialize;
+import org.Transformer.JobSerialize;
 import org.Transformer.Slides.ConfigurationSlide;
 import org.Transformer.dataset.DataSet;
 
@@ -27,7 +27,7 @@ import org.Transformer.dataset.DataSet;
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public abstract class Exporter implements XmlSerialize, ConfigurationSlide
+public abstract class Exporter implements JobSerialize, ConfigurationSlide
 {
     public abstract void export(DataSet[] theData, ExportStyle expStyle);
     public abstract boolean wasSuccessfull();

@@ -19,6 +19,7 @@
 package org.Transformer.dataset;
 
 import java.awt.Component;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,10 +28,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.Transformer.JobUtils;
 import org.Transformer.Tool;
 import org.Transformer.Translator;
-import org.Transformer.XmlUtils;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -141,25 +141,19 @@ public class ConCatFilter extends DataFilter
     }
 
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element eql = XmlUtils.getElementFor(FieldThatMustBeEqual, "FieldThatMustBeEqual");
-        res.addContent(eql);
-        org.jdom.Element conc = XmlUtils.getElementFor(FieldsThatWillBeConCatenated, "FieldsThatWillBeConCatenated");
-        res.addContent(conc);
-        org.jdom.Element seperator = new org.jdom.Element("ConCatSeperator");
-        seperator.setText(ConCatSeperator);
-        res.addContent(seperator);
-        return res;
+        return "ConCatSeperator = " + ConCatSeperator + "\n"
+               + JobUtils.getConfigTextFor(FieldThatMustBeEqual, "FieldThatMustBeEqual")
+               + JobUtils.getConfigTextFor(FieldsThatWillBeConCatenated, "FieldsThatWillBeConCatenated");
     }
 
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
-        FieldThatMustBeEqual = XmlUtils.getStringArrayFrom(cfg.getChild("FieldThatMustBeEqual"));
-        FieldsThatWillBeConCatenated = XmlUtils.getStringArrayFrom(cfg.getChild("FieldsThatWillBeConCatenated"));
-        ConCatSeperator = cfg.getChildText("ConCatSeperator");
+        ConCatSeperator = cfg.get("ConCatSeperator");
+        FieldThatMustBeEqual = JobUtils.getStringArrayFromSettingMap(cfg, "FieldThatMustBeEqual");
+        FieldsThatWillBeConCatenated = JobUtils.getStringArrayFromSettingMap(cfg, "FieldsThatWillBeConCatenated");
     }
 
     @Override

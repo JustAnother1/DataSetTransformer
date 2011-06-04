@@ -21,6 +21,7 @@ package org.Transformer.exporter;
 import java.awt.Component;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,11 +30,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.Transformer.JobUtils;
 import org.Transformer.Tool;
 import org.Transformer.Translator;
-import org.Transformer.XmlUtils;
 import org.Transformer.dataset.DataSet;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -105,22 +105,17 @@ public class CsvExportStyle extends ExportStyle
 
 
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        org.jdom.Element pos = XmlUtils.getElementFor(mapping, "Mapping");
-        res.addContent(pos);
-        org.jdom.Element src = new org.jdom.Element("seperator");
-        src.setText(seperator);
-        res.addContent(src);
-        return res;
+        return "seperator = " + seperator + "\n"
+               + JobUtils.getConfigTextFor(mapping, "mapping");
     }
 
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
-        mapping = XmlUtils.getStringArrayFrom(cfg.getChild("Mapping"));
-        seperator = cfg.getChildText("seperator");
+        mapping = JobUtils.getStringArrayFromSettingMap(cfg, "mapping");
+        seperator = cfg.get("seperator");
     }
 
     @Override

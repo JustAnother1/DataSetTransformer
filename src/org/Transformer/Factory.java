@@ -33,7 +33,6 @@ import org.Transformer.importer.PagedUrlImporter;
 import org.Transformer.importer.TreeImportSelector;
 import org.Transformer.importer.UrlImporter;
 import org.Transformer.importer.UrlListImporter;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -52,9 +51,8 @@ public class Factory
         return res;
     }
 
-    public static Importer createImporterFor(Element child)
+    public static Importer createImporterFor(String type)
     {
-        String type = child.getChild("type").getText();
         Importer res = null;
         // All Importers
         if(true == "UrlImporter".equals(type))
@@ -83,8 +81,6 @@ public class Factory
             return null;
         }
 
-        org.jdom.Element cfg = child.getChild("cfg");
-        res.setConfig(cfg);
         return res;
     }
 
@@ -96,9 +92,8 @@ public class Factory
         return res;
     }
 
-    public static ImportSelector createImportSelectorFor(Element child)
+    public static ImportSelector createImportSelectorFor(String type)
     {
-        String type = child.getChild("type").getText();
         ImportSelector res = null;
         // All Importers
         if(true == "CsvImportSelector".equals(type))
@@ -116,8 +111,6 @@ public class Factory
             return null;
         }
 
-        org.jdom.Element cfg = child.getChild("cfg");
-        res.setConfig(cfg);
         return res;
     }
 
@@ -130,9 +123,8 @@ public class Factory
         return res;
     }
 
-    public static DataFilter createDataFilterFor(Element child)
+    public static DataFilter createDataFilterFor(String type)
     {
-        String type = child.getChild("type").getText();
         DataFilter res = null;
         // All Importers
         if(true == "ConCatFilter".equals(type))
@@ -156,8 +148,6 @@ public class Factory
             return null;
         }
 
-        org.jdom.Element cfg = child.getChild("cfg");
-        res.setConfig(cfg);
         return res;
     }
 
@@ -169,9 +159,8 @@ public class Factory
         return res;
     }
 
-    public static Exporter createExporterFor(Element child)
+    public static Exporter createExporterFor(String type)
     {
-        String type = child.getChild("type").getText();
         Exporter res = null;
         // All Importers
         if(true == "FileExporter".equals(type))
@@ -185,8 +174,6 @@ public class Factory
             return null;
         }
 
-        org.jdom.Element cfg = child.getChild("cfg");
-        res.setConfig(cfg);
         return res;
     }
 
@@ -198,9 +185,8 @@ public class Factory
         return res;
     }
 
-    public static ExportStyle createExportStyleFor(Element child)
+    public static ExportStyle createExportStyleFor(String type)
     {
-        String type = child.getChild("type").getText();
         ExportStyle res = null;
         // All Importers
         if(true == "CsvExportStyle".equals(type))
@@ -219,8 +205,6 @@ public class Factory
             return null;
         }
 
-        org.jdom.Element cfg = child.getChild("cfg");
-        res.setConfig(cfg);
         return res;
     }
 

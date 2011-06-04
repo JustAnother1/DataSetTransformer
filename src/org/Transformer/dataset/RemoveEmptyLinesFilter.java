@@ -19,6 +19,7 @@
 package org.Transformer.dataset;
 
 import java.awt.Component;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -27,7 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.Transformer.Translator;
-import org.jdom.Element;
 
 /**
  * @author Lars P&ouml;tter
@@ -58,14 +58,13 @@ public class RemoveEmptyLinesFilter extends DataFilter
     }
 
     @Override
-    public Element getConfig()
+    public String getConfig()
     {
-        org.jdom.Element res = new org.jdom.Element("cfg");
-        return res;
+        return "";
     }
 
     @Override
-    public void setConfig(Element cfg)
+    public void setConfig(Map<String, String> cfg)
     {
     }
 

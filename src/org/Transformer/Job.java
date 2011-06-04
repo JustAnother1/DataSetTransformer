@@ -17,12 +17,12 @@
  */
 package org.Transformer;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 
 import org.Transformer.dataset.DataFilter;
 import org.Transformer.exporter.ExportStyle;
@@ -30,19 +30,21 @@ import org.Transformer.exporter.Exporter;
 import org.Transformer.importer.ImportSelector;
 import org.Transformer.importer.Importer;
 
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 
-
-/**
+/** Representation of the Job to do.
+ * Brings together all information needed to execute the task.
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
 public class Job
 {
+    private final static String IMPORTER_LINE = "Importer";
+    private final static String IMPORT_SELECTOR_LINE = "Import Selector";
+    private final static String DATA_FILTER_LINE = "Data Filter";
+    private final static String EXPORTER_LINE = "Exporter";
+    private final static String EXPORT_STYLE_LINE = "Export Style";
+    private final static String CLASS_TYPE_NAME = "type";
+
     private Importer theImporter;
     private ImportSelector theImportSelector;
     private DataFilter theDataFilter;
@@ -56,142 +58,124 @@ public class Job
     {
     }
 
-    private static Job createJobFromElement(org.jdom.Element cfg)
-    {
-        Job res = new Job();
-        Importer cfgImporter = Factory.createImporterFor(cfg.getChild("Importer"));
-        res.setImporter(cfgImporter);
-        ImportSelector cfgImportSelector = Factory.createImportSelectorFor(cfg.getChild("ImportSelector"));
-        res.setImportSelector(cfgImportSelector);
-        DataFilter cfgDataFilter = Factory.createDataFilterFor(cfg.getChild("DataFilter"));
-        res.setDataFilter(cfgDataFilter);
-        Exporter cfgExporter = Factory.createExporterFor(cfg.getChild("Exporter"));
-        res.setExporter(cfgExporter);
-        ExportStyle cfgExportStyle = Factory.createExportStyleFor(cfg.getChild("ExportStyle"));
-        res.setExportStyle(cfgExportStyle);
-        return res;
-    }
-
-    private org.jdom.Element GetNodeFor(XmlSerialize obj, String Name)
-    {
-        org.jdom.Element imp = new org.jdom.Element(Name);
-        org.jdom.Element type = new org.jdom.Element("type");
-        if(null != obj)
-        {
-            type.addContent(obj.getName());
-            imp.addContent(obj.getConfig());
-        }
-        imp.addContent(type);
-        return imp;
-    }
-
-    private org.jdom.Element getXmlSerialization()
-    {
-        org.jdom.Element res = new org.jdom.Element("Job");
-
-        org.jdom.Element imp = GetNodeFor(theImporter, "Importer");
-        res.addContent(imp);
-
-        org.jdom.Element impsel = GetNodeFor(theImportSelector, "ImportSelector");
-        res.addContent(impsel);
-
-        org.jdom.Element data = GetNodeFor(theDataFilter, "DataFilter");
-        res.addContent(data);
-
-        org.jdom.Element exp = GetNodeFor(theExporter, "Exporter");
-        res.addContent(exp);
-
-        org.jdom.Element expsty = GetNodeFor(theExportStyle, "ExportStyle");
-        res.addContent(expsty);
-        return res;
-    }
-
     public static void writeJobToFile(File cfgFile, Job job)
     {
-        Job[] jobs = new Job[1];
-        jobs[0] = job;
-        writeJobsToFile(cfgFile, jobs);
-    }
-
-    public static void writeJobsToFile(File cfgFile, Job[] jobs)
-    {
         try
         {
-            final FileOutputStream fout = new FileOutputStream(cfgFile);
-            final BufferedOutputStream bout = new BufferedOutputStream(fout);
-            org.jdom.Element root = new org.jdom.Element("Jobs");
-            for(int i = 0; i < jobs.length; i++)
+            FileWriter fw = new FileWriter(cfgFile);
+
+            Importer imp = job.getImporter();
+            if(null != imp)
             {
-                org.jdom.Element curElement = jobs[i].getXmlSerialization();
-                root.addContent(curElement);
+                fw.write("[" + IMPORTER_LINE + "]\n");
+                fw.write(CLASS_TYPE_NAME + " = " + imp.getName() + "\n");
+                fw.write(imp.getConfig() + "\n");
             }
-            final XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
-            final Document doc = new Document();
-            doc.setRootElement(root);
-            xout.output(doc, bout);
-            bout.flush();
-            bout.close();
-            fout.close();
+            ImportSelector impsel = job.getImportSelector();
+            if(null != impsel)
+            {
+                fw.write("[" + IMPORT_SELECTOR_LINE + "]\n");
+                fw.write(CLASS_TYPE_NAME + " = " + impsel.getName() + "\n");
+                fw.write(impsel.getConfig() + "\n");
+            }
+            DataFilter df = job.getDataFilter();
+            if(null != df)
+            {
+                fw.write("[" + DATA_FILTER_LINE + "]\n");
+                fw.write(CLASS_TYPE_NAME + " = " + df.getName() + "\n");
+                fw.write(df.getConfig() + "\n");
+            }
+            Exporter exp = job.getExporter();
+            if(null != exp)
+            {
+                fw.write("[" + EXPORTER_LINE + "]\n");
+                fw.write(CLASS_TYPE_NAME + " = " + exp.getName() + "\n");
+                fw.write(exp.getConfig() + "\n");
+            }
+            ExportStyle expsty = job.getExportStyle();
+            if(null != expsty)
+            {
+                fw.write("[" + EXPORT_STYLE_LINE + "]\n");
+                fw.write(CLASS_TYPE_NAME + " = " + expsty.getName() + "\n");
+                fw.write(expsty.getConfig() + "\n");
+            }
+            fw.close();
         }
-        catch ( final IOException e )
+        catch(IOException e)
         {
             e.printStackTrace();
         }
     }
 
+    /** creates a Job from the provided File.
+     * If the File does not exist a new Job is returned.
+     * @param cfgFile File that contains Job Description
+     * @return Job created from cfgFile or new Job
+     */
     public static Job readFromFile(File cfgFile)
     {
-        // Parse configuration
-        final SAXBuilder builder = new SAXBuilder();
-        org.jdom.Element root = null;
+        Job result = new Job();
         try
         {
-            final Document doc = builder.build(cfgFile);
-            root = doc.getRootElement();
-        }
-        catch(final IllegalStateException e)
-        {
-            // Root Tag not set
-            System.out.println("XML Document does not contain XML Tags !");
-        }
-        catch (final JDOMException e)
-        {
-            System.out.println("XML Document "
-                      + cfgFile.getAbsolutePath()
-                      + " is not a well formed XML File !"
-                      + " Parsing failed !");
-            e.printStackTrace();
-        }
-        catch (final IOException e)
-        {
-            e.printStackTrace();
-        }
-        Vector<Job> foundJobs = new Vector<Job>();
-        if(null != root)
-        {
-            if(true == "Jobs".equals(root.getName()))
+            FileReader fr = new FileReader(cfgFile);
+            ConfigParser cfgp = new ConfigParser(fr);
+            String classType;
+            Map<String, String> settings = cfgp.getSettingsOfSection(IMPORTER_LINE);
+            if(null != settings)
             {
-                @SuppressWarnings("unchecked")
-                final List<org.jdom.Element> le = root.getChildren();
-                for(int i = 0; i < le.size(); i++)
-                {
-                    final org.jdom.Element curElement = le.get(i);
-                    foundJobs.add(createJobFromElement(curElement));
-                }
+                classType = settings.get(CLASS_TYPE_NAME);
+                Importer imp = Factory.createImporterFor(classType);
+                imp.setConfig(settings);
+                result.setImporter(imp);
             }
-            else
-            {
-                System.out.println("Wrong root Tag of : " + root.getName());
-            }
-        }
-        else
-        {
-            // File has no root element !
-            System.out.println("Could not read tags from " + cfgFile.getAbsolutePath() + " !");
-        }
 
-        Job[] res = foundJobs.toArray(new Job[1]);
-        return foundJobs.firstElement();
+            settings = cfgp.getSettingsOfSection(IMPORT_SELECTOR_LINE);
+            if(null != settings)
+            {
+                classType = settings.get(CLASS_TYPE_NAME);
+                ImportSelector impsel = Factory.createImportSelectorFor(classType);
+                impsel.setConfig(settings);
+                result.setImportSelector(impsel);
+            }
+
+            settings = cfgp.getSettingsOfSection(DATA_FILTER_LINE);
+            if(null != settings)
+            {
+                classType = settings.get(CLASS_TYPE_NAME);
+                DataFilter df = Factory.createDataFilterFor(classType);
+                df.setConfig(settings);
+                result.setDataFilter(df);
+            }
+
+            settings = cfgp.getSettingsOfSection(EXPORTER_LINE);
+            if(null != settings)
+            {
+                classType = settings.get(CLASS_TYPE_NAME);
+                Exporter exp = Factory.createExporterFor(classType);
+                exp.setConfig(settings);
+                result.setExporter(exp);
+            }
+
+            settings = cfgp.getSettingsOfSection(EXPORT_STYLE_LINE);
+            if(null != settings)
+            {
+                classType = settings.get(CLASS_TYPE_NAME);
+                ExportStyle expSty = Factory.createExportStyleFor(classType);
+                expSty.setConfig(settings);
+                result.setExportStyle(expSty);
+            }
+
+            fr.close();
+        }
+        catch(FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public void setImporter(Importer aImporter)

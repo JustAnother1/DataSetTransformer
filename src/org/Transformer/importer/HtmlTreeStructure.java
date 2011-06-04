@@ -86,7 +86,7 @@ public class HtmlTreeStructure extends TreeStructure
     }
 
     /**
-     * @param pos if the String starts with QhtmlQ then the HTML code will be returned,
+     * @param pos if the String starts with \@html\@ then the HTML code will be returned,
      *            otherwise the displayed text will be returned.
      */
     @Override

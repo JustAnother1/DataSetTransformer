@@ -59,11 +59,13 @@ public class Executor
     {
         Importer imp = job.getImporter();
         log.debug("Importer is : " + imp.getName());
+        log.debug("Importer Configuration is : " + imp.getConfig());
         reportProgress(1);
 
         // Import Data using Import Filter
         ImportSelector impSelector = job.getImportSelector();
         log.debug("Import Selector is : " + impSelector.getName());
+        log.debug("Import Selector Configuration is : " + impSelector.getConfig());
         imp.importData(impSelector);
         reportProgress(20);
 
@@ -105,13 +107,34 @@ public class Executor
         return exp.wasSuccessfull();
     }
 
+    private boolean isEmpty(DataSet[] someData)
+    {
+        if(null == someData)
+        {
+            return true;
+        }
+        if(1 > someData.length)
+        {
+            return true;
+        }
+        for(int i = 0; i < someData.length; i++)
+        {
+            if(someData[i].getNumberOfAtoms() > 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void executeJob(Job job)
     {
         reportProgress(0);
         log.info("=== Starting ===");
-        DataSet theData[] = importData(job);
-        if(null == theData)
+        DataSet[] theData = importData(job);
+        if(true == isEmpty(theData))
         {
+            log.error("No Data !");
             return;
         }
         reportProgress(35);
@@ -119,6 +142,11 @@ public class Executor
         printDataSetArray(theData);
 
         filterData(job, theData);
+        if(true == isEmpty(theData))
+        {
+            log.error("No Data !");
+            return;
+        }
         reportProgress(66);
         log.info("=== Filtered the Data ===");
         printDataSetArray(theData);

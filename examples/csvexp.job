@@ -1,44 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Jobs>
-  <Job>
-    <Importer>
-      <cfg>
-        <FileName>testData/small.csv</FileName>
-      </cfg>
-      <type>FileImporter</type>
-    </Importer>
-    <ImportSelector>
-      <cfg>
-        <Mapping>
-          <id0>a</id0>
-          <id1>s</id1>
-          <id2>d</id2>
-        </Mapping>
-        <seperator>,</seperator>
-      </cfg>
-      <type>CsvImportSelector</type>
-    </ImportSelector>
-    <DataFilter>
-      <cfg />
-      <type>RemoveEmptyLinesFilter</type>
-    </DataFilter>
-    <Exporter>
-      <cfg>
-        <target>exported.csv</target>
-      </cfg>
-      <type>FileExporter</type>
-    </Exporter>
-    <ExportStyle>
-      <cfg>
-        <Mapping>
-          <id0>d</id0>
-          <id1>s</id1>
-          <id2>a</id2>
-        </Mapping>
-        <seperator>,</seperator>
-      </cfg>
-      <type>CsvExportStyle</type>
-    </ExportStyle>
-  </Job>
-</Jobs>
+[Importer]
+type = FileImporter
+FileName = testData/small.csv
+
+[Import Selector]
+type = CsvImportSelector
+seperator = ,
+mapping_0 = a
+mapping_1 = s
+mapping_2 = d
+
+[Data Filter]
+type = RemoveEmptyLinesFilter
+
+[Exporter]
+type = FileExporter
+target = exported.csv
+
+[Export Style]
+type = CsvExportStyle
+seperator = ,
+mapping_0 = d
+mapping_1 = s
+mapping_2 = a
 

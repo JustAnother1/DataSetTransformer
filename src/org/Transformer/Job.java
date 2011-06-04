@@ -125,8 +125,19 @@ public class Job
             {
                 classType = settings.get(CLASS_TYPE_NAME);
                 Importer imp = Factory.createImporterFor(classType);
-                imp.setConfig(settings);
-                result.setImporter(imp);
+                if(null != imp)
+                {
+                    imp.setConfig(settings);
+                    result.setImporter(imp);
+                }
+                else
+                {
+                    System.err.println("Could not create the Importer : " + classType);
+                }
+            }
+            else
+            {
+                System.err.println("File did not contain an Importer !");
             }
 
             settings = cfgp.getSettingsOfSection(IMPORT_SELECTOR_LINE);
@@ -134,8 +145,19 @@ public class Job
             {
                 classType = settings.get(CLASS_TYPE_NAME);
                 ImportSelector impsel = Factory.createImportSelectorFor(classType);
-                impsel.setConfig(settings);
-                result.setImportSelector(impsel);
+                if(null != impsel)
+                {
+                    impsel.setConfig(settings);
+                    result.setImportSelector(impsel);
+                }
+                else
+                {
+                    System.err.println("Could not create the Import Selector : " + classType);
+                }
+            }
+            else
+            {
+                System.err.println("File did not contain an Import Selector !");
             }
 
             settings = cfgp.getSettingsOfSection(DATA_FILTER_LINE);
@@ -143,8 +165,19 @@ public class Job
             {
                 classType = settings.get(CLASS_TYPE_NAME);
                 DataFilter df = Factory.createDataFilterFor(classType);
-                df.setConfig(settings);
-                result.setDataFilter(df);
+                if(null != df)
+                {
+                    df.setConfig(settings);
+                    result.setDataFilter(df);
+                }
+                else
+                {
+                    System.err.println("Could not create the Data Filter : " + classType);
+                }
+            }
+            else
+            {
+                System.err.println("File did not contain a Data Filter !");
             }
 
             settings = cfgp.getSettingsOfSection(EXPORTER_LINE);
@@ -152,8 +185,19 @@ public class Job
             {
                 classType = settings.get(CLASS_TYPE_NAME);
                 Exporter exp = Factory.createExporterFor(classType);
-                exp.setConfig(settings);
-                result.setExporter(exp);
+                if(null != exp)
+                {
+                    exp.setConfig(settings);
+                    result.setExporter(exp);
+                }
+                else
+                {
+                    System.err.println("Could not create the Exporter : " + classType);
+                }
+            }
+            else
+            {
+                System.err.println("File did not contain an Exporter !");
             }
 
             settings = cfgp.getSettingsOfSection(EXPORT_STYLE_LINE);
@@ -161,8 +205,19 @@ public class Job
             {
                 classType = settings.get(CLASS_TYPE_NAME);
                 ExportStyle expSty = Factory.createExportStyleFor(classType);
-                expSty.setConfig(settings);
-                result.setExportStyle(expSty);
+                if(null != expSty)
+                {
+                    expSty.setConfig(settings);
+                    result.setExportStyle(expSty);
+                }
+                else
+                {
+                    System.err.println("Could not create the Export Style : " + classType);
+                }
+            }
+            else
+            {
+                System.err.println("File did not contain an Export Style !");
             }
 
             fr.close();

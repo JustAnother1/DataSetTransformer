@@ -57,9 +57,9 @@ public class ConfigParser
                     {
                         // found a setting
                         String key = line.substring(0, line.indexOf('='));
-                        System.out.println("Found key : " + key + " !");
+                        key = key.trim();
                         String value = line.substring(line.indexOf('=') + 1);
-                        System.out.println("Found value : " + value + " !");
+                        value = value.trim();
                         curSettings = parsedData.get(curSection);
                         if(null == curSettings)
                         {

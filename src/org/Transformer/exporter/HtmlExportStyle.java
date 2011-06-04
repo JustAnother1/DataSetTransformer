@@ -41,7 +41,16 @@ import org.apache.log4j.Logger;
 public class HtmlExportStyle extends ExportStyle
 {
     private final Logger log = Logger.getLogger(this.getClass().getName());
+    /**
+     * Structure of the HTML File before and After the Row data. Row Data is inserted at the Point labeled with %ROW%.
+     * Simple Example: "<html><head></head><body>%ROW%</body></html>"
+     */
     private String GlobalStyleDefinition = "";
+    /**
+     * Formating of the Row Data. consist of pairs of Descriptionand Variable name.
+     * If the Variables in the DataSet have the Names vari1 vari2 and var3 then the following styles are valid:
+     * "%vari1", "Value of Variable 1 : %vari1%Value of Variable 2 : %vari2%Value of Variable 3 : %vari3"
+     */
     private String RowStyleDefinition = "";
     private JTextField glob;
     private JTextArea row;
@@ -56,6 +65,11 @@ public class HtmlExportStyle extends ExportStyle
     private boolean formatARow(DataSet theData, OutputStream out) throws IOException
     {
         String usedRowStyle = RowStyleDefinition;
+        if(null == usedRowStyle)
+        {
+            log.error("Row Style Definition is Null !");
+            return false;
+        }
         String[] parts = usedRowStyle.split("%", -1);
         for(int i = 0; i < parts.length; i++)
         {
@@ -83,6 +97,11 @@ public class HtmlExportStyle extends ExportStyle
     public boolean formatTheData(DataSet[] theData, OutputStream out) throws IOException
     {
         String usedStyle = GlobalStyleDefinition;
+        if(null == usedStyle)
+        {
+            log.error("Global Style Definition is Null !");
+            return false;
+        }
         log.debug("Using Global Style : " + usedStyle);
         String[] globalParts = usedStyle.split("%", 3);
         for(int i = 0; i < globalParts.length; i++)

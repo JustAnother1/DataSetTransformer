@@ -49,27 +49,24 @@ public class Main
      */
     public static void execute(String Parameter)
     {
-        Job[] jobs = null;
         File configFile = new File(Parameter);
         System.out.println("Parameter is : " + Parameter);
 
         if(true == configFile.canRead())
         {
+            Job jobs = null;
             // Read Job Description from File
             jobs = Job.readFromFile(configFile);
+            // Do the Jobs
+            Job curJob = jobs;
+            Executor exec = new Executor();
+            exec.executeJob(curJob);
         }
         else
         {
             // complain
             System.err.println("Could not read Job File " + Parameter + " !");
             System.out.println("Start without Parameter to use Wizard, or provide a job File as Parameter !");
-        }
-        // Do the Jobs
-        for(int i = 0; i < jobs.length; i++)
-        {
-            Job curJob = jobs[i];
-            Executor exec = new Executor();
-            exec.executeJob(curJob);
         }
     }
 
@@ -102,8 +99,8 @@ public class Main
             }
             else
             {
-                Job job[] = Job.readFromFile(new File(args[1]));
-                final BaseWindow ConfigCreator = new BaseWindow(job[0]);
+                Job job = Job.readFromFile(new File(args[1]));
+                final BaseWindow ConfigCreator = new BaseWindow(job);
                 javax.swing.SwingUtilities.invokeLater(ConfigCreator);
             }
         }

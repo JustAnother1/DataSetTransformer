@@ -139,7 +139,7 @@ public class Job
         }
     }
 
-    public static Job[] readFromFile(File cfgFile)
+    public static Job readFromFile(File cfgFile)
     {
         // Parse configuration
         final SAXBuilder builder = new SAXBuilder();
@@ -191,7 +191,7 @@ public class Job
         }
 
         Job[] res = foundJobs.toArray(new Job[1]);
-        return res;
+        return foundJobs.firstElement();
     }
 
     public void setImporter(Importer aImporter)

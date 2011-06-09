@@ -51,6 +51,7 @@ public class HtmlTreeStructure extends TreeStructure
     {
         super(src);
         Tidy tidy = new Tidy();
+        tidy.setInputEncoding("utf8");
         tidy.setOnlyErrors(true);
         tidy.setQuiet(true);
         tidy.setShowWarnings(false);

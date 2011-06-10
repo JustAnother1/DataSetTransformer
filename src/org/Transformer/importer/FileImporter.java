@@ -80,19 +80,23 @@ public class FileImporter extends Importer
             if((false == sourceFile.exists()) || (false == sourceFile.canRead()))
             {
                 System.err.println("Could not read Data from " + FileName);
-            }
-            FileInputStream fin = new FileInputStream(sourceFile);
-            System.out.println("Reading Data from " + sourceFile.getAbsolutePath());
-            if(true == infilt.parseToDataSets(fin))
-            {
-                theImportedData = infilt.getTheData();
-                ImportSuccessfullyCompleted = true;
+                ImportSuccessfullyCompleted = false;
             }
             else
             {
-                ImportSuccessfullyCompleted = false;
+                FileInputStream fin = new FileInputStream(sourceFile);
+                System.out.println("Reading Data from " + sourceFile.getAbsolutePath());
+                if(true == infilt.parseToDataSets(fin))
+                {
+                    theImportedData = infilt.getTheData();
+                    ImportSuccessfullyCompleted = true;
+                }
+                else
+                {
+                    ImportSuccessfullyCompleted = false;
+                }
+                fin.close();
             }
-            fin.close();
         }
         catch(MalformedURLException e)
         {

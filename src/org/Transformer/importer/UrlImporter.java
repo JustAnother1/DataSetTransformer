@@ -107,8 +107,11 @@ public class UrlImporter extends Importer
         try
         {
             // already cached ?
-            String cacheName = "DataTransformer_cache" + onlyAllowedChars(SourceUrl) + ".dtc";
+            File cacheFolder = new File("cache");
+            cacheFolder.mkdir();
+            String cacheName = "cache/DataTransformer_cache" + onlyAllowedChars(SourceUrl) + ".dtc";
             File cacheFile = new File(cacheName);
+
             if(false == cacheFile.exists())
             {
                 System.out.println("Getting Source Data from " + SourceUrl);

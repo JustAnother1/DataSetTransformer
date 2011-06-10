@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License version 2
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, see <http://www.gnu.org/licenses/>
+ -->
+<project name="DataSetTransformer" default="all" basedir=".">
+    <!-- Global Variables -->
+    <property name="build" location="bin"/>
+    <property name="src" location="src"/>
+    <property name="test" location="test"/>
+    <property name="rel" location="rel"/>
+    <property name="relcfg" location="${rel}/cfg"/>
+    <property name="rellib" location="${rel}/lib"/>
+    <property name="lib" location="lib"/>
+    <property name="ServerJar" location="${rel}/${ant.project.name}.jar"/>
+    <property name="ServerMainClass" value="org.Transformer.Main"/>
+    <property name="javadoc" location="${rel}/doc"/>
+    <!--<property name="test.class.name" value="org.FriendsUnited.AllTests" />
+    <property name="JunitJar" location="${lib}/junit-4.6.jar"/> -->
+
+    <path id="project.class.path">
+      <fileset dir="lib" includes="*.jar"/>
+      <pathelement location="${src}" />
+    </path>
+
+
+    <target name="clean" description="Prepare for building" >
+        <!-- Create the time stamp -->
+        <tstamp>
+             <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+        </tstamp>
+        <!-- Delete everything dynamically created -->
+        <delete dir="${build}"/>
+        <delete dir="${javadoc}"/>
+        <delete dir="${rel}"/>
+        <delete file="${ServerJar}"/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+        <mkdir dir="${javadoc}"/>
+        <mkdir dir="${rel}"/>
+        <mkdir dir="${relcfg}"/>
+        <mkdir dir="${rellib}"/>
+    </target>
+
+    <!-- Compile all *.java Files -> create *.class files -->
+    <target name="compile" depends="clean" description="compile *.java to *.class" >
+        <javac srcdir="${src}" destdir="${build}" debug="true">
+            <classpath refid="project.class.path"/>
+        </javac>
+    </target>
+
+
+    <!-- Create Dokumentation -->
+    <target name="javadoc" depends="clean" description="create Documentation" >
+        <javadoc packagenames="org.Transformer.*"
+                 sourcepath="${src}"
+                 destdir="${javadoc}"
+                 Overview="${src}/overview.html"
+                 Version="yes"
+                 Use="yes"
+                 Author="yes"
+                 serialwarn="yes"
+                 Encoding="UTF-8">
+            <classpath refid="project.class.path"/>
+        </javadoc>
+    </target>
+
+    <!-- create the jar file -->
+    <target name="jar" depends="compile" description="create the Jar File">
+        <jar destfile="${ServerJar}"
+             includes="**/*.class">
+            <fileset dir="${build}"/>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+                <attribute name="Main-Class" value="${ServerMainClass}"/>
+                <attribute name="Class-Path" value="lib/jdom.jar lib/log4j-1.2.15.jar lib/jericho-html-3.1 lib/jtidy-r938.jar"/>
+            </manifest>
+        </jar>
+        <copy todir="${rellib}">
+            <fileset dir="${lib}"/>
+        </copy>
+    </target>
+
+    <!-- build everything, javadoc -->
+    <target name="all" depends="jar">
+
+    </target>
+
+</project>

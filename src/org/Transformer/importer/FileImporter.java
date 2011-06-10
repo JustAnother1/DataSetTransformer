@@ -17,20 +17,11 @@
  */
 package org.Transformer.importer;
 
-import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.Transformer.Translator;
 
 /**
  * @author Lars P&ouml;tter
@@ -39,7 +30,6 @@ import org.Transformer.Translator;
 public class FileImporter extends Importer
 {
     protected String FileName = "";
-    private JTextField path;
 
     /**
      *
@@ -64,52 +54,6 @@ public class FileImporter extends Importer
     public String getName()
     {
         return "FileImporter";
-    }
-
-    /* (non-Javadoc)
-     * @see org.Transformer.Slides.ConfigurationSlide#getComponent()
-     */
-    @Override
-    public Component getComponent()
-    {
-        JPanel slide = new JPanel();
-        slide.setLayout(new BoxLayout(slide, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("FileName :");
-        slide.add(desc);
-        path = new JTextField();
-        slide.add(path);
-        slide.add(Box.createVerticalGlue());
-        return slide;
-    }
-
-    /* (non-Javadoc)
-     * @see org.Transformer.Slides.ConfigurationSlide#actionAfterShow()
-     */
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    /* (non-Javadoc)
-     * @see org.Transformer.Slides.ConfigurationSlide#actionOnClose()
-     */
-    @Override
-    public void actionOnClose()
-    {
-        if(null != path)
-        {
-            FileName = path.getText();
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.Transformer.Slides.ConfigurationSlide#updateLanguage(org.Transformer.Translator)
-     */
-    @Override
-    public void updateLanguage(Translator msg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
     /* (non-Javadoc)

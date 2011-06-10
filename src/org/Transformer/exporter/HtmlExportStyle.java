@@ -18,19 +18,10 @@
  */
 package org.Transformer.exporter;
 
-import java.awt.Component;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
-import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
 import org.apache.log4j.Logger;
 
@@ -47,13 +38,11 @@ public class HtmlExportStyle extends ExportStyle
      */
     private String GlobalStyleDefinition = "";
     /**
-     * Formating of the Row Data. consist of pairs of Descriptionand Variable name.
+     * Formating of the Row Data. consist of pairs of Description and Variable name.
      * If the Variables in the DataSet have the Names vari1 vari2 and var3 then the following styles are valid:
      * "%vari1", "Value of Variable 1 : %vari1%Value of Variable 2 : %vari2%Value of Variable 3 : %vari3"
      */
     private String RowStyleDefinition = "";
-    private JTextField glob;
-    private JTextArea row;
 
     /**
      *
@@ -165,57 +154,6 @@ public class HtmlExportStyle extends ExportStyle
     public String getName()
     {
         return "HtmlExportStyle";
-    }
-
-    @Override
-    public void actionOnClose()
-    {
-        if(null != glob)
-        {
-            GlobalStyleDefinition = glob.getText();
-        }
-        if(null != row)
-        {
-            RowStyleDefinition = row.getText();
-        }
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel parentSlide = new JPanel();
-        parentSlide.setLayout(new BoxLayout(parentSlide, BoxLayout.Y_AXIS));
-
-        JPanel slide1 = new JPanel();
-        slide1.setLayout(new BoxLayout(slide1, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("Global Style : ");
-        slide1.add(desc);
-        JTextField glob = new JTextField();
-        slide1.add(glob);
-
-        JPanel slide2 = new JPanel();
-        slide2.setLayout(new BoxLayout(slide2, BoxLayout.X_AXIS));
-        JLabel desc2 = new JLabel("Row Style : ");
-        slide2.add(desc2);
-        JTextArea row = new JTextArea();
-        slide2.add(row);
-
-        parentSlide.add(slide1);
-        parentSlide.add(slide2);
-        parentSlide.add(Box.createVerticalGlue());
-        return parentSlide;
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

@@ -18,20 +18,12 @@
  */
 package org.Transformer.importer;
 
-import java.awt.Component;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-
 import org.Transformer.JobUtils;
 import org.Transformer.Tool;
-import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
 
 /**
@@ -42,9 +34,7 @@ public class TreeImportSelector extends ImportSelector
 {
     private TreeStructure expectedStructure;
     private String[] Mapping_Position;
-    private JTextArea pos;
     private String[] Mapping_Name;
-    private JTextArea names;
 
     /**
      *
@@ -52,13 +42,6 @@ public class TreeImportSelector extends ImportSelector
     public TreeImportSelector()
     {
         super();
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
     public void setMapping(String[] positions, String[] Names)
@@ -115,52 +98,6 @@ public class TreeImportSelector extends ImportSelector
     public String getName()
     {
         return "TreeImportSelector";
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel parentSlide = new JPanel();
-        parentSlide.setLayout(new BoxLayout(parentSlide, BoxLayout.Y_AXIS));
-
-        JPanel slide1 = new JPanel();
-        slide1.setLayout(new BoxLayout(slide1, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("Positions : ");
-        slide1.add(desc);
-        pos = new JTextArea();
-        pos.setLineWrap(false);
-        slide1.add(pos);
-
-        JPanel slide2 = new JPanel();
-        slide2.setLayout(new BoxLayout(slide2, BoxLayout.X_AXIS));
-        JLabel desc2 = new JLabel("Names : ");
-        slide2.add(desc2);
-        names = new JTextArea();
-        names.setLineWrap(false);
-        slide2.add(names);
-
-        parentSlide.add(slide1);
-        parentSlide.add(slide2);
-        parentSlide.add(Box.createVerticalGlue());
-        return parentSlide;
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    @Override
-    public void actionOnClose()
-    {
-        if(null != pos)
-        {
-            Mapping_Position = Tool.StringToArray(pos.getText());
-        }
-        if(null != names)
-        {
-            Mapping_Name = Tool.StringToArray(names.getText());
-        }
     }
 
 }

@@ -18,19 +18,9 @@
  */
 package org.Transformer.dataset;
 
-import java.awt.Component;
 import java.util.Map;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import org.Transformer.JobUtils;
-import org.Transformer.Tool;
-import org.Transformer.Translator;
 
 /**
  * @author Lars P&ouml;tter
@@ -41,19 +31,11 @@ public class ConCatFilter extends DataFilter
     private String[] FieldThatMustBeEqual;
     private String[] FieldsThatWillBeConCatenated;
     private String ConCatSeperator = "";
-    private JTextField sep;
-    private JTextArea map;
-    private JTextArea cmap;
 
     /**
      *
      */
     public ConCatFilter()
-    {
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
     {
     }
 
@@ -160,64 +142,6 @@ public class ConCatFilter extends DataFilter
     public String getName()
     {
         return "ConCatFilter";
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-
-    @Override
-    public void actionOnClose()
-    {
-        if(null != sep)
-        {
-            ConCatSeperator = sep.getText();
-        }
-        if(null != cmap)
-        {
-            FieldsThatWillBeConCatenated = Tool.StringToArray(cmap.getText());
-        }
-        if(null != map)
-        {
-            FieldThatMustBeEqual = Tool.StringToArray(map.getText());
-        }
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel parentSlide = new JPanel();
-        parentSlide.setLayout(new BoxLayout(parentSlide, BoxLayout.Y_AXIS));
-
-        JPanel slide1 = new JPanel();
-        slide1.setLayout(new BoxLayout(slide1, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("Seperator : ");
-        slide1.add(desc);
-        sep = new JTextField();
-        sep.setText(",");
-        slide1.add(sep);
-
-        JPanel slide2 = new JPanel();
-        slide2.setLayout(new BoxLayout(slide2, BoxLayout.X_AXIS));
-        JLabel desc2 = new JLabel("Equal Mapping : ");
-        slide2.add(desc2);
-        map = new JTextArea();
-        slide2.add(map);
-
-        JPanel slide3 = new JPanel();
-        slide3.setLayout(new BoxLayout(slide3, BoxLayout.X_AXIS));
-        JLabel desc3 = new JLabel("Concat Mapping : ");
-        slide3.add(desc3);
-        cmap = new JTextArea();
-        slide3.add(cmap);
-
-        parentSlide.add(slide1);
-        parentSlide.add(slide2);
-        parentSlide.add(slide3);
-        parentSlide.add(Box.createVerticalGlue());
-        return parentSlide;
     }
 
 }

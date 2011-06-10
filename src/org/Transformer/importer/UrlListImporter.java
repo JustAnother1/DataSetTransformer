@@ -18,7 +18,6 @@
  */
 package org.Transformer.importer;
 
-import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,13 +25,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
 
 /**
@@ -44,7 +36,6 @@ public class UrlListImporter extends Importer
     private String source = null;
     private UrlImporter singleImporter = new UrlImporter();
     private Vector<DataSet> resultCollect = new Vector<DataSet>();
-    private JTextField url;
 
     /**
      *
@@ -145,7 +136,6 @@ public class UrlListImporter extends Importer
         }
     }
 
-
     @Override
     public String getConfig()
     {
@@ -162,40 +152,6 @@ public class UrlListImporter extends Importer
     public String getName()
     {
         return "UrlListImporter";
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel slide = new JPanel();
-        slide.setLayout(new BoxLayout(slide, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("URL of URL List :");
-        slide.add(desc);
-        url = new JTextField();
-        slide.add(url);
-        slide.add(Box.createVerticalGlue());
-        return slide;
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    @Override
-    public void actionOnClose()
-    {
-        if(null != url)
-        {
-            source = url.getText();
-        }
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

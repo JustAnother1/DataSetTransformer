@@ -15,7 +15,6 @@
 
 package org.Transformer;
 
-import org.Transformer.Slides.ConfigurationSlide;
 import org.Transformer.dataset.ConCatFilter;
 import org.Transformer.dataset.DataFilter;
 import org.Transformer.dataset.RegExpFilter;
@@ -40,16 +39,6 @@ import org.Transformer.importer.UrlListImporter;
  */
 public class Factory
 {
-
-    public static ConfigurationSlide[] getAllImporterSlides()
-    {
-        ConfigurationSlide[] res = new ConfigurationSlide[4];
-        res[0] = new UrlImporter();
-        res[1] = new UrlListImporter();
-        res[2] = new PagedUrlImporter();
-        res[3] = new FileImporter();
-        return res;
-    }
 
     public static Importer createImporterFor(String type)
     {
@@ -84,14 +73,6 @@ public class Factory
         return res;
     }
 
-    public static ConfigurationSlide[] getAllImportSelectorSlides()
-    {
-        ConfigurationSlide[] res = new ConfigurationSlide[2];
-        res[0] = new CsvImportSelector();
-        res[1] = new TreeImportSelector();
-        return res;
-    }
-
     public static ImportSelector createImportSelectorFor(String type)
     {
         ImportSelector res = null;
@@ -111,15 +92,6 @@ public class Factory
             return null;
         }
 
-        return res;
-    }
-
-    public static ConfigurationSlide[] getAllDataFilterSlides()
-    {
-        ConfigurationSlide[] res = new ConfigurationSlide[3];
-        res[0] = new ConCatFilter();
-        res[1] = new RegExpFilter();
-        res[2] = new RemoveEmptyLinesFilter();
         return res;
     }
 
@@ -151,14 +123,6 @@ public class Factory
         return res;
     }
 
-
-    public static ConfigurationSlide[] getAllExporterSlides()
-    {
-        ConfigurationSlide[] res = new ConfigurationSlide[1];
-        res[0] = new FileExporter();
-        return res;
-    }
-
     public static Exporter createExporterFor(String type)
     {
         Exporter res = null;
@@ -174,14 +138,6 @@ public class Factory
             return null;
         }
 
-        return res;
-    }
-
-    public static ConfigurationSlide[] getAllExportStyleSlides()
-    {
-        ConfigurationSlide[] res = new ConfigurationSlide[2];
-        res[0] = new CsvExportStyle();
-        res[1] = new HtmlExportStyle();
         return res;
     }
 

@@ -18,16 +18,14 @@
  */
 package org.Transformer.dataset;
 
-import org.Transformer.Job;
 import org.Transformer.JobSerialize;
-import org.Transformer.Slides.ConfigurationSlide;
 
 
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public abstract class DataFilter implements JobSerialize, ConfigurationSlide
+public abstract class DataFilter implements JobSerialize
 {
 
     /**
@@ -38,28 +36,5 @@ public abstract class DataFilter implements JobSerialize, ConfigurationSlide
     }
 
     public abstract DataSet[] applyFilterTo(DataSet theData[]);
-
-    @Override
-    public ConfigurationSlide getNextSlide()
-    {
-        return null;
-    }
-
-    @Override
-    public boolean hasNextSlide()
-    {
-        return false;
-    }
-
-    @Override
-    public void setJob(Job theJob)
-    {
-    }
-
-    @Override
-    public Job getJob()
-    {
-        return null;
-    }
 
 }

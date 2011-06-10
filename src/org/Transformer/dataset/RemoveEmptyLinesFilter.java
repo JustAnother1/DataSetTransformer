@@ -18,16 +18,9 @@
  */
 package org.Transformer.dataset;
 
-import java.awt.Component;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.Transformer.Translator;
 
 /**
  * @author Lars P&ouml;tter
@@ -72,34 +65,6 @@ public class RemoveEmptyLinesFilter extends DataFilter
     public String getName()
     {
         return "RemoveEmptyLinesFilter";
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel slide = new JPanel();
-        slide.setLayout(new BoxLayout(slide, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("no configuration needed !");
-        slide.add(desc);
-        slide.add(Box.createVerticalGlue());
-        return slide;
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    @Override
-    public void actionOnClose()
-    {
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

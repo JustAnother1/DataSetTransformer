@@ -93,21 +93,11 @@ public class Main
 
         if(0 < args.length)
         {
-            if(false == "-edit".equals(args[0]))
-            {
-                execute(args[0]);
-            }
-            else
-            {
-                Job job = Job.readFromFile(new File(args[1]));
-                final BaseWindow ConfigCreator = new BaseWindow(job);
-                javax.swing.SwingUtilities.invokeLater(ConfigCreator);
-            }
+            execute(args[0]);
         }
         else
         {
-            final BaseWindow ConfigCreator = new BaseWindow();
-            javax.swing.SwingUtilities.invokeLater(ConfigCreator);
+            System.out.println("Provide name of Job File as parameter !");
         }
     }
 

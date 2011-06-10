@@ -20,16 +20,14 @@ package org.Transformer.importer;
 
 import java.io.InputStream;
 
-import org.Transformer.Job;
 import org.Transformer.JobSerialize;
-import org.Transformer.Slides.ConfigurationSlide;
 import org.Transformer.dataset.DataSet;
 
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public abstract class ImportSelector implements JobSerialize, ConfigurationSlide
+public abstract class ImportSelector implements JobSerialize
 {
     protected DataSet[] data = new DataSet[1];
 
@@ -46,29 +44,6 @@ public abstract class ImportSelector implements JobSerialize, ConfigurationSlide
     public DataSet[] getTheData()
     {
         return data;
-    }
-
-    @Override
-    public ConfigurationSlide getNextSlide()
-    {
-        return null;
-    }
-
-    @Override
-    public boolean hasNextSlide()
-    {
-        return false;
-    }
-
-    @Override
-    public void setJob(Job theJob)
-    {
-    }
-
-    @Override
-    public Job getJob()
-    {
-        return null;
     }
 
 }

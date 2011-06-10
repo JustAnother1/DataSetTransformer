@@ -18,21 +18,12 @@
  */
 package org.Transformer.exporter;
 
-import java.awt.Component;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import org.Transformer.JobUtils;
 import org.Transformer.Tool;
-import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
 
 /**
@@ -43,8 +34,6 @@ public class CsvExportStyle extends ExportStyle
 {
     private String[] mapping;
     private String seperator = ",";
-    private JTextField sep;
-    private JTextArea map;
 
     /**
      *
@@ -122,59 +111,6 @@ public class CsvExportStyle extends ExportStyle
     public String getName()
     {
         return "CsvExportStyle";
-    }
-
-
-    @Override
-    public void actionOnClose()
-    {
-        if(null != sep)
-        {
-            seperator = sep.getText();
-        }
-        if(null != map)
-        {
-            mapping = Tool.StringToArray(map.getText());
-        }
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel parentSlide = new JPanel();
-        parentSlide.setLayout(new BoxLayout(parentSlide, BoxLayout.Y_AXIS));
-
-        JPanel slide1 = new JPanel();
-        slide1.setLayout(new BoxLayout(slide1, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("Seperator : ");
-        slide1.add(desc);
-        sep = new JTextField();
-        sep.setText(",");
-        slide1.add(sep);
-
-        JPanel slide2 = new JPanel();
-        slide2.setLayout(new BoxLayout(slide2, BoxLayout.X_AXIS));
-        JLabel desc2 = new JLabel("Mapping : ");
-        slide2.add(desc2);
-        map = new JTextArea();
-        slide2.add(map);
-
-        parentSlide.add(slide1);
-        parentSlide.add(slide2);
-        parentSlide.add(Box.createVerticalGlue());
-        return parentSlide;
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

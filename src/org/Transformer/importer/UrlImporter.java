@@ -18,7 +18,6 @@
  */
 package org.Transformer.importer;
 
-import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,14 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.Transformer.Translator;
-
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
@@ -44,7 +35,6 @@ import org.Transformer.Translator;
 public class UrlImporter extends Importer
 {
     protected String SourceUrl = "";
-    private JTextField url;
 
     /**
      *
@@ -176,40 +166,6 @@ public class UrlImporter extends Importer
     public String getName()
     {
         return "UrlImporter";
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel slide = new JPanel();
-        slide.setLayout(new BoxLayout(slide, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("URL :");
-        slide.add(desc);
-        url = new JTextField();
-        slide.add(url);
-        slide.add(Box.createVerticalGlue());
-        return slide;
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    @Override
-    public void actionOnClose()
-    {
-        if(null != url)
-        {
-            SourceUrl = url.getText();
-        }
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

@@ -18,19 +18,11 @@
  */
 package org.Transformer.exporter;
 
-import java.awt.Component;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.Transformer.Translator;
 import org.Transformer.dataset.DataSet;
 
 /**
@@ -41,7 +33,6 @@ public class FileExporter extends Exporter
 {
     private boolean ExportSuccessfullyExecuted = false;
     private String target = "";
-    private JTextField url;
 
     /**
      *
@@ -113,41 +104,6 @@ public class FileExporter extends Exporter
     public String getName()
     {
         return "FileExporter";
-    }
-
-
-    @Override
-    public void actionOnClose()
-    {
-        if(null != url)
-        {
-            target = url.getText();
-        }
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel slide = new JPanel();
-        slide.setLayout(new BoxLayout(slide, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("File Name :");
-        slide.add(desc);
-        url = new JTextField();
-        slide.add(url);
-        slide.add(Box.createVerticalGlue());
-        return slide;
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

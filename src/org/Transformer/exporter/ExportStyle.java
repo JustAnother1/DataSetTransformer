@@ -21,39 +21,14 @@ package org.Transformer.exporter;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.Transformer.Job;
 import org.Transformer.JobSerialize;
-import org.Transformer.Slides.ConfigurationSlide;
 import org.Transformer.dataset.DataSet;
 
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public abstract class ExportStyle implements JobSerialize, ConfigurationSlide
+public abstract class ExportStyle implements JobSerialize
 {
     public abstract boolean formatTheData(DataSet[] theData, OutputStream out) throws IOException;
-
-    @Override
-    public ConfigurationSlide getNextSlide()
-    {
-        return null;
-    }
-
-    @Override
-    public boolean hasNextSlide()
-    {
-        return false;
-    }
-
-    @Override
-    public void setJob(Job theJob)
-    {
-    }
-
-    @Override
-    public Job getJob()
-    {
-        return null;
-    }
 }

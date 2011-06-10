@@ -18,17 +18,8 @@
  */
 package org.Transformer.dataset;
 
-import java.awt.Component;
 import java.util.Map;
 import java.util.Vector;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.Transformer.Translator;
 
 /**
  * @author Lars P&ouml;tter
@@ -38,8 +29,6 @@ public class RegExpFilter extends DataFilter
 {
     private String RegularExpression;
     private String NameOfAtom;
-    private JTextField exp;
-    private JTextField map;
 
     /**
      *
@@ -81,14 +70,12 @@ public class RegExpFilter extends DataFilter
         return res.toArray(new DataSet[1]);
     }
 
-
     @Override
     public String getConfig()
     {
         return "NameOfAtom = " + NameOfAtom + "\n"
                + "RegularExpression = " + RegularExpression;
     }
-
 
     @Override
     public void setConfig(Map<String, String> cfg)
@@ -101,57 +88,6 @@ public class RegExpFilter extends DataFilter
     public String getName()
     {
         return "RegExpFilter";
-    }
-
-    @Override
-    public void actionOnClose()
-    {
-        if(null != exp)
-        {
-            RegularExpression = exp.getText();
-        }
-        if(null != map)
-        {
-            NameOfAtom = map.getText();
-        }
-    }
-
-    @Override
-    public Component getComponent()
-    {
-        JPanel parentSlide = new JPanel();
-        parentSlide.setLayout(new BoxLayout(parentSlide, BoxLayout.Y_AXIS));
-
-        JPanel slide1 = new JPanel();
-        slide1.setLayout(new BoxLayout(slide1, BoxLayout.X_AXIS));
-        JLabel desc = new JLabel("Expression : ");
-        slide1.add(desc);
-        exp = new JTextField();
-        slide1.add(exp);
-
-        JPanel slide2 = new JPanel();
-        slide2.setLayout(new BoxLayout(slide2, BoxLayout.X_AXIS));
-        JLabel desc2 = new JLabel("Name : ");
-        slide2.add(desc2);
-        map = new JTextField();
-        slide2.add(map);
-
-        parentSlide.add(slide1);
-        parentSlide.add(slide2);
-        parentSlide.add(Box.createVerticalGlue());
-        return parentSlide;
-    }
-
-    @Override
-    public void actionAfterShow()
-    {
-    }
-
-    @Override
-    public void updateLanguage(Translator newMsg)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

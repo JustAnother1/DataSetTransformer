@@ -33,7 +33,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class CsvImportSelector extends ImportSelector
 {
-    private String seperator = ",";
+    private String separator = ",";
     private String[] mapping;
 
     /**
@@ -51,7 +51,7 @@ public class CsvImportSelector extends ImportSelector
 
     public void setSeperator(String theSeperator)
     {
-        seperator = theSeperator;
+        separator = theSeperator;
     }
 
 
@@ -110,8 +110,8 @@ public class CsvImportSelector extends ImportSelector
     private DataSet parseLineToDataSet(String line)
     {
         System.out.println("Line : " + line);
-        String[] Values = line.split(seperator);
-        System.out.println("Split with Seperator : " + seperator + " !");
+        String[] Values = line.split(separator);
+        System.out.println("Split with Separator : " + separator + " !");
         for(int i = 0; i < Values.length; i++)
         {
             System.out.println("Atom " + i + " : " + Values[i]);
@@ -146,7 +146,7 @@ public class CsvImportSelector extends ImportSelector
     @Override
     public String getConfig()
     {
-        return "seperator = " + seperator + "\n"
+        return "separator = " + separator + "\n"
                + JobUtils.getConfigTextFor(mapping, "mapping");
     }
 
@@ -154,7 +154,7 @@ public class CsvImportSelector extends ImportSelector
     public void setConfig(Map<String, String> cfg)
     {
         mapping = JobUtils.getStringArrayFromSettingMap(cfg, "mapping");
-        seperator = cfg.get("seperator");
+        separator = cfg.get("separator");
     }
 
     @Override

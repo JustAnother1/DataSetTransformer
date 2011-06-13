@@ -32,7 +32,7 @@ import org.Transformer.dataset.DataSet;
 public class CsvExportStyle extends ExportStyle
 {
     private String[] mapping;
-    private String seperator = ",";
+    private String separator = ",";
 
     /**
      *
@@ -43,7 +43,7 @@ public class CsvExportStyle extends ExportStyle
 
     public void setSeperator(String theSeperator)
     {
-        seperator = theSeperator;
+        separator = theSeperator;
     }
 
     public void setMapping(String[] theMapping)
@@ -81,7 +81,7 @@ public class CsvExportStyle extends ExportStyle
                     Object val = curSet.getDataAtom(mapping[j]);
                     if(null != val)
                     {
-                        line = line + val.toString() + seperator;
+                        line = line + val.toString() + separator;
                     }
                 }
             }
@@ -95,7 +95,7 @@ public class CsvExportStyle extends ExportStyle
     @Override
     public String getConfig()
     {
-        return "seperator = " + seperator + "\n"
+        return "separator = " + separator + "\n"
                + JobUtils.getConfigTextFor(mapping, "mapping");
     }
 
@@ -103,7 +103,7 @@ public class CsvExportStyle extends ExportStyle
     public void setConfig(Map<String, String> cfg)
     {
         mapping = JobUtils.getStringArrayFromSettingMap(cfg, "mapping");
-        seperator = cfg.get("seperator");
+        separator = cfg.get("separator");
     }
 
     @Override

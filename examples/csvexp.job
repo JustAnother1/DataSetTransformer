@@ -4,7 +4,7 @@ FileName = testData/small.csv
 
 [Import Selector]
 type = CsvImportSelector
-seperator = ,
+separator = ,
 mapping_0 = a
 mapping_1 = s
 mapping_2 = d
@@ -18,7 +18,7 @@ target = exported.csv
 
 [Export Style]
 type = CsvExportStyle
-seperator = ,
+separator = ,
 mapping_0 = d
 mapping_1 = s
 mapping_2 = a

@@ -79,10 +79,10 @@ Contents
     - "Data Filter"
     - "Exporter"
     - "Export Style"
-   These sections directly correspond to the 5 steps needed for the transformation. Each of these steps can be thought of
-   as a separate module. Each section must have at least on setting. That setting is the "type"-setting. The type selects
-   the kind of module used in this step. The different kind of modules may have different settings. Refer to the following
-   sections to find which kinds of modules are available and which settings they need.
+   These sections directly correspond to the 5 steps needed for the transformation. Each of these steps can be thought
+   of as a separate module. Each section must have at least on setting. That setting is the "type"-setting. The type
+   selects the kind of module used in this step. The different kind of modules may have different settings. Refer to
+   the following sections to find which kinds of modules are available and which settings they need.
 
 4.1. Importer
      --------
@@ -134,9 +134,9 @@ Contents
 
        Description
        -----------
-       Uses URL Importer to import bytes from the specified URL. If the resulting Data that comes out of the import filter
-       has found a data element named Next with a valid URL as value, then this URL is also imported. This repeats until
-       no Next data element is found or the next element does not contain a valid URL.
+       Uses URL Importer to import bytes from the specified URL. If the resulting Data that comes out of the import
+       filter has found a data element named Next with a valid URL as value, then this URL is also imported. This
+       repeats until no Next data element is found or the next element does not contain a valid URL.
 
        Parameters
        ----------
@@ -173,15 +173,16 @@ Contents
 
        Description
        -----------
-       Interprets the imported bytes as HTML File. A Location and a name need to be provided for each data element that
-       shall be extracted. Locations are defined as follows:
-       If a location starts with "@html@" then the HTML code contained in the defined tag will be the value of the data
-       element. Without this the text defined by the tag will be the value of the data element.
+       Interprets the imported bytes as HTML File. A Location and a name need to be provided for each data element
+       that shall be extracted. Locations are defined as follows:
+       If a location starts with "@html@" then the HTML code contained in the defined tag will be the value of the
+       data element. Without this the text defined by the tag will be the value of the data element.
        If only a value of a attribute in the tag is needed then this can be achieved with @attributeName. a Location
        ending with "a@href" will create a data element that contains the URL in the specified link.
        The Location presents the Path to the tag. In HTML this will always start with the tag "html". This is then
-       followed by either "head" or "body". If a tag has more than one child tags of the same type an attribute that has
-       to match can be supplied. "div(id:main)" matches only the div Tag that has the attribute "id" with the value "main".
+       followed by either "head" or "body". If a tag has more than one child tags of the same type an attribute that
+       has to match can be supplied. "div(id:main)" matches only the div Tag that has the attribute "id" with the
+       value "main".
        The tags in the location are separated by "/".
        Example: "html/head/link(type:text/css)@href" applied on a HTML data like this:
 
@@ -213,10 +214,10 @@ Contents
 
        Description
        -----------
-       This filter will return only one Data Set. The filter checks that in all Data Sets that are provided to the filter
-       the data elements specified in "FieldThatMustBeEqual" have always the same value. If that is the case then the
-       values of all that Data elements specified in "FieldsThatWillBeConCatenated" will be concatenated with the
-       defined separator.
+       This filter will return only one Data Set. The filter checks that in all Data Sets that are provided to the
+       filter the data elements specified in "FieldThatMustBeEqual" have always the same value. If that is the case
+       then the values of all that Data elements specified in "FieldsThatWillBeConCatenated" will be concatenated with
+       the defined separator.
 
        Parameters
        ----------
@@ -281,8 +282,9 @@ Contents
 
        Description
        -----------
-       creates a CSV byte stream from the provided data sets. Each data set results in one row. The mapping defines the
-       sequence of the date element of the data sets. The separator defines the used separator between the data elements.
+       creates a CSV byte stream from the provided data sets. Each data set results in one row. The mapping defines
+       the sequence of the date element of the data sets. The separator defines the used separator between the data
+       elements.
 
        Parameters
        ----------
@@ -302,7 +304,8 @@ Contents
        GlobalStyleDefinition = <html><head></head><body>%ROW%</body></html>
        RowStyleDefinition = party: %n% had %c% cakes
        Data = [n = Birthday c = 5][n = Christmas c = 0]
-       Resulting HTML = <html><head></head><body>party: Birthday had 5 cakes party: Christmas had 0 cakes </body></html>
+       Resulting HTML = <html><head></head><body>party: Birthday had 5 cakes
+                                                 party: Christmas had 0 cakes </body></html>
 
        Parameters
        ----------

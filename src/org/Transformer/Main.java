@@ -66,7 +66,7 @@ public class Main
         {
             // complain
             System.err.println("Could not read Job File " + Parameter + " !");
-            System.out.println("Start without Parameter to use Wizard, or provide a job File as Parameter !");
+            System.out.println("Provide a job File as Parameter !");
         }
     }
 

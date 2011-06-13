@@ -30,7 +30,7 @@ public class ConCatFilter extends DataFilter
 {
     private String[] FieldThatMustBeEqual;
     private String[] FieldsThatWillBeConCatenated;
-    private String ConCatSeperator = "";
+    private String conCatSeparator = "";
 
     /**
      *
@@ -51,7 +51,7 @@ public class ConCatFilter extends DataFilter
 
     public void setConCatSeperator(String conCatSeperator)
     {
-        ConCatSeperator = conCatSeperator;
+        conCatSeparator = conCatSeperator;
     }
 
     /**
@@ -114,7 +114,7 @@ public class ConCatFilter extends DataFilter
             String line = "";
             for(int i = 0; i < theData.length; i++)
             {
-                line = line + ConCatSeperator + theData[i].getDataAtom(FieldsThatWillBeConCatenated[k]);
+                line = line + conCatSeparator + theData[i].getDataAtom(FieldsThatWillBeConCatenated[k]);
             }
             res[0].addDataAtom(line, FieldsThatWillBeConCatenated[k]);
         }
@@ -125,7 +125,7 @@ public class ConCatFilter extends DataFilter
     @Override
     public String getConfig()
     {
-        return "ConCatSeperator = " + ConCatSeperator + "\n"
+        return "ConCatSeparator = " + conCatSeparator + "\n"
                + JobUtils.getConfigTextFor(FieldThatMustBeEqual, "FieldThatMustBeEqual")
                + JobUtils.getConfigTextFor(FieldsThatWillBeConCatenated, "FieldsThatWillBeConCatenated");
     }
@@ -133,7 +133,7 @@ public class ConCatFilter extends DataFilter
     @Override
     public void setConfig(Map<String, String> cfg)
     {
-        ConCatSeperator = cfg.get("ConCatSeperator");
+        conCatSeparator = cfg.get("ConCatSeparator");
         FieldThatMustBeEqual = JobUtils.getStringArrayFromSettingMap(cfg, "FieldThatMustBeEqual");
         FieldsThatWillBeConCatenated = JobUtils.getStringArrayFromSettingMap(cfg, "FieldsThatWillBeConCatenated");
     }

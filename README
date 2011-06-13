@@ -1,37 +1,340 @@
-DataSetTransformer is a tool that can read data that can be organized in tables(rows and columns) can apply transformations and safe the transformed data.
+DataSetTransformer
+------------------
 
-currently supported input formats:
-==================================
-csv ( character separated values)
-html
-
-currently supported transformations:
-====================================
-combine fields
-apply regular expression
-remove empty lines
+DataSetTransformer is a tool that can read any data that can be organized in tables(rows and columns)
+can apply transformations and safe the transformed data.
 
 
-currently supported output formats:
-===================================
-csv ( character separated values)
-html
+Contents
+--------
+1. Overview
+2. License
+3. Usage
+4. Creating Job Files
+5. Example Job File
 
 
+1. Overview
+   --------
+   The Transformation splits up into 5 Steps.
+    - Importing
+    - Import Selection
+    - Data Filtering
+    - Export Style
+    - Exporting
 
-LICENSE
+   The Importer reads the Data stream.
+   The import Filter then extracts the Data from the Stream.
+   This Data is then filtered.
+   The filtered Data is then converted into the Export format.
+   Finally the data in export format is written out.
 
-Copyright (C) 2011  Lars Pötter <Lars_Poetter@gmx.de>
-All Rights Reserved.
+   currently supported input formats:
+    - CSV (character separated values)
+    - HTML
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License version 2
-as published by the Free Software Foundation.
+   currently supported data filters:
+    - combine fields
+    - apply regular expression
+    - remove empty lines
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+   currently supported output formats:
+    - CSV (character separated values)
+    - HTML
 
-You should have received a copy of the GNU General Public License along
-with this program; if not, see <http://www.gnu.org/licenses/>
+
+2. License
+   -------
+   Copyright (C) 2011  Lars Pötter <Lars_Poetter@gmx.de>
+   All Rights Reserved.
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License version 2
+   as published by the Free Software Foundation.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, see <http://www.gnu.org/licenses/>
+
+
+3. Usage
+   -----
+   Start the DataSetTarnsformer by doing "java -jar DataSetTransformer.jar jobfile.job".
+   The Job File contains all the settings needed to do the transformation.
+
+
+4. Creating Job Files
+   ------------------
+   Job Files are simple Text Files. Job Files contain Sections and Settings.
+   A Section starts with a Line "[Setting Name]" and ends with the end of the File or the next Section.
+   Settings are lines like "Setting Name = Value".
+
+   A Job File must have the following sections:
+    - "Importer"
+    - "Import Selector"
+    - "Data Filter"
+    - "Exporter"
+    - "Export Style"
+   These sections directly correspond to the 5 steps needed for the transformation. Each of these steps can be thought of
+   as a separate module. Each section must have at least on setting. That setting is the "type"-setting. The type selects
+   the kind of module used in this step. The different kind of modules may have different settings. Refer to the following
+   sections to find which kinds of modules are available and which settings they need.
+
+4.1. Importer
+     --------
+     currently available Importers:
+
+4.1.1. File Importer
+       ------------
+       type = FileImporter
+
+       Description
+       -----------
+       Reads bytes from a file in the local file system.
+
+       Parameters
+       ----------
+       FileName = path to file with input data.
+
+
+4.1.2. URL Importer
+       -----------
+       type = UrlImporter
+
+       Description
+       -----------
+       Reads bytes from a resource identified by a Unified Resource Locator (URL).
+       This module creates a folder cache where copies of the imported resources are kept. The second import then uses
+       the cached copy and will not request the resource again. If you want to request the resource again, then remove
+       the cached copy from the cache folder.
+
+       Parameters
+       ----------
+       SourceUrl = URL from that the bytes will be read.
+
+4.1.4. URL List Importer
+       -----------------
+       type = UrlListImporter
+
+       Description
+       -----------
+       Reads URL's from the specified file and import all of them using the URL Importer.
+
+       Parameters
+       ----------
+       source = path to text file that contains one URL per line.
+
+4.1.5. Paged URL Importer
+       ------------------
+       type = PagedUrlImporter
+
+       Description
+       -----------
+       Uses URL Importer to import bytes from the specified URL. If the resulting Data that comes out of the import filter
+       has found a data element named Next with a valid URL as value, then this URL is also imported. This repeats until
+       no Next data element is found or the next element does not contain a valid URL.
+
+       Parameters
+       ----------
+       SourceUrl = URL from that the bytes will be read.
+
+4.2. Import Selector
+     ---------------
+     currently available Import Selectors:
+
+4.2.1. CSV Import Selector
+       -------------------
+       type = CsvImportSelector
+
+       Description
+       -----------
+       Interprets the imported bytes as text containing data elements separated by the separator character.
+       With one Data Set per line.
+
+       Parameters
+       ----------
+       separator = character that splits the data elements.
+       mapping_0 = name of the first data element in each row.
+       mapping_1 = name of the second data element in each row.
+       mapping_2 = name of the third data element in each row.
+       mapping_. = name of the ... data element in each row.
+       mapping_. = name of the ... data element in each row.
+       mapping_. = name of the ... data element in each row.
+       mapping_N = name of the (N+1)th data element in each row.
+
+
+4.2.2. Tree Import Selector
+       --------------------
+       type = TreeImportSelector
+
+       Description
+       -----------
+       Interprets the imported bytes as HTML File. A Location and a name need to be provided for each data element that
+       shall be extracted. Locations are defined as follows:
+       If a location starts with "@html@" then the HTML code contained in the defined tag will be the value of the data
+       element. Without this the text defined by the tag will be the value of the data element.
+       If only a value of a attribute in the tag is needed then this can be achieved with @attributeName. a Location
+       ending with "a@href" will create a data element that contains the URL in the specified link.
+       The Location presents the Path to the tag. In HTML this will always start with the tag "html". This is then
+       followed by either "head" or "body". If a tag has more than one child tags of the same type an attribute that has
+       to match can be supplied. "div(id:main)" matches only the div Tag that has the attribute "id" with the value "main".
+       The tags in the location are separated by "/".
+       Example: "html/head/link(type:text/css)@href" applied on a HTML data like this:
+
+                <html>
+                <head>
+                <link href="styles/theme.css" rel="stylesheet" type="text/css">
+                </head>
+                <body>
+                </body
+                </html>
+
+       will create a data element that contains "styles/theme.css".
+
+       Parameters
+       ----------
+       Mapping_Name_0 = name of the first data element.
+       Mapping_Name_1 = name of the second data element.
+       Mapping_Name_N = name of the (N+1)th data element.
+       Mapping_Position_0 = position of the first data element.
+       Mapping_Position_1 = position of the second data element.
+       Mapping_Position_N = position of the (N+1)th data element.
+
+4.3. Data Filter
+     -----------
+     currently available Data Filters:
+4.3.1. Concatenate Filter
+       ------------------
+       type = ConCatFilter
+
+       Description
+       -----------
+       This filter will return only one Data Set. The filter checks that in all Data Sets that are provided to the filter
+       the data elements specified in "FieldThatMustBeEqual" have always the same value. If that is the case then the
+       values of all that Data elements specified in "FieldsThatWillBeConCatenated" will be concatenated with the
+       defined separator.
+
+       Parameters
+       ----------
+       ConCatSeparator = string that will be inserted between concatenated values.
+       FieldThatMustBeEqual_0 = name of data element that shall be the same on all data sets.
+       FieldThatMustBeEqual_1 = name of data element that shall be the same on all data sets.
+       FieldThatMustBeEqual_N = name of data element that shall be the same on all data sets.
+       FieldsThatWillBeConCatenated_0 = name of data element that shall be the same on all data sets.
+       FieldsThatWillBeConCatenated_1 = name of data element that shall be the same on all data sets.
+       FieldsThatWillBeConCatenated_N = name of data element that shall be the same on all data sets.
+
+4.3.2. Regular Expression Filter
+       -------------------------
+       type = RegExpFilter
+
+       Description
+       -----------
+       This filter only returns those data set from the provided data sets that contain the data element specified by
+       "NameOfAtom" and where the value of that data element also matched the specified regular expression defined in
+       "RegularExpression"
+
+       Parameters
+       ----------
+       NameOfAtom = Name of the data element that will be processed.
+       RegularExpression = the regular expression that must be matched.
+
+4.3.3. Remove Empty Lines Filter
+       -------------------------
+       type = RemoveEmptyLinesFilter
+
+       Description
+       -----------
+       Returns from the provided data set only those that have at least one data element.
+
+       Parameters
+       ----------
+       no parameters available
+
+4.4. Exporter
+     --------
+     currently available Exporters:
+
+4.4.1. File Exporter
+       -------------
+       type = FileExporter
+
+       Description
+       -----------
+       Writes the bytes produced by the Export Style module into that file specified in "target".
+
+       Parameters
+       ----------
+       target = File Name of result file.
+
+4.5. Export Style
+     ------------
+     currently available Export Styles:
+
+4.5.1. CSV Export Style
+       ----------------
+       type = CsvExportStyle
+
+       Description
+       -----------
+       creates a CSV byte stream from the provided data sets. Each data set results in one row. The mapping defines the
+       sequence of the date element of the data sets. The separator defines the used separator between the data elements.
+
+       Parameters
+       ----------
+       separator = character used to separate the data atoms of the data set.
+       mapping_0 = name of first data element.
+       mapping_1 = name of second data element.
+       mapping_N = name of (N+1)th data element.
+
+4.5.2. HTML Export Style
+       -----------------
+       type = HtmlExportStyle
+
+       Description
+       -----------
+       Creates a byte stream by interleaving the data from the data sets with the Global and Row Style definition.
+       Example:
+       GlobalStyleDefinition = <html><head></head><body>%ROW%</body></html>
+       RowStyleDefinition = party: %n% had %c% cakes
+       Data = [n = Birthday c = 5][n = Christmas c = 0]
+       Resulting HTML = <html><head></head><body>party: Birthday had 5 cakes party: Christmas had 0 cakes </body></html>
+
+       Parameters
+       ----------
+       GlobalStyleDefinition = specifies the HTML tags before and after the data.
+       RowStyleDefinition = specifies the HTML tags used for each data set row.
+
+
+5. Example Job File
+   ----------------
+
+[Importer]
+type = FileImporter
+FileName = testData/small.csv
+
+[Import Selector]
+type = CsvImportSelector
+separator = ,
+mapping_0 = a
+mapping_1 = s
+mapping_2 = d
+
+[Data Filter]
+type = RemoveEmptyLinesFilter
+
+[Exporter]
+type = FileExporter
+target = exported.csv
+
+[Export Style]
+type = CsvExportStyle
+separator = ,
+mapping_0 = d
+mapping_1 = s
+mapping_2 = a
+

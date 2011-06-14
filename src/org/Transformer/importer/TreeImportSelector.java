@@ -31,7 +31,6 @@ import org.Transformer.dataset.DataSet;
  */
 public class TreeImportSelector extends ImportSelector
 {
-    private TreeStructure expectedStructure;
     private String[] Mapping_Position;
     private String[] Mapping_Name;
 
@@ -52,13 +51,7 @@ public class TreeImportSelector extends ImportSelector
     @Override
     public boolean parseToDataSets(InputStream src)
     {
-        expectedStructure = new XmlTreeStructure(null);
         TreeStructure Tree = new HtmlTreeStructure(src);
-        if(false == Tree.matchesTreeStructure(expectedStructure))
-        {
-            System.out.println("Wrong Tree Structure");
-            return false;
-        }
         if((null == Mapping_Position) || (null == Mapping_Name))
         {
             System.out.println("No Mapping !");

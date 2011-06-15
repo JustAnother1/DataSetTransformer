@@ -23,7 +23,7 @@ import java.io.Reader;
 import java.util.Hashtable;
 import java.util.Map;
 
-/** Parses Config Files
+/** Parses Config Files.
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
@@ -34,13 +34,13 @@ public class ConfigParser
     /**
      *
      */
-    public ConfigParser(Reader cfg)
+    public ConfigParser(final Reader cfg)
     {
         String curSection = "[]";
         parsedData = new Hashtable<String, Hashtable<String, String>>();
         try
         {
-            BufferedReader br = new BufferedReader(cfg);
+            final BufferedReader br = new BufferedReader(cfg);
             String line = br.readLine();
             Hashtable<String, String> curSettings = null;
             while(null != line)
@@ -73,13 +73,13 @@ public class ConfigParser
             }
             br.close();
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             e.printStackTrace();
         }
     }
 
-    public Map<String, String> getSettingsOfSection(String Section)
+    public final Map<String, String> getSettingsOfSection(final String Section)
     {
         return parsedData.get("[" + Section + "]");
     }

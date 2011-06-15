@@ -172,7 +172,6 @@ public class HtmlTreeStructure extends TreeStructure
                             if(null != hlp)
                             {
                                 res.add(hlp);
-                                System.err.println("5-added: " + hlp);
                             }
                         }
                     }

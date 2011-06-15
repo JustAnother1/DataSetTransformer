@@ -58,16 +58,35 @@ public class TreeImportSelector extends ImportSelector
             return false;
         }
         Vector<DataSet> res = new Vector<DataSet>();
-
-        // TODO more than one row
-        DataSet row = new DataSet();
+        System.out.println("Importing with " + Mapping_Position.length + " Mapping Positions.");
         for(int i = 0; i < Mapping_Position.length; i++)
         {
-            String Val = Tree.getLeafFor(Mapping_Position[i]);
-            row.addDataAtom(Val, Mapping_Name[i]);
+            String Val[] = Tree.getLeafsFor(Mapping_Position[i]);
+            if(null == Val)
+            {
+                continue;
+            }
+            if(1 > Val.length)
+            {
+                continue;
+            }
+            System.out.println("Found " + Val.length + " Strings.");
+            for(int k = 0; k < Val.length; k++)
+            {
+                DataSet curRow;
+                if(res.size()> k)
+                {
+                    curRow = res.get(k);
+                }
+                else
+                {
+                    curRow = new DataSet();
+                    res.add(k, curRow);
+                }
+                System.out.println("String " + k + " : " + Val[k]);
+                curRow.addDataAtom(Val[k], Mapping_Name[i]);
+            }
         }
-        res.add(row);
-
         data = (DataSet[])res.toArray(new DataSet[1]);
         return true;
     }

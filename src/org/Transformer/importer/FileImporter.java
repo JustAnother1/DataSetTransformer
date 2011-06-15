@@ -38,27 +38,18 @@ public class FileImporter extends Importer
     {
     }
 
-    /* (non-Javadoc)
-     * @see org.Transformer.XmlSerialize#getConfig()
-     */
     @Override
     public String getConfig()
     {
         return "FileName = " + FileName;
     }
 
-    /* (non-Javadoc)
-     * @see org.Transformer.XmlSerialize#getName()
-     */
     @Override
     public String getName()
     {
         return "FileImporter";
     }
 
-    /* (non-Javadoc)
-     * @see org.Transformer.importer.Importer#setSource(java.lang.String)
-     */
     @Override
     public void setSource(String src)
     {
@@ -68,9 +59,6 @@ public class FileImporter extends Importer
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.Transformer.importer.Importer#importData(org.Transformer.importer.ImportSelector)
-     */
     @Override
     public void importData(ImportSelector infilt)
     {

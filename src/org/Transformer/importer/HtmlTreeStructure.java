@@ -21,6 +21,7 @@ package org.Transformer.importer;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Vector;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -59,31 +60,179 @@ public class HtmlTreeStructure extends TreeStructure
         valid = true;
     }
 
-    /*
-    private String AttributesToString(NamedNodeMap attributes)
+    private boolean hasHtmlOutputPrefix(String pos)
     {
-        String res = "";
-        for(int i = 0; i < attributes.getLength(); i++)
+        if(true == pos.startsWith("@html@"))
         {
-            Node n = attributes.item(i);
-            res = res + n.getNodeName() + " : " + n.getNodeValue() + ", ";
-        }
-        return res;
-    }
-*/
-
-    @Override
-    public boolean matchesTreeStructure(TreeStructure expectedStructure)
-    {
-        if(false == valid)
-        {
-            return false;
+            return true;
         }
         else
         {
-            // TODO
-            return true;
+            return false;
         }
+    }
+
+    private String removeHtmlOutputPrefix(String pos)
+    {
+        return pos.substring(6);
+    }
+
+    private String[] getStringsForPath(String[] path, NodeList nl, boolean htmlOutput, int index)
+    {
+        if(null == path)
+        {
+            return null;
+        }
+        if(index >= path.length)
+        {
+            return null;
+        }
+        if(null == nl)
+        {
+            return null;
+        }
+        String curPath = path[index];
+        String attrName = null;
+        String attrValue = null;
+        // Check if attributes requested
+        if(true == curPath.contains("("))
+        {
+            String help = curPath.substring(curPath.indexOf('(') + 1, curPath.lastIndexOf(')'));
+            attrName = help.substring(0, help.indexOf(':'));
+            attrValue = help.substring(help.indexOf(':') + 1);
+            curPath = curPath.substring(0, curPath.indexOf('('))
+                      + curPath.substring(curPath.lastIndexOf(')') + 1);
+        }
+        // else nothing to do as attrName already null !
+
+        // Check for Output Modifier
+        String selectedData = null;
+        if(true == curPath.contains("@"))
+        {
+            String help = curPath.substring(curPath.indexOf('@') + 1);
+            selectedData = help;
+            curPath = curPath.substring(0, curPath.indexOf('@'));
+        }
+        // else nothing to do as selectedData already null
+
+        Vector<String> res = new Vector<String>();
+        // curPath has now only the tag name in it
+        if(true == "*".equals(curPath))
+        {
+            // star can be more than one level of tags
+            for(int k = 0; k < nl.getLength(); k++)
+            {
+                Node n = nl.item(k);
+                String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index);
+                if(null != hlp)
+                {
+                    for(int i = 0; i < hlp.length; i++)
+                    {
+                        if(null != hlp[i])
+                        {
+                            res.add(hlp[i]);
+                        }
+                    }
+                }
+            }
+            // find in the tags of this node the next path element
+            String[] hlp = getStringsForPath(path, nl, htmlOutput, index + 1);
+            if(null != hlp)
+            {
+                for(int i = 0; i < hlp.length; i++)
+                {
+                    if(null != hlp[i])
+                    {
+                        res.add(hlp[i]);
+                    }
+                }
+            }
+        }
+
+        for(int k = 0; k < nl.getLength(); k++)
+        {
+            Node n = nl.item(k);
+            if(true == curPath.equals(n.getNodeName()))
+            {
+                if(null == attrName)
+                {
+                    if(index == (path.length - 1))
+                    {
+                        if(null == selectedData)
+                        {
+                            String hlp = getTextFromNode(n, htmlOutput);
+                            if(null != hlp)
+                            {
+                                res.add(hlp);
+                            }
+                        }
+                        else
+                        {
+                            String hlp = getAttributeFromNode(n, selectedData);
+                            if(null != hlp)
+                            {
+                                res.add(hlp);
+                                System.err.println("5-added: " + hlp);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
+                        if(null != hlp)
+                        {
+                            for(int i = 0; i < hlp.length; i++)
+                            {
+                                if(null != hlp[i])
+                                {
+                                    res.add(hlp[i]);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if(true == AttributeValueEquals(attrValue, attrName, n))
+                    {
+                        if(index == path.length)
+                        {
+                            if(null == selectedData)
+                            {
+                                String hlp = getTextFromNode(n, htmlOutput);
+                                if(null != hlp)
+                                {
+                                    res.add(hlp);
+                                }
+                            }
+                            else
+                            {
+                                String hlp = getAttributeFromNode(n, selectedData);
+                                if(null != hlp)
+                                {
+                                    res.add(hlp);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
+                            if(null != hlp)
+                            {
+                                for(int i = 0; i < hlp.length; i++)
+                                {
+                                    if(null != hlp[i])
+                                    {
+                                        res.add(hlp[i]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res.toArray(new String[1]);
     }
 
     /**
@@ -91,118 +240,27 @@ public class HtmlTreeStructure extends TreeStructure
      *            otherwise the displayed text will be returned.
      */
     @Override
-    public String getLeafFor(String pos)
+    public String[] getLeafsFor(String pos)
     {
-        boolean htmlOutput = false;
-        String selectedData = "";
         if((false == valid) || (null == pos))
         {
             return null;
         }
-        else
+        if(true == "".equals(pos))
         {
-            if(true == "".equals(pos))
-            {
-                return null;
-            }
-            // Output format = HTML ?
-            if(true == pos.startsWith("@html@"))
-            {
-                htmlOutput = true;
-                pos = pos.substring(6);
-            }
-            String[] path = pos.split("/");
-            NodeList nl = doc.getChildNodes();
-            Node n = doc.getFirstChild(); // just to initialize variable hopefully never read
-            boolean found = false;
-            boolean NeddsAttr = false;
-            for(int i = 0; i < path.length; i++)
-            {
-                String curPath = path[i];
-                String attrName = "neverEver";
-                String attrValue = "neverEver";
-                // Check if attributes requested
-                if(true == curPath.contains("("))
-                {
-                    String help = curPath.substring(curPath.indexOf('(') + 1, curPath.lastIndexOf(')'));
-                    // System.out.println("help : " + help);
-                    attrName = help.substring(0, help.indexOf(':'));
-                    attrValue = help.substring(help.indexOf(':') + 1);
-                    // System.out.println("Name : " + attrName);
-                    // System.out.println("Value : " + attrValue);
-                    curPath = curPath.substring(0, curPath.indexOf('('))
-                              + curPath.substring(curPath.lastIndexOf(')') + 1);
-                    // System.out.println("new Path : " + curPath);
-                    NeddsAttr = true;
-                }
-                else
-                {
-                    NeddsAttr = false;
-                }
-                // Check for Output Modifier
-                if(true == curPath.contains("@"))
-                {
-                    // System.out.println("Found AT !!!!!");
-                    String help = curPath.substring(curPath.indexOf('@') + 1);
-                    selectedData = help;
-                    curPath = curPath.substring(0, curPath.indexOf('@'));
-                }
-                else
-                {
-                    selectedData = "Text";
-                }
-                for(int k = 0; k < nl.getLength(); k++)
-                {
-                    found = false;
-                    n = nl.item(k);
-                    if(true == curPath.equals(n.getNodeName()))
-                    {
-                        if(false == NeddsAttr)
-                        {
-                            // System.out.println("Found " + curPath + " at index " + k);
-                            found = true;
-                            break;
-                        }
-                        else
-                        {
-                            // if (true == attrValue.equals(n.getAttributes().getNamedItem(attrName).getNodeValue()))
-                            if(true == AttributeValueEquals(attrValue, attrName, n))
-                            {
-                                // System.out.println("Found " + curPath + " with attribute " + attrName + ":" + attrValue + " at index " + k);
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if(false == found)
-                {
-                    if(true == NeddsAttr)
-                    {
-                        System.out.println("Could not find " + curPath + " with Attribute " + attrName + ":" + attrValue + "  !");
-                    }
-                    else
-                    {
-                        System.out.println("Could not find " + curPath);
-                    }
-                    return null;
-                }
-                else
-                {
-                    nl = n.getChildNodes();
-                }
-            }
-            if(true == "Text".equals(selectedData))
-            {
-                // System.out.println("Text of " + pos + " is " + getTextFromNode(n, htmlOutput));
-                return getTextFromNode(n, htmlOutput);
-            }
-            else
-            {
-                // System.out.println("Attribute " + selectedData + " of " + pos + " is " + getAttributeFromNode(n, selectedData));
-                return getAttributeFromNode(n, selectedData);
-            }
+            return null;
         }
+
+        // Output format = HTML ?
+        boolean htmlOutput = hasHtmlOutputPrefix(pos);
+        if(true == htmlOutput)
+        {
+            pos = removeHtmlOutputPrefix(pos);
+        }
+        String[] path = pos.split("/");
+        NodeList nl = doc.getChildNodes();
+
+        return getStringsForPath(path, nl, htmlOutput, 0);
     }
 
     private String getAttributeFromNode(Node n, String Name)
@@ -233,59 +291,27 @@ public class HtmlTreeStructure extends TreeStructure
             }
             catch(TransformerConfigurationException e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             catch(TransformerFactoryConfigurationError e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             catch(TransformerException e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             return null;
         }
         else
         {
-
-            /*
-            final XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
-            final org.jdom.Document jdoc = new org.jdom.Document();
-            jdoc.setRootElement(n.);
-            String res = xout.outputString(jdoc);
-            */
-
-
-            /*
-            System.out.println("Found The Node : " + n);
-            System.out.println("Name : " + n.getNodeName());
-            System.out.println("Type : " + n.getNodeType());
-            System.out.println("Value : " + n.getNodeValue());
-            System.out.println("Attributes : " + AttributesToString(n.getAttributes()));
-            System.out.println("Text : " + n.getTextContent());
-            */
-
-
             String res = n.getNodeValue();
             NodeList nl = n.getChildNodes();
             for(int i = 0; i < nl.getLength(); i++)
             {
                 n = nl.item(i);
                 res = res + getTextFromNode(n, false);
-
-                /*
-                System.out.println("Found The Child : " + i);
-                System.out.println("Name : " + n.getNodeName());
-                System.out.println("Type : " + n.getNodeType());
-                System.out.println("Value : " + n.getNodeValue());
-                System.out.println("Attributes : " + AttributesToString(n.getAttributes()));
-                System.out.println("Text : " + n.getTextContent());
-                */
             }
-
             return res;
         }
     }

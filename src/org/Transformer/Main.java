@@ -57,10 +57,15 @@ public class Main
             Job jobs = null;
             // Read Job Description from File
             jobs = Job.readFromFile(configFile);
-            // Do the Jobs
-            Job curJob = jobs;
-            Executor exec = new Executor();
-            exec.executeJob(curJob);
+            if(true == jobs.isExecuteable())
+            {
+                Executor exec = new Executor();
+                exec.executeJob(jobs);
+            }
+            else
+            {
+                System.err.println("The Job " + Parameter + " can not be executed !");
+            }
         }
         else
         {

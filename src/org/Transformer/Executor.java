@@ -134,7 +134,7 @@ public class Executor
         DataSet[] theData = importData(job);
         if(true == isEmpty(theData))
         {
-            log.error("No Data !");
+            log.error("Importer could not import any Data !");
             return;
         }
         reportProgress(35);
@@ -144,7 +144,7 @@ public class Executor
         filterData(job, theData);
         if(true == isEmpty(theData))
         {
-            log.error("No Data !");
+            log.error("No Data leaft after filtering !");
             return;
         }
         reportProgress(66);
@@ -172,7 +172,6 @@ public class Executor
             {
                 log.debug("Entry " + k + " has " + theData[k].getNumberOfAtoms() + " Data Atoms !");
                 String[] names = theData[k].getNamesOfAllDataAtoms();
-                // System.out.println("Data Atoms : ");
                 for (int h = 0; h < names.length; h++)
                 {
                     log.debug("(" + names[h] + " : " + theData[k].getDataAtom(names[h]) + ")");

@@ -37,21 +37,7 @@ public class XmlTreeStructure extends TreeStructure
     }
 
     @Override
-    public boolean matchesTreeStructure(TreeStructure expectedStructure)
-    {
-        if(false == valid)
-        {
-            return false;
-        }
-        else
-        {
-            // TODO
-            return true;
-        }
-    }
-
-    @Override
-    public String getLeafFor(String string)
+    public String[] getLeafsFor(String string)
     {
         if(false == valid)
         {

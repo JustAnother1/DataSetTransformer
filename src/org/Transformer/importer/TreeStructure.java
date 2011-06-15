@@ -37,9 +37,7 @@ public abstract class TreeStructure
 
     }
 
-    public abstract boolean matchesTreeStructure(TreeStructure expectedStructure);
-
-    public abstract String getLeafFor(String string);
+    public abstract String[] getLeafsFor(String string);
 
     public boolean isValid()
     {

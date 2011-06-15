@@ -183,6 +183,7 @@ Contents
        followed by either "head" or "body". If a tag has more than one child tags of the same type an attribute that
        has to match can be supplied. "div(id:main)" matches only the div Tag that has the attribute "id" with the
        value "main".
+       An alternative is the tag name "*". That matches all Tags also on several levels.
        The tags in the location are separated by "/".
        Example: "html/head/link(type:text/css)@href" applied on a HTML data like this:
 

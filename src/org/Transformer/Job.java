@@ -283,4 +283,29 @@ public class Job
         return theDataFilter;
     }
 
+    public boolean isExecuteable()
+    {
+        if(null == theImporter)
+        {
+            return false;
+        }
+        if(null == theImportSelector)
+        {
+            return false;
+        }
+        if(null == theDataFilter)
+        {
+            return false;
+        }
+        if(null == theExporter)
+        {
+            return false;
+        }
+        if(null == theExportStyle)
+        {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -41,12 +41,12 @@ public class CsvExportStyle extends ExportStyle
     {
     }
 
-    public void setSeperator(String theSeperator)
+    public final void setSeperator(final String theSeperator)
     {
         separator = theSeperator;
     }
 
-    public void setMapping(String[] theMapping)
+    public final void setMapping(final String[] theMapping)
     {
         mapping = theMapping;
     }
@@ -55,7 +55,7 @@ public class CsvExportStyle extends ExportStyle
      * @see org.Transformer.exporter.ExportStyle#formatTheData(org.Transformer.dataset.DataSet[], java.io.OutputStream)
      */
     @Override
-    public boolean formatTheData(DataSet[] theData, OutputStream out) throws IOException
+    public final boolean formatTheData(final DataSet[] theData, final OutputStream out) throws IOException
     {
         if((null == mapping) || (null == theData) || (null == out))
         {
@@ -63,8 +63,8 @@ public class CsvExportStyle extends ExportStyle
         }
         for(int i = 0; i < theData.length; i++)
         {
-            String line = "";
-            DataSet curSet = theData[i];
+            final StringBuffer sb = new StringBuffer();
+            final DataSet curSet = theData[i];
             if(null != curSet)
             {
                 int maxLength;
@@ -78,13 +78,14 @@ public class CsvExportStyle extends ExportStyle
                 }
                 for(int j = 0; j < maxLength; j++)
                 {
-                    Object val = curSet.getDataAtom(mapping[j]);
+                    final Object val = curSet.getDataAtom(mapping[j]);
                     if(null != val)
                     {
-                        line = line + val.toString() + separator;
+                        sb.append(val.toString() + separator);
                     }
                 }
             }
+            String line = sb.toString();
             line = line + "\n";
             out.write(line.getBytes());
         }
@@ -93,21 +94,21 @@ public class CsvExportStyle extends ExportStyle
 
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
         return "separator = " + separator + "\n"
                + JobUtils.getConfigTextFor(mapping, "mapping");
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
         mapping = JobUtils.getStringArrayFromSettingMap(cfg, "mapping");
         separator = cfg.get("separator");
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "CsvExportStyle";
     }

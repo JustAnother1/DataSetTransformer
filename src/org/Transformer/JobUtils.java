@@ -22,22 +22,25 @@ import java.util.Vector;
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public class JobUtils
+public final class JobUtils
 {
-
-    public static String getConfigTextFor(String[] arr, String Name)
+    private JobUtils()
     {
-        String res = "";
-        for(int i = 0; i < arr.length; i++)
-        {
-            res = res + Name + "_" + i + " = " + arr[i] + "\n";
-        }
-        return res;
     }
 
-    public static String[] getStringArrayFromSettingMap(Map<String, String> cfg, String Name)
+    public static String getConfigTextFor(final String[] arr, final String Name)
     {
-        Vector<String> vec = new Vector<String>();
+        final StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < arr.length; i++)
+        {
+            sb.append(Name + "_" + i + " = " + arr[i] + "\n");
+        }
+        return sb.toString();
+    }
+
+    public static String[] getStringArrayFromSettingMap(final Map<String, String> cfg, final String Name)
+    {
+        final Vector<String> vec = new Vector<String>();
         String val = cfg.get(Name + "_0");
         int i = 0;
         while(val != null)

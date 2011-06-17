@@ -27,8 +27,8 @@ import java.util.Vector;
  */
 public class RegExpFilter extends DataFilter
 {
-    private String RegularExpression;
-    private String NameOfAtom;
+    private String regularExpression;
+    private String nameOfAtom;
 
     /**
      *
@@ -37,29 +37,29 @@ public class RegExpFilter extends DataFilter
     {
     }
 
-    public void setRegularExpression(String regularExpression)
+    public final void setRegularExpression(final String newRegularExpression)
     {
-        RegularExpression = regularExpression;
+        regularExpression = newRegularExpression;
     }
 
-    public void setNameOfAtom(String nameOfAtom)
+    public final void setNameOfAtom(final String newNameOfAtom)
     {
-        NameOfAtom = nameOfAtom;
+        nameOfAtom = newNameOfAtom;
     }
 
     /**
      * @see org.Transformer.dataset.DataFilter#applyFilterTo(org.Transformer.dataset.DataSet[])
      */
     @Override
-    public DataSet[] applyFilterTo(DataSet[] theData)
+    public final DataSet[] applyFilterTo(final DataSet[] theData)
     {
-        Vector<DataSet> res = new Vector<DataSet>();
+        final Vector<DataSet> res = new Vector<DataSet>();
         for(int i = 0; i < theData.length; i++)
         {
-            String fieldValue = theData[i].getDataAtom(NameOfAtom);
+            final String fieldValue = theData[i].getDataAtom(nameOfAtom);
             if(null != fieldValue)
             {
-                if(true == fieldValue.matches(RegularExpression))
+                if(true == fieldValue.matches(regularExpression))
                 {
                     res.add(theData[i]);
                 }
@@ -71,21 +71,21 @@ public class RegExpFilter extends DataFilter
     }
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
-        return "NameOfAtom = " + NameOfAtom + "\n"
-               + "RegularExpression = " + RegularExpression;
+        return "NameOfAtom = " + nameOfAtom + "\n"
+               + "RegularExpression = " + regularExpression;
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
-        NameOfAtom = cfg.get("NameOfAtom");
-        RegularExpression = cfg.get("RegularExpression");
+        nameOfAtom = cfg.get("NameOfAtom");
+        regularExpression = cfg.get("RegularExpression");
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "RegExpFilter";
     }

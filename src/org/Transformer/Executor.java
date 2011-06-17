@@ -41,12 +41,12 @@ public class Executor
     {
     }
 
-    public void addProgressReporter(IntReporter rep)
+    public final void addProgressReporter(final IntReporter rep)
     {
         progRep = rep;
     }
 
-    private void reportProgress(int progress)
+    private void reportProgress(final int progress)
     {
         if(null != progRep)
         {
@@ -55,15 +55,15 @@ public class Executor
         // else no reporting
     }
 
-    private DataSet[] importData(Job job)
+    private DataSet[] importData(final Job job)
     {
-        Importer imp = job.getImporter();
+        final Importer imp = job.getImporter();
         log.debug("Importer is : " + imp.getName());
         log.debug("Importer Configuration is : " + imp.getConfig());
         reportProgress(1);
 
         // Import Data using Import Filter
-        ImportSelector impSelector = job.getImportSelector();
+        final ImportSelector impSelector = job.getImportSelector();
         log.debug("Import Selector is : " + impSelector.getName());
         log.debug("Import Selector Configuration is : " + impSelector.getConfig());
         imp.importData(impSelector);
@@ -73,7 +73,7 @@ public class Executor
         {
             log.error("Import Failed");
             reportProgress(21);
-            return null;
+            return new DataSet[0];
         }
         reportProgress(33);
 
@@ -82,24 +82,28 @@ public class Executor
         return imp.getTheData();
     }
 
-    private DataSet[] filterData(Job job, DataSet[] theData)
+    private DataSet[] filterData(final Job job, final DataSet[] theData)
     {
-        DataFilter filter = job.getDataFilter();
-        log.debug("Data Filter is : " + filter.getName());
+        final DataFilter filter = job.getDataFilter();
         if(null != filter)
         {
-            theData = filter.applyFilterTo(theData);
+            log.debug("Data Filter is : " + filter.getName());
+            final DataSet[] res = filter.applyFilterTo(theData);
+            return res;
         }
-        return theData;
+        else
+        {
+            return theData;
+        }
     }
 
-    private Boolean exportData(Job job, DataSet[] theData)
+    private Boolean exportData(final Job job, final DataSet[] theData)
     {
-        Exporter exp = job.getExporter();
+        final Exporter exp = job.getExporter();
         log.debug("Exporter is : " + exp.getName());
         reportProgress(68);
 
-        ExportStyle expStyle = job.getExportStyle();
+        final ExportStyle expStyle = job.getExportStyle();
         log.debug("Export Style is : " + expStyle.getName());
         exp.export(theData, expStyle);
         reportProgress(98);
@@ -107,7 +111,7 @@ public class Executor
         return exp.wasSuccessfull();
     }
 
-    private boolean isEmpty(DataSet[] someData)
+    private boolean isEmpty(final DataSet[] someData)
     {
         if(null == someData)
         {
@@ -127,11 +131,11 @@ public class Executor
         return true;
     }
 
-    public void executeJob(Job job)
+    public final void executeJob(final Job job)
     {
         reportProgress(0);
         log.info("=== Starting ===");
-        DataSet[] theData = importData(job);
+        final DataSet[] theData = importData(job);
         if(true == isEmpty(theData))
         {
             log.error("Importer could not import any Data !");
@@ -161,17 +165,17 @@ public class Executor
         log.info("=== Success ===");
     }
 
-    private void printDataSetArray(DataSet[] theData)
+    private void printDataSetArray(final DataSet[] theData)
     {
         log.info("=== Current Data Set ===");
         log.debug("Data Set Entries:");
         for(int k = 0; k < theData.length; k++)
         {
-            DataSet curSet = theData[k];
+            final DataSet curSet = theData[k];
             if(null != curSet)
             {
                 log.debug("Entry " + k + " has " + theData[k].getNumberOfAtoms() + " Data Atoms !");
-                String[] names = theData[k].getNamesOfAllDataAtoms();
+                final String[] names = theData[k].getNamesOfAllDataAtoms();
                 for (int h = 0; h < names.length; h++)
                 {
                     log.debug("(" + names[h] + " : " + theData[k].getDataAtom(names[h]) + ")");

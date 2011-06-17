@@ -33,13 +33,13 @@ import org.apache.log4j.xml.DOMConfigurator;
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public class Main
+public final class Main
 {
 
     /** not used
      *
      */
-    public Main()
+    private Main()
     {
     }
 
@@ -47,9 +47,9 @@ public class Main
      *
      * @param Parameter Filename of File containing Job definitions
      */
-    public static void execute(String Parameter)
+    public static void execute(final String Parameter)
     {
-        File configFile = new File(Parameter);
+        final File configFile = new File(Parameter);
         System.out.println("Parameter is : " + Parameter);
 
         if(true == configFile.canRead())
@@ -59,7 +59,7 @@ public class Main
             jobs = Job.readFromFile(configFile);
             if(true == jobs.isExecuteable())
             {
-                Executor exec = new Executor();
+                final Executor exec = new Executor();
                 exec.executeJob(jobs);
             }
             else
@@ -78,7 +78,7 @@ public class Main
     /** Main function of DataSet Transformer Project.
      * @param args command line parameters
      */
-    public static void main(String[] args)
+    public static void main(final String[] args)
     {
         Logger rootlog = null;
         // Start Log4J Logger

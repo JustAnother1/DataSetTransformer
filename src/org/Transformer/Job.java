@@ -38,12 +38,12 @@ import org.Transformer.importer.Importer;
  */
 public class Job
 {
-    private final static String IMPORTER_LINE = "Importer";
-    private final static String IMPORT_SELECTOR_LINE = "Import Selector";
-    private final static String DATA_FILTER_LINE = "Data Filter";
-    private final static String EXPORTER_LINE = "Exporter";
-    private final static String EXPORT_STYLE_LINE = "Export Style";
-    private final static String CLASS_TYPE_NAME = "type";
+    private static final String IMPORTER_LINE = "Importer";
+    private static final String IMPORT_SELECTOR_LINE = "Import Selector";
+    private static final String DATA_FILTER_LINE = "Data Filter";
+    private static final String EXPORTER_LINE = "Exporter";
+    private static final String EXPORT_STYLE_LINE = "Export Style";
+    private static final String CLASS_TYPE_NAME = "type";
 
     private Importer theImporter;
     private ImportSelector theImportSelector;
@@ -58,53 +58,187 @@ public class Job
     {
     }
 
-    public static void writeJobToFile(File cfgFile, Job job)
+    public static void writeJobToFile(final File cfgFile, final Job job)
     {
+        FileWriter fw = null;
         try
         {
-            FileWriter fw = new FileWriter(cfgFile);
+            fw = new FileWriter(cfgFile);
 
-            Importer imp = job.getImporter();
+            final Importer imp = job.getImporter();
             if(null != imp)
             {
                 fw.write("[" + IMPORTER_LINE + "]\n");
                 fw.write(CLASS_TYPE_NAME + " = " + imp.getName() + "\n");
                 fw.write(imp.getConfig() + "\n");
             }
-            ImportSelector impsel = job.getImportSelector();
+            final ImportSelector impsel = job.getImportSelector();
             if(null != impsel)
             {
                 fw.write("[" + IMPORT_SELECTOR_LINE + "]\n");
                 fw.write(CLASS_TYPE_NAME + " = " + impsel.getName() + "\n");
                 fw.write(impsel.getConfig() + "\n");
             }
-            DataFilter df = job.getDataFilter();
+            final DataFilter df = job.getDataFilter();
             if(null != df)
             {
                 fw.write("[" + DATA_FILTER_LINE + "]\n");
                 fw.write(CLASS_TYPE_NAME + " = " + df.getName() + "\n");
                 fw.write(df.getConfig() + "\n");
             }
-            Exporter exp = job.getExporter();
+            final Exporter exp = job.getExporter();
             if(null != exp)
             {
                 fw.write("[" + EXPORTER_LINE + "]\n");
                 fw.write(CLASS_TYPE_NAME + " = " + exp.getName() + "\n");
                 fw.write(exp.getConfig() + "\n");
             }
-            ExportStyle expsty = job.getExportStyle();
+            final ExportStyle expsty = job.getExportStyle();
             if(null != expsty)
             {
                 fw.write("[" + EXPORT_STYLE_LINE + "]\n");
                 fw.write(CLASS_TYPE_NAME + " = " + expsty.getName() + "\n");
                 fw.write(expsty.getConfig() + "\n");
             }
-            fw.close();
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             e.printStackTrace();
         }
+        finally
+        {
+            if(null != fw)
+            {
+                try
+                {
+                    fw.close();
+                }
+                catch(final IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static Importer readImporter(final ConfigParser cfgp)
+    {
+        final Map<String, String> settings = cfgp.getSettingsOfSection(IMPORTER_LINE);
+        if(null != settings)
+        {
+            final String classType = settings.get(CLASS_TYPE_NAME);
+            final Importer imp = Factory.createImporterFor(classType);
+            if(null != imp)
+            {
+                imp.setConfig(settings);
+                return imp;
+            }
+            else
+            {
+                System.err.println("Could not create the Importer : " + classType);
+            }
+        }
+        else
+        {
+            System.err.println("File did not contain an Importer !");
+        }
+        return null;
+    }
+
+    private static ImportSelector readImportSelector(final ConfigParser cfgp)
+    {
+        final Map<String, String> settings = cfgp.getSettingsOfSection(IMPORT_SELECTOR_LINE);
+        if(null != settings)
+        {
+            final String classType = settings.get(CLASS_TYPE_NAME);
+            final ImportSelector impsel = Factory.createImportSelectorFor(classType);
+            if(null != impsel)
+            {
+                impsel.setConfig(settings);
+                return impsel;
+            }
+            else
+            {
+                System.err.println("Could not create the Import Selector : " + classType);
+            }
+        }
+        else
+        {
+            System.err.println("File did not contain an Import Selector !");
+        }
+        return null;
+    }
+
+    private static DataFilter readDataFilter(final ConfigParser cfgp)
+    {
+        final Map<String, String> settings = cfgp.getSettingsOfSection(IMPORTER_LINE);
+        if(null != settings)
+        {
+            final String classType = settings.get(CLASS_TYPE_NAME);
+            final DataFilter df = Factory.createDataFilterFor(classType);
+            if(null != df)
+            {
+                df.setConfig(settings);
+                return df;
+            }
+            else
+            {
+                System.err.println("Could not create the Data Filter : " + classType);
+            }
+        }
+        else
+        {
+            System.err.println("File did not contain a Data Filter !");
+        }
+        return null;
+    }
+
+    private static Exporter readExporter(final ConfigParser cfgp)
+    {
+        final Map<String, String> settings = cfgp.getSettingsOfSection(EXPORTER_LINE);
+        if(null != settings)
+        {
+            final String classType = settings.get(CLASS_TYPE_NAME);
+            final Exporter exp = Factory.createExporterFor(classType);
+            if(null != exp)
+            {
+                exp.setConfig(settings);
+                return exp;
+            }
+            else
+            {
+                System.err.println("Could not create the Exporter : " + classType);
+            }
+        }
+        else
+        {
+            System.err.println("File did not contain an Exporter !");
+        }
+        return null;
+    }
+
+    private static ExportStyle readExportStyle(final ConfigParser cfgp)
+    {
+        final Map<String, String> settings = cfgp.getSettingsOfSection(EXPORT_STYLE_LINE);
+        if(null != settings)
+        {
+            final String classType = settings.get(CLASS_TYPE_NAME);
+            final ExportStyle expSty = Factory.createExportStyleFor(classType);
+            if(null != expSty)
+            {
+                expSty.setConfig(settings);
+                return expSty;
+            }
+            else
+            {
+                System.err.println("Could not create the Export Style : " + classType);
+            }
+        }
+        else
+        {
+            System.err.println("File did not contain an Export Style !");
+        }
+        return null;
     }
 
     /** creates a Job from the provided File.
@@ -112,178 +246,84 @@ public class Job
      * @param cfgFile File that contains Job Description
      * @return Job created from cfgFile or new Job
      */
-    public static Job readFromFile(File cfgFile)
+    public static Job readFromFile(final File cfgFile)
     {
-        Job result = new Job();
+        final Job result = new Job();
         try
         {
-            FileReader fr = new FileReader(cfgFile);
-            ConfigParser cfgp = new ConfigParser(fr);
-            String classType;
-            Map<String, String> settings = cfgp.getSettingsOfSection(IMPORTER_LINE);
-            if(null != settings)
-            {
-                classType = settings.get(CLASS_TYPE_NAME);
-                Importer imp = Factory.createImporterFor(classType);
-                if(null != imp)
-                {
-                    imp.setConfig(settings);
-                    result.setImporter(imp);
-                }
-                else
-                {
-                    System.err.println("Could not create the Importer : " + classType);
-                }
-            }
-            else
-            {
-                System.err.println("File did not contain an Importer !");
-            }
+            final FileReader fr = new FileReader(cfgFile);
+            final ConfigParser cfgp = new ConfigParser(fr);
 
-            settings = cfgp.getSettingsOfSection(IMPORT_SELECTOR_LINE);
-            if(null != settings)
-            {
-                classType = settings.get(CLASS_TYPE_NAME);
-                ImportSelector impsel = Factory.createImportSelectorFor(classType);
-                if(null != impsel)
-                {
-                    impsel.setConfig(settings);
-                    result.setImportSelector(impsel);
-                }
-                else
-                {
-                    System.err.println("Could not create the Import Selector : " + classType);
-                }
-            }
-            else
-            {
-                System.err.println("File did not contain an Import Selector !");
-            }
-
-            settings = cfgp.getSettingsOfSection(DATA_FILTER_LINE);
-            if(null != settings)
-            {
-                classType = settings.get(CLASS_TYPE_NAME);
-                DataFilter df = Factory.createDataFilterFor(classType);
-                if(null != df)
-                {
-                    df.setConfig(settings);
-                    result.setDataFilter(df);
-                }
-                else
-                {
-                    System.err.println("Could not create the Data Filter : " + classType);
-                }
-            }
-            else
-            {
-                System.err.println("File did not contain a Data Filter !");
-            }
-
-            settings = cfgp.getSettingsOfSection(EXPORTER_LINE);
-            if(null != settings)
-            {
-                classType = settings.get(CLASS_TYPE_NAME);
-                Exporter exp = Factory.createExporterFor(classType);
-                if(null != exp)
-                {
-                    exp.setConfig(settings);
-                    result.setExporter(exp);
-                }
-                else
-                {
-                    System.err.println("Could not create the Exporter : " + classType);
-                }
-            }
-            else
-            {
-                System.err.println("File did not contain an Exporter !");
-            }
-
-            settings = cfgp.getSettingsOfSection(EXPORT_STYLE_LINE);
-            if(null != settings)
-            {
-                classType = settings.get(CLASS_TYPE_NAME);
-                ExportStyle expSty = Factory.createExportStyleFor(classType);
-                if(null != expSty)
-                {
-                    expSty.setConfig(settings);
-                    result.setExportStyle(expSty);
-                }
-                else
-                {
-                    System.err.println("Could not create the Export Style : " + classType);
-                }
-            }
-            else
-            {
-                System.err.println("File did not contain an Export Style !");
-            }
+            result.setImporter(readImporter(cfgp));
+            result.setImportSelector(readImportSelector(cfgp));
+            result.setDataFilter(readDataFilter(cfgp));
+            result.setExporter(readExporter(cfgp));
+            result.setExportStyle(readExportStyle(cfgp));
 
             fr.close();
         }
-        catch(FileNotFoundException e)
+        catch(final FileNotFoundException e)
         {
             e.printStackTrace();
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             e.printStackTrace();
         }
         return result;
     }
 
-    public void setImporter(Importer aImporter)
+    public final void setImporter(final Importer aImporter)
     {
         theImporter = aImporter;
     }
 
-    public Importer getImporter()
+    public final Importer getImporter()
     {
         return theImporter;
     }
 
-    public void setImportSelector(ImportSelector ainselect)
+    public final void setImportSelector(final ImportSelector ainselect)
     {
         theImportSelector = ainselect;
     }
 
-    public ImportSelector getImportSelector()
+    public final ImportSelector getImportSelector()
     {
         return theImportSelector;
     }
 
-    public void setExporter(Exporter exp)
+    public final void setExporter(final Exporter exp)
     {
         theExporter = exp;
     }
 
-    public Exporter getExporter()
+    public final Exporter getExporter()
     {
         return theExporter;
     }
 
-    public void setExportStyle(ExportStyle expStyle)
+    public final void setExportStyle(final ExportStyle expStyle)
     {
         theExportStyle = expStyle;
     }
 
-    public ExportStyle getExportStyle()
+    public final ExportStyle getExportStyle()
     {
         return theExportStyle;
     }
 
-    public void setDataFilter(DataFilter filter)
+    public final void setDataFilter(final DataFilter filter)
     {
         theDataFilter = filter;
     }
 
-    public DataFilter getDataFilter()
+    public final DataFilter getDataFilter()
     {
         return theDataFilter;
     }
 
-    public boolean isExecuteable()
+    public final boolean isExecuteable()
     {
         if(null == theImporter)
         {

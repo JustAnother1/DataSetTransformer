@@ -18,23 +18,14 @@
  */
 package org.Transformer.importer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
 
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public class UrlImporter extends Importer
+public class UrlImporter extends BaseUrlImporter
 {
-    protected String SourceUrl = "";
 
     /**
      *
@@ -43,130 +34,25 @@ public class UrlImporter extends Importer
     {
     }
 
-    public void setSource(String src)
+    public final void importData(final ImportSelector infilt)
     {
-        if(null != src)
-        {
-            SourceUrl = src;
-        }
-    }
-
-    private boolean isValidChar(final char c)
-    {
-        final char[] validChars = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-                                   'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                                   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                                   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-        for(int i = 0; i < validChars.length; i++)
-        {
-            if(c == validChars[i])
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String onlyAllowedChars(final String src)
-    {
-        final StringBuffer dst = new StringBuffer();
-        for(int i = 0; i < src.length(); i++)
-        {
-            final char cur = src.charAt(i);
-            if(true == isValidChar(cur))
-            {
-                dst.append(cur);
-            }
-        }
-        return dst.toString();
-    }
-
-    /**
-     * Copy the content of the input stream into the output stream, using a temporary
-     * byte array buffer whose size is 4 * 1024.
-     *
-     * @param in The input stream to copy from.
-     * @param out The output stream to copy to.
-     *
-     * @throws IOException If any error occurs during the copy.
-     */
-    private static void copy(InputStream in, OutputStream out) throws IOException
-    {
-        byte[] b = new byte[4 * 1024];
-        int read;
-        while ((read = in.read(b)) != -1)
-        {
-            out.write(b, 0, read);
-        }
-    }
-
-
-    public void importData(ImportSelector infilt)
-    {
-        try
-        {
-            // already cached ?
-            File cacheFolder = new File("cache");
-            cacheFolder.mkdir();
-            String cacheName = "cache/DataTransformer_cache" + onlyAllowedChars(SourceUrl) + ".dtc";
-            File cacheFile = new File(cacheName);
-
-            if(false == cacheFile.exists())
-            {
-                System.out.println("Getting Source Data from " + SourceUrl);
-                // not cached load the file
-                URL src = new URL(SourceUrl);
-                InputStream is = src.openStream();
-                FileOutputStream cache = new FileOutputStream(cacheName);
-                copy(is, cache);
-                is.close();
-                cache.flush();
-                cache.close();
-            }
-            else
-            {
-                System.out.println("Using cached Data for " + SourceUrl);
-            }
-            FileInputStream fin = new FileInputStream(cacheFile);
-            if(true == infilt.parseToDataSets(fin))
-            {
-                theImportedData = infilt.getTheData();
-                ImportSuccessfullyCompleted = true;
-            }
-            else
-            {
-                ImportSuccessfullyCompleted = false;
-            }
-            fin.close();
-        }
-        catch(MalformedURLException e)
-        {
-            System.err.println("Could not parse the URL : " + SourceUrl);
-            //e.printStackTrace();
-            ImportSuccessfullyCompleted = false;
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-            ImportSuccessfullyCompleted = false;
-        }
+        baseImportData(infilt);
     }
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
-        return "SourceUrl = " + SourceUrl;
+        return "SourceUrl = " + getSource();
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
-        SourceUrl = cfg.get("SourceUrl");
+        setSource(cfg.get("SourceUrl"));
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "UrlImporter";
     }

@@ -27,19 +27,24 @@ import java.io.InputStream;
  */
 public abstract class TreeStructure
 {
-    boolean valid = false;
+    private boolean valid = false;
     /**
      * @param src
      *
      */
-    public TreeStructure(InputStream src)
+    public TreeStructure(final InputStream src)
     {
 
     }
 
     public abstract String[] getLeafsFor(String string);
 
-    public boolean isValid()
+    protected final void setValid(final boolean value)
+    {
+        valid = value;
+    }
+
+    public final boolean isValid()
     {
         return valid;
     }

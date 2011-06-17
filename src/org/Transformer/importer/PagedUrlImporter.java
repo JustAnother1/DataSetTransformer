@@ -18,6 +18,7 @@
  */
 package org.Transformer.importer;
 
+import java.util.Map;
 import java.util.Vector;
 
 import org.Transformer.dataset.DataSet;
@@ -26,7 +27,7 @@ import org.Transformer.dataset.DataSet;
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public class PagedUrlImporter extends UrlImporter
+public class PagedUrlImporter extends BaseUrlImporter
 {
     /**
      *
@@ -35,31 +36,43 @@ public class PagedUrlImporter extends UrlImporter
     {
     }
 
-    public void importData(ImportSelector infilt)
+    @Override
+    public final void setConfig(final Map<String, String> cfg)
     {
-        Vector<DataSet> res = new Vector<DataSet>();
-        String nextPageUrl = SourceUrl;
+        setSource(cfg.get("SourceUrl"));
+    }
+
+    @Override
+    public final String getConfig()
+    {
+        return "SourceUrl = " + getSource();
+    }
+
+    public final void importData(final ImportSelector infilt)
+    {
+        final Vector<DataSet> res = new Vector<DataSet>();
+        String nextPageUrl = getSource();
         do
         {
             // Parse the Page
             System.out.println("Importing Page : " + nextPageUrl);
-            super.setSource(nextPageUrl);
-            super.importData(infilt);
+            setSource(nextPageUrl);
+            baseImportData(infilt);
             if(false == super.wasSuccessfull())
             {
-                ImportSuccessfullyCompleted = false;
+                setSuccessfullyCompleted(false);
                 return;
             }
             // has more pages ?
             nextPageUrl = "";
-            DataSet[] curRes = super.getTheData();
+            final DataSet[] curRes = super.getTheData();
             for(int i = 0; i < curRes.length; i++)
             {
                 res.add(curRes[i]);
             }
             for(int i = 0; i < curRes.length; i++)
             {
-                String curNext = curRes[i].getDataAtom("Next");
+                final String curNext = curRes[i].getDataAtom("Next");
                 if(null != curNext)
                 {
                     if(0 < curNext.length())
@@ -70,11 +83,11 @@ public class PagedUrlImporter extends UrlImporter
                 }
             }
         } while(0 < nextPageUrl.length());
-        theImportedData = res.toArray(new DataSet[1]);
+        setTheData(res.toArray(new DataSet[1]));
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "PagedUrlImporter";
     }

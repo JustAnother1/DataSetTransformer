@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class FileImporter extends Importer
 {
-    protected String FileName = "";
+    private String fileName = "";
 
     /**
      *
@@ -39,69 +39,69 @@ public class FileImporter extends Importer
     }
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
-        return "FileName = " + FileName;
+        return "FileName = " + fileName;
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "FileImporter";
     }
 
     @Override
-    public void setSource(String src)
+    public final void setSource(final String src)
     {
         if(null != src)
         {
-            FileName = src;
+            fileName = src;
         }
     }
 
     @Override
-    public void importData(ImportSelector infilt)
+    public final void importData(final ImportSelector infilt)
     {
         try
         {
-            File sourceFile = new File(FileName);
+            final File sourceFile = new File(fileName);
             if((false == sourceFile.exists()) || (false == sourceFile.canRead()))
             {
-                System.err.println("Could not read Data from " + FileName);
-                ImportSuccessfullyCompleted = false;
+                System.err.println("Could not read Data from " + fileName);
+                setSuccessfullyCompleted(false);
             }
             else
             {
-                FileInputStream fin = new FileInputStream(sourceFile);
+                final FileInputStream fin = new FileInputStream(sourceFile);
                 System.out.println("Reading Data from " + sourceFile.getAbsolutePath());
                 if(true == infilt.parseToDataSets(fin))
                 {
-                    theImportedData = infilt.getTheData();
-                    ImportSuccessfullyCompleted = true;
+                    setTheData(infilt.getTheData());
+                    setSuccessfullyCompleted(true);
                 }
                 else
                 {
-                    ImportSuccessfullyCompleted = false;
+                    setSuccessfullyCompleted(false);
                 }
                 fin.close();
             }
         }
-        catch(MalformedURLException e)
+        catch(final MalformedURLException e)
         {
             e.printStackTrace();
-            ImportSuccessfullyCompleted = false;
+            setSuccessfullyCompleted(false);
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             e.printStackTrace();
-            ImportSuccessfullyCompleted = false;
+            setSuccessfullyCompleted(false);
         }
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
-        FileName = cfg.get("FileName");
+        fileName = cfg.get("FileName");
     }
 
 }

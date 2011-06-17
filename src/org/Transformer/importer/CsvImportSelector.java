@@ -34,7 +34,7 @@ import org.Transformer.dataset.DataSet;
 public class CsvImportSelector extends ImportSelector
 {
     private String separator = ",";
-    private String[] mapping;
+    private String[] mapping = new String[0];
 
     /**
      *
@@ -44,12 +44,12 @@ public class CsvImportSelector extends ImportSelector
         super();
     }
 
-    public void setMapping(String[] theMapping)
+    public final void setMapping(final String[] theMapping)
     {
         mapping = theMapping;
     }
 
-    public void setSeperator(String theSeperator)
+    public final void setSeperator(final String theSeperator)
     {
         separator = theSeperator;
     }
@@ -59,10 +59,10 @@ public class CsvImportSelector extends ImportSelector
      * @see org.Transformer.importer.ImportFilter#parseToDataSets(java.io.InputStream)
      */
     @Override
-    public boolean parseToDataSets(InputStream src)
+    public final boolean parseToDataSets(final InputStream src)
     {
-        Vector<DataSet> res = new Vector<DataSet>();
-        InputStreamReader in = new InputStreamReader(src);
+        final Vector<DataSet> res = new Vector<DataSet>();
+        final InputStreamReader in = new InputStreamReader(src);
         StringBuffer sb = new StringBuffer();
         int r;
         try
@@ -71,12 +71,12 @@ public class CsvImportSelector extends ImportSelector
                 r = in.read();
                 if(-1 != r)
                 {
-                    char c = (char)r;
+                    final char c = (char)r;
                     if(c == '\n')
                     {
                         // end of Line reached
-                        String line = sb.toString();
-                        DataSet LineSet = parseLineToDataSet(line);
+                        final String line = sb.toString();
+                        final DataSet LineSet = parseLineToDataSet(line);
                         if(null != LineSet)
                         {
                             res.add(LineSet);
@@ -90,33 +90,33 @@ public class CsvImportSelector extends ImportSelector
                 }
             }while(-1 != r);
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             e.printStackTrace();
         }
         // end of Line reached
-        String line = sb.toString();
-        DataSet LineSet = parseLineToDataSet(line);
+        final String line = sb.toString();
+        final DataSet LineSet = parseLineToDataSet(line);
         if(null != LineSet)
         {
             res.add(LineSet);
         }
 
-        data = res.toArray(new DataSet[1]);
+        setDataSet(res.toArray(new DataSet[1]));
         return true;
     }
 
 
-    private DataSet parseLineToDataSet(String line)
+    private DataSet parseLineToDataSet(final String line)
     {
         System.out.println("Line : " + line);
-        String[] Values = line.split(separator);
+        final String[] Values = line.split(separator);
         System.out.println("Split with Separator : " + separator + " !");
         for(int i = 0; i < Values.length; i++)
         {
             System.out.println("Atom " + i + " : " + Values[i]);
         }
-        DataSet row = new DataSet();
+        final DataSet row = new DataSet();
         System.out.println("mapping.length : " + mapping.length);
         for(int i = 0; i < mapping.length; i++)
         {
@@ -133,7 +133,7 @@ public class CsvImportSelector extends ImportSelector
         }
         for(int j = 0; j < maxLength; j++)
         {
-            String Name = mapping[j];
+            final String Name = mapping[j];
             if(null != Name)
             {
                 row.addDataAtom(Values[j], Name);
@@ -144,21 +144,21 @@ public class CsvImportSelector extends ImportSelector
     }
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
         return "separator = " + separator + "\n"
                + JobUtils.getConfigTextFor(mapping, "mapping");
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
         mapping = JobUtils.getStringArrayFromSettingMap(cfg, "mapping");
         separator = cfg.get("separator");
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "CsvImportSelector";
     }

@@ -31,8 +31,8 @@ import org.Transformer.dataset.DataSet;
  */
 public class TreeImportSelector extends ImportSelector
 {
-    private String[] Mapping_Position;
-    private String[] Mapping_Name;
+    private String[] mappingPosition;
+    private String[] mappingName;
 
     /**
      *
@@ -42,26 +42,26 @@ public class TreeImportSelector extends ImportSelector
         super();
     }
 
-    public void setMapping(String[] positions, String[] Names)
+    public final void setMapping(final String[] positions, final String[] Names)
     {
-        Mapping_Name = Names;
-        Mapping_Position = positions;
+        mappingName = Names;
+        mappingPosition = positions;
     }
 
     @Override
-    public boolean parseToDataSets(InputStream src)
+    public final boolean parseToDataSets(final InputStream src)
     {
-        TreeStructure Tree = new HtmlTreeStructure(src);
-        if((null == Mapping_Position) || (null == Mapping_Name))
+        final TreeStructure Tree = new HtmlTreeStructure(src);
+        if((null == mappingPosition) || (null == mappingName))
         {
             System.out.println("No Mapping !");
             return false;
         }
-        Vector<DataSet> res = new Vector<DataSet>();
-        System.out.println("Importing with " + Mapping_Position.length + " Mapping Positions.");
-        for(int i = 0; i < Mapping_Position.length; i++)
+        final Vector<DataSet> res = new Vector<DataSet>();
+        System.out.println("Importing with " + mappingPosition.length + " Mapping Positions.");
+        for(int i = 0; i < mappingPosition.length; i++)
         {
-            String Val[] = Tree.getLeafsFor(Mapping_Position[i]);
+            final String[] Val = Tree.getLeafsFor(mappingPosition[i]);
             if(null == Val)
             {
                 continue;
@@ -84,29 +84,29 @@ public class TreeImportSelector extends ImportSelector
                     res.add(k, curRow);
                 }
                 System.out.println("String " + k + " : " + Val[k]);
-                curRow.addDataAtom(Val[k], Mapping_Name[i]);
+                curRow.addDataAtom(Val[k], mappingName[i]);
             }
         }
-        data = (DataSet[])res.toArray(new DataSet[1]);
+        setDataSet((DataSet[])res.toArray(new DataSet[1]));
         return true;
     }
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
-        return "" + JobUtils.getConfigTextFor(Mapping_Position, "Mapping_Position") + "\n"
-                  + JobUtils.getConfigTextFor(Mapping_Name, "Mapping_Name");
+        return "" + JobUtils.getConfigTextFor(mappingPosition, "Mapping_Position") + "\n"
+                  + JobUtils.getConfigTextFor(mappingName, "Mapping_Name");
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
-        Mapping_Position = JobUtils.getStringArrayFromSettingMap(cfg, "Mapping_Position");
-        Mapping_Name = JobUtils.getStringArrayFromSettingMap(cfg, "Mapping_Name");
+        mappingPosition = JobUtils.getStringArrayFromSettingMap(cfg, "Mapping_Position");
+        mappingName = JobUtils.getStringArrayFromSettingMap(cfg, "Mapping_Name");
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "TreeImportSelector";
     }

@@ -30,23 +30,23 @@ public class XmlTreeStructure extends TreeStructure
     /**
      * @param src
      */
-    public XmlTreeStructure(InputStream src)
+    public XmlTreeStructure(final InputStream src)
     {
         super(src);
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public String[] getLeafsFor(String string)
+    public final String[] getLeafsFor(final String string)
     {
-        if(false == valid)
+        if(false == isValid())
         {
-            return null;
+            return new String[0];
         }
         else
         {
             // TODO
-            return null;
+            return new String[0];
         }
     }
 

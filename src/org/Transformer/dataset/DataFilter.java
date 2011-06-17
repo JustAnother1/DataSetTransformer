@@ -35,6 +35,6 @@ public abstract class DataFilter implements JobSerialize
     {
     }
 
-    public abstract DataSet[] applyFilterTo(DataSet theData[]);
+    public abstract DataSet[] applyFilterTo(DataSet[] theData);
 
 }

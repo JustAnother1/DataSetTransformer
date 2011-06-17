@@ -48,7 +48,7 @@ public class UrlListImporter extends Importer
      * @see org.Transformer.importer.Importer#setSource(java.lang.String)
      */
     @Override
-    public void setSource(String src)
+    public final void setSource(final String src)
     {
         source = src;
     }
@@ -57,14 +57,15 @@ public class UrlListImporter extends Importer
      * @see org.Transformer.importer.Importer#importData(org.Transformer.importer.ImportSelector)
      */
     @Override
-    public void importData(ImportSelector infilt)
+    public final void importData(final ImportSelector infilt)
     {
-        File srcFile = new File(source);
+        final File srcFile = new File(source);
         if((true == srcFile.exists()) && (true == srcFile.canRead()))
         {
+            FileReader fr = null;
             try
             {
-                FileReader fr = new FileReader(srcFile);
+                fr = new FileReader(srcFile);
                 int r;
                 char c;
                 StringBuffer sb = new StringBuffer();
@@ -80,11 +81,11 @@ public class UrlListImporter extends Importer
                         }
                         else
                         {
-                            String line = sb.toString();
+                            final String line = sb.toString();
                             sb = new StringBuffer(); // Delete all characters
                             if(false == partImport(line, infilt))
                             {
-                                theImportedData = resultCollect.toArray(new DataSet[1]);
+                                setTheData(resultCollect.toArray(new DataSet[1]));
                                 return;
                             }
                         }
@@ -94,36 +95,50 @@ public class UrlListImporter extends Importer
                         // last line
                         if(0 < sb.length())
                         {
-                            String line = sb.toString();
+                            final String line = sb.toString();
                             if(false == partImport(line, infilt))
                             {
-                                theImportedData = resultCollect.toArray(new DataSet[1]);
+                                setTheData(resultCollect.toArray(new DataSet[1]));
                                 return;
                             }
                         }
                     }
                 }while(r != -1);
-                theImportedData = resultCollect.toArray(new DataSet[1]);
+                setTheData(resultCollect.toArray(new DataSet[1]));
             }
-            catch(FileNotFoundException e)
+            catch(final FileNotFoundException e)
             {
                 e.printStackTrace();
             }
-            catch(IOException e)
+            catch(final IOException e)
             {
                 e.printStackTrace();
+            }
+            finally
+            {
+                if(null != fr)
+                {
+                    try
+                    {
+                        fr.close();
+                    }
+                    catch(final IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
 
-    private boolean partImport(String line, ImportSelector infilt)
+    private boolean partImport(final String line, final ImportSelector infilt)
     {
         System.out.println("Importing : " + line);
         singleImporter.setSource(line);
         singleImporter.importData(infilt);
-        if(true == singleImporter.ImportSuccessfullyCompleted)
+        if(true == singleImporter.wasSuccessfull())
         {
-            DataSet[] resPart = singleImporter.getTheData();
+            final DataSet[] resPart = singleImporter.getTheData();
             for(int i = 0; i < resPart.length; i++)
             {
                 resultCollect.add(resPart[i]);
@@ -137,19 +152,19 @@ public class UrlListImporter extends Importer
     }
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
         return "source = " + source;
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
         source = cfg.get("source");
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "UrlListImporter";
     }

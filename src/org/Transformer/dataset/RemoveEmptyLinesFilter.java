@@ -36,9 +36,9 @@ public class RemoveEmptyLinesFilter extends DataFilter
     {
     }
 
-    public DataSet[] applyFilterTo(DataSet theData[])
+    public final DataSet[] applyFilterTo(final DataSet[] theData)
     {
-        Vector<DataSet> res = new Vector<DataSet>();
+        final Vector<DataSet> res = new Vector<DataSet>();
         for(int i = 0; i < theData.length; i++)
         {
             if(0 != theData[i].getNumberOfAtoms())
@@ -51,18 +51,18 @@ public class RemoveEmptyLinesFilter extends DataFilter
     }
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
         return "";
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public void setConfig(final Map<String, String> cfg)
     {
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "RemoveEmptyLinesFilter";
     }

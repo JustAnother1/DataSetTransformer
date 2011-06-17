@@ -29,7 +29,7 @@ import org.Transformer.dataset.DataSet;
  */
 public abstract class ImportSelector implements JobSerialize
 {
-    protected DataSet[] data = new DataSet[1];
+    private DataSet[] data = new DataSet[1];
 
     /**
      *
@@ -41,7 +41,12 @@ public abstract class ImportSelector implements JobSerialize
 
     public abstract boolean parseToDataSets(InputStream src);
 
-    public DataSet[] getTheData()
+    protected final void setDataSet(final DataSet[] curData)
+    {
+        data = curData;
+    }
+
+    public final DataSet[] getTheData()
     {
         return data;
     }

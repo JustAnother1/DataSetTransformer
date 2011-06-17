@@ -23,5 +23,5 @@ package org.Transformer;
  */
 public interface IntReporter
 {
-    public void reportProgress(int progress);
+    void reportProgress(int progress);
 }

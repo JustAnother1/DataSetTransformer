@@ -44,23 +44,24 @@ import org.w3c.tidy.Tidy;
 public class HtmlTreeStructure extends TreeStructure
 {
     private Document doc;
+    private Vector<String> res;
 
     /**
      * @param src
      */
-    public HtmlTreeStructure(InputStream src)
+    public HtmlTreeStructure(final InputStream src)
     {
         super(src);
-        Tidy tidy = new Tidy();
+        final Tidy tidy = new Tidy();
         tidy.setInputEncoding("utf8");
         tidy.setOnlyErrors(true);
         tidy.setQuiet(true);
         tidy.setShowWarnings(false);
         doc = tidy.parseDOM(src, null);
-        valid = true;
+        setValid(true);
     }
 
-    private boolean hasHtmlOutputPrefix(String pos)
+    private boolean hasHtmlOutputPrefix(final String pos)
     {
         if(true == pos.startsWith("@html@"))
         {
@@ -72,32 +73,51 @@ public class HtmlTreeStructure extends TreeStructure
         }
     }
 
-    private String removeHtmlOutputPrefix(String pos)
+    private String removeHtmlOutputPrefix(final String pos)
     {
         return pos.substring(6);
     }
 
-    private String[] getStringsForPath(String[] path, NodeList nl, boolean htmlOutput, int index)
+    private String[] getStringsForPath(final String[] path,
+                                       final NodeList nl,
+                                       final boolean htmlOutput,
+                                       final int index)
     {
         if(null == path)
         {
-            return null;
+            return new String[0];
         }
         if(index >= path.length)
         {
-            return null;
+            return new String[0];
         }
         if(null == nl)
         {
-            return null;
+            return new String[0];
         }
+
+        res = new Vector<String>();
+        // curPath has now only the tag name in it
+        if(true == "*".equals(path[index]))
+        {
+            handleWildCardPathElement(nl, path, htmlOutput, index);
+        }
+        else
+        {
+            handlePathElement(nl, path, index, htmlOutput);
+        }
+        return res.toArray(new String[1]);
+    }
+
+    private void handlePathElement(final NodeList nl, final String[] path, final int index, final boolean htmlOutput)
+    {
         String curPath = path[index];
         String attrName = null;
         String attrValue = null;
         // Check if attributes requested
         if(true == curPath.contains("("))
         {
-            String help = curPath.substring(curPath.indexOf('(') + 1, curPath.lastIndexOf(')'));
+            final String help = curPath.substring(curPath.indexOf('(') + 1, curPath.lastIndexOf(')'));
             attrName = help.substring(0, help.indexOf(':'));
             attrValue = help.substring(help.indexOf(':') + 1);
             curPath = curPath.substring(0, curPath.indexOf('('))
@@ -109,49 +129,15 @@ public class HtmlTreeStructure extends TreeStructure
         String selectedData = null;
         if(true == curPath.contains("@"))
         {
-            String help = curPath.substring(curPath.indexOf('@') + 1);
+            final String help = curPath.substring(curPath.indexOf('@') + 1);
             selectedData = help;
             curPath = curPath.substring(0, curPath.indexOf('@'));
         }
         // else nothing to do as selectedData already null
 
-        Vector<String> res = new Vector<String>();
-        // curPath has now only the tag name in it
-        if(true == "*".equals(curPath))
-        {
-            // star can be more than one level of tags
-            for(int k = 0; k < nl.getLength(); k++)
-            {
-                Node n = nl.item(k);
-                String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index);
-                if(null != hlp)
-                {
-                    for(int i = 0; i < hlp.length; i++)
-                    {
-                        if(null != hlp[i])
-                        {
-                            res.add(hlp[i]);
-                        }
-                    }
-                }
-            }
-            // find in the tags of this node the next path element
-            String[] hlp = getStringsForPath(path, nl, htmlOutput, index + 1);
-            if(null != hlp)
-            {
-                for(int i = 0; i < hlp.length; i++)
-                {
-                    if(null != hlp[i])
-                    {
-                        res.add(hlp[i]);
-                    }
-                }
-            }
-        }
-
         for(int k = 0; k < nl.getLength(); k++)
         {
-            Node n = nl.item(k);
+            final Node n = nl.item(k);
             if(true == curPath.equals(n.getNodeName()))
             {
                 if(null == attrName)
@@ -160,7 +146,7 @@ public class HtmlTreeStructure extends TreeStructure
                     {
                         if(null == selectedData)
                         {
-                            String hlp = getTextFromNode(n, htmlOutput);
+                            final String hlp = getTextFromNode(n, htmlOutput);
                             if(null != hlp)
                             {
                                 res.add(hlp);
@@ -168,7 +154,7 @@ public class HtmlTreeStructure extends TreeStructure
                         }
                         else
                         {
-                            String hlp = getAttributeFromNode(n, selectedData);
+                            final String hlp = getAttributeFromNode(n, selectedData);
                             if(null != hlp)
                             {
                                 res.add(hlp);
@@ -177,7 +163,7 @@ public class HtmlTreeStructure extends TreeStructure
                     }
                     else
                     {
-                        String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
+                        final String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
                         if(null != hlp)
                         {
                             for(int i = 0; i < hlp.length; i++)
@@ -192,13 +178,13 @@ public class HtmlTreeStructure extends TreeStructure
                 }
                 else
                 {
-                    if(true == AttributeValueEquals(attrValue, attrName, n))
+                    if(true == attributeValueEquals(attrValue, attrName, n))
                     {
                         if(index == path.length)
                         {
                             if(null == selectedData)
                             {
-                                String hlp = getTextFromNode(n, htmlOutput);
+                                final String hlp = getTextFromNode(n, htmlOutput);
                                 if(null != hlp)
                                 {
                                     res.add(hlp);
@@ -206,7 +192,7 @@ public class HtmlTreeStructure extends TreeStructure
                             }
                             else
                             {
-                                String hlp = getAttributeFromNode(n, selectedData);
+                                final String hlp = getAttributeFromNode(n, selectedData);
                                 if(null != hlp)
                                 {
                                     res.add(hlp);
@@ -215,7 +201,7 @@ public class HtmlTreeStructure extends TreeStructure
                         }
                         else
                         {
-                            String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
+                            final String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
                             if(null != hlp)
                             {
                                 for(int i = 0; i < hlp.length; i++)
@@ -231,7 +217,41 @@ public class HtmlTreeStructure extends TreeStructure
                 }
             }
         }
-        return res.toArray(new String[1]);
+    }
+
+    private void handleWildCardPathElement(final NodeList nl,
+                                           final String[] path,
+                                           final boolean htmlOutput,
+                                           final int index)
+    {
+        // star can be more than one level of tags
+        for(int k = 0; k < nl.getLength(); k++)
+        {
+            final Node n = nl.item(k);
+            final String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index);
+            if(null != hlp)
+            {
+                for(int i = 0; i < hlp.length; i++)
+                {
+                    if(null != hlp[i])
+                    {
+                        res.add(hlp[i]);
+                    }
+                }
+            }
+        }
+        // find in the tags of this node the next path element
+        final String[] hlp = getStringsForPath(path, nl, htmlOutput, index + 1);
+        if(null != hlp)
+        {
+            for(int i = 0; i < hlp.length; i++)
+            {
+                if(null != hlp[i])
+                {
+                    res.add(hlp[i]);
+                }
+            }
+        }
     }
 
     /**
@@ -239,64 +259,69 @@ public class HtmlTreeStructure extends TreeStructure
      *            otherwise the displayed text will be returned.
      */
     @Override
-    public String[] getLeafsFor(String pos)
+    public final String[] getLeafsFor(final String pos)
     {
-        if((false == valid) || (null == pos))
+        if((false == isValid()) || (null == pos))
         {
-            return null;
+            return new String[0];
         }
         if(true == "".equals(pos))
         {
-            return null;
+            return new String[0];
         }
 
         // Output format = HTML ?
-        boolean htmlOutput = hasHtmlOutputPrefix(pos);
+        final boolean htmlOutput = hasHtmlOutputPrefix(pos);
+        final String hlp;
         if(true == htmlOutput)
         {
-            pos = removeHtmlOutputPrefix(pos);
+            hlp = removeHtmlOutputPrefix(pos);
         }
-        String[] path = pos.split("/");
-        NodeList nl = doc.getChildNodes();
+        else
+        {
+            hlp = pos;
+        }
+        final String[] path = hlp.split("/");
+        final NodeList nl = doc.getChildNodes();
 
         return getStringsForPath(path, nl, htmlOutput, 0);
     }
 
-    private String getAttributeFromNode(Node n, String Name)
+    private String getAttributeFromNode(final Node n, final String Name)
     {
-        String res = "";
-        NamedNodeMap attributes = n.getAttributes();
-        Node att = attributes.getNamedItem(Name);
+        final String strRes = "";
+        final NamedNodeMap attributes = n.getAttributes();
+        final Node att = attributes.getNamedItem(Name);
         if(null != att)
         {
             return att.getNodeValue();
         }
-        return res;
+        return strRes;
     }
 
-    private String getTextFromNode(Node n, boolean html)
+    private String getTextFromNode(final Node n, final boolean html)
     {
         if(true == html)
         {
             try
             {
-                Transformer transformer = TransformerFactory.newInstance().newTransformer();
-                DOMSource xmlSource = new DOMSource(n);
-                Writer w = new StringWriter();
-                StreamResult outputTarget = new StreamResult(w);
+                final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                final DOMSource xmlSource = new DOMSource(n);
+                final Writer w = new StringWriter();
+                final StreamResult outputTarget = new StreamResult(w);
                 transformer.transform(xmlSource, outputTarget);
-                String hlp = w.toString();
+                final String hlp = w.toString();
                 return hlp.substring(hlp.indexOf('>') + 1);
             }
-            catch(TransformerConfigurationException e)
+            catch(final TransformerConfigurationException e)
             {
                 e.printStackTrace();
             }
-            catch(TransformerFactoryConfigurationError e)
+            catch(final TransformerFactoryConfigurationError e)
             {
                 e.printStackTrace();
             }
-            catch(TransformerException e)
+            catch(final TransformerException e)
             {
                 e.printStackTrace();
             }
@@ -304,29 +329,30 @@ public class HtmlTreeStructure extends TreeStructure
         }
         else
         {
-            String res = n.getNodeValue();
-            NodeList nl = n.getChildNodes();
+            final StringBuffer sb = new StringBuffer();
+            sb.append(n.getNodeValue());
+            final NodeList nl = n.getChildNodes();
             for(int i = 0; i < nl.getLength(); i++)
             {
-                n = nl.item(i);
-                res = res + getTextFromNode(n, false);
+                final Node curNode = nl.item(i);
+                sb.append(getTextFromNode(curNode, false));
             }
-            return res;
+            return sb.toString();
         }
     }
 
-    private boolean AttributeValueEquals(String attrValue, String attrName, Node n)
+    private boolean attributeValueEquals(final String attrValue, final String attrName, final Node n)
     {
         if((null == attrValue) || (null == n))
         {
             return false;
         }
-        NamedNodeMap nnm = n.getAttributes();
+        final NamedNodeMap nnm = n.getAttributes();
         if(null == nnm)
         {
             return false;
         }
-        Node attribute = nnm.getNamedItem(attrName);
+        final Node attribute = nnm.getNamedItem(attrName);
         if(null == attribute)
         {
             return false;

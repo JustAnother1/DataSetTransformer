@@ -27,7 +27,7 @@ import java.util.Set;
  */
 public class DataSet
 {
-    private HashMap<String, String> Data = new HashMap<String, String>();
+    private HashMap<String, String> data = new HashMap<String, String>();
 
     /**
      *
@@ -36,27 +36,27 @@ public class DataSet
     {
     }
 
-    public void addDataAtom(String da, String Name)
+    public final void addDataAtom(final String da, final String Name)
     {
         if((null != da) && (null != Name))
         {
-            Data.put(Name, da);
+            data.put(Name, da);
         }
     }
 
-    public String getDataAtom(String Name)
+    public final String getDataAtom(final String Name)
     {
-        return Data.get(Name);
+        return data.get(Name);
     }
 
-    public String[] getNamesOfAllDataAtoms()
+    public final String[] getNamesOfAllDataAtoms()
     {
-        Set<String> hlp = Data.keySet();
+        final Set<String> hlp = data.keySet();
         return hlp.toArray(new String[1]);
     }
 
-    public int getNumberOfAtoms()
+    public final int getNumberOfAtoms()
     {
-        return Data.size();
+        return data.size();
     }
 }

@@ -31,7 +31,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class FileExporter extends Exporter
 {
-    private boolean ExportSuccessfullyExecuted = false;
+    private boolean exportSuccessfullyExecuted = false;
     private String target = "";
 
     /**
@@ -41,45 +41,55 @@ public class FileExporter extends Exporter
     {
     }
 
-    public void export(DataSet[] theData, ExportStyle expStyle)
+    public final void export(final DataSet[] theData, final ExportStyle expStyle)
     {
-        FileOutputStream out;
+        FileOutputStream out = null;
         try
         {
             out = new FileOutputStream(target);
             if(true == expStyle.formatTheData(theData, out))
             {
                 out.flush();
-                ExportSuccessfullyExecuted = true;
+                exportSuccessfullyExecuted = true;
                 System.out.println("Export successfully !");
             }
             else
             {
                 System.out.println("Export failed !");
             }
-            out.close();
         }
-        catch(FileNotFoundException e)
+        catch(final FileNotFoundException e)
         {
             e.printStackTrace();
             System.out.println("Export failed !");
-            ExportSuccessfullyExecuted = false;
+            exportSuccessfullyExecuted = false;
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             e.printStackTrace();
             System.out.println("Export failed !");
-            ExportSuccessfullyExecuted = false;
+            exportSuccessfullyExecuted = false;
+        }
+        if(null != out)
+        {
+            try
+            {
+                out.close();
+            }
+            catch(final IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
-    public boolean wasSuccessfull()
+    public final boolean wasSuccessfull()
     {
-        return ExportSuccessfullyExecuted;
+        return exportSuccessfullyExecuted;
     }
 
-    public void setTarget(String trg)
+    public final void setTarget(final String trg)
     {
         if(null != trg)
         {
@@ -89,19 +99,19 @@ public class FileExporter extends Exporter
 
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
         return "target = " + target;
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
         target = cfg.get("target");
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "FileExporter";
     }

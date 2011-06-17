@@ -27,22 +27,32 @@ import org.Transformer.dataset.DataSet;
  */
 public abstract class Importer implements JobSerialize
 {
-    protected DataSet[] theImportedData = new DataSet[1];
-    protected boolean ImportSuccessfullyCompleted = false;
+    private DataSet[] theImportedData;
+    private boolean importSuccessfullyCompleted = false;
 
     public abstract void setSource(String src);
     public abstract void importData(ImportSelector infilt);
 
-    public boolean wasSuccessfull()
+    protected final void setSuccessfullyCompleted(final boolean value)
     {
-        return ImportSuccessfullyCompleted;
+        importSuccessfullyCompleted = value;
     }
 
-    public DataSet[] getTheData()
+    public final boolean wasSuccessfull()
+    {
+        return importSuccessfullyCompleted;
+    }
+
+    protected final void setTheData(final DataSet[] value)
+    {
+        theImportedData = value;
+    }
+
+    public final DataSet[] getTheData()
     {
         if(null == theImportedData)
         {
-            theImportedData[0] = new DataSet();
+            theImportedData = new DataSet[0];
         }
         return theImportedData;
     }

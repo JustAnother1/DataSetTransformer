@@ -28,9 +28,11 @@ import org.Transformer.JobUtils;
  */
 public class ConCatFilter extends DataFilter
 {
-    private String[] FieldThatMustBeEqual;
-    private String[] FieldsThatWillBeConCatenated;
+    private String[] fieldThatMustBeEqual = new String[0];
+    private String[] fieldsThatWillBeConCatenated = new String[0];
     private String conCatSeparator = "";
+
+    private DataSet[] res = null;
 
     /**
      *
@@ -39,66 +41,56 @@ public class ConCatFilter extends DataFilter
     {
     }
 
-    public void setFieldThatMustBeEqual(String[] fieldThatMustBeEqual)
+    public final void setFieldThatMustBeEqual(final String[] newFieldThatMustBeEqual)
     {
-        FieldThatMustBeEqual = fieldThatMustBeEqual;
+        if(null != newFieldThatMustBeEqual)
+        {
+            fieldThatMustBeEqual = newFieldThatMustBeEqual;
+        }
     }
 
-    public void setFieldsThatWillBeConCatenated(String[] fieldsThatWillBeConCatenated)
+    public final void setFieldsThatWillBeConCatenated(final String[] newFieldsThatWillBeConCatenated)
     {
-        FieldsThatWillBeConCatenated = fieldsThatWillBeConCatenated;
+        if(null != newFieldsThatWillBeConCatenated)
+        {
+            fieldsThatWillBeConCatenated = newFieldsThatWillBeConCatenated;
+        }
     }
 
-    public void setConCatSeperator(String conCatSeperator)
+    public final void setConCatSeperator(final String conCatSeperator)
     {
         conCatSeparator = conCatSeperator;
     }
 
-    /**
-     * @see org.Transformer.dataset.DataFilter#applyFilterTo(org.Transformer.dataset.DataSet[])
-     */
-    @Override
-    public DataSet[] applyFilterTo(DataSet[] theData)
+    private void handleFirstDataSet(final DataSet[] theData)
     {
-        DataSet[] res = new DataSet[1];
-        res[0] = new DataSet();
-        if((null == FieldThatMustBeEqual) || (null == FieldsThatWillBeConCatenated) || (null == theData))
-        {
-            return res;
-        }
-        if(1 > theData.length)
-        {
-            return res;
-        }
-        for(int i = 0; i < FieldThatMustBeEqual.length; i++)
+        for(int i = 0; i < fieldThatMustBeEqual.length; i++)
         {
             // copy the Fields
-            res[0].addDataAtom(theData[0].getDataAtom(FieldThatMustBeEqual[i]), FieldThatMustBeEqual[i]);
+            res[0].addDataAtom(theData[0].getDataAtom(fieldThatMustBeEqual[i]), fieldThatMustBeEqual[i]);
         }
-        for(int i = 0; i < FieldsThatWillBeConCatenated.length; i++)
+        for(int i = 0; i < fieldsThatWillBeConCatenated.length; i++)
         {
             // copy the Fields
-            res[0].addDataAtom(theData[0].getDataAtom(FieldsThatWillBeConCatenated[i]), FieldsThatWillBeConCatenated[i]);
+            res[0].addDataAtom(theData[0].getDataAtom(fieldsThatWillBeConCatenated[i]),
+                               fieldsThatWillBeConCatenated[i]                         );
         }
-        if(2 > theData.length)
-        {
-            // only one element
-            return res;
-        }
+    }
 
-        // check Eqals
-        for(int k = 0; k < FieldThatMustBeEqual.length; k++)
+    private boolean checkEquals(final DataSet[] theData)
+    {
+        for(int k = 0; k < fieldThatMustBeEqual.length; k++)
         {
-            String should = res[0].getDataAtom(FieldThatMustBeEqual[k]);
+            final String should = res[0].getDataAtom(fieldThatMustBeEqual[k]);
             if(null != should)
             {
                 for(int i = 1; i < theData.length; i++)
                 {
-                    String is = theData[i].getDataAtom(FieldThatMustBeEqual[k]);
+                    final String is = theData[i].getDataAtom(fieldThatMustBeEqual[k]);
                     if(false == should.equals(is))
                     {
                         System.out.println("Checked field is different !(" + should + "|" + is + ")");
-                        return null;
+                        return false;
                     }
                 }
             }
@@ -107,39 +99,71 @@ public class ConCatFilter extends DataFilter
                 System.out.println("Checked field should Value is null !");
             }
         }
+        return true;
+    }
+
+    @Override
+    public final DataSet[] applyFilterTo(final DataSet[] theData)
+    {
+        res = new DataSet[1];
+        res[0] = new DataSet();
+        if((null == fieldThatMustBeEqual) || (null == fieldsThatWillBeConCatenated) || (null == theData))
+        {
+            return res;
+        }
+        if(1 > theData.length)
+        {
+            return res;
+        }
+
+        handleFirstDataSet(theData);
+
+        if(2 > theData.length)
+        {
+            // only one element
+            return res;
+        }
+
+        // check Eqals
+        if(false == checkEquals(theData))
+        {
+            return res;
+        }
+        // else ok -> go on
 
         // concat
-        for(int k = 0; k < FieldsThatWillBeConCatenated.length; k++)
+        for(int k = 0; k < fieldsThatWillBeConCatenated.length; k++)
         {
-            String line = "";
+            final StringBuffer sb = new StringBuffer();
             for(int i = 0; i < theData.length; i++)
             {
-                line = line + conCatSeparator + theData[i].getDataAtom(FieldsThatWillBeConCatenated[k]);
+                sb.append(conCatSeparator + theData[i].getDataAtom(fieldsThatWillBeConCatenated[k]));
             }
-            res[0].addDataAtom(line, FieldsThatWillBeConCatenated[k]);
+            final String line = sb.toString();
+            res[0].addDataAtom(line, fieldsThatWillBeConCatenated[k]);
         }
 
         return res;
     }
 
     @Override
-    public String getConfig()
+    public final String getConfig()
     {
         return "ConCatSeparator = " + conCatSeparator + "\n"
-               + JobUtils.getConfigTextFor(FieldThatMustBeEqual, "FieldThatMustBeEqual")
-               + JobUtils.getConfigTextFor(FieldsThatWillBeConCatenated, "FieldsThatWillBeConCatenated");
+               + JobUtils.getConfigTextFor(fieldThatMustBeEqual, "FieldThatMustBeEqual")
+               + JobUtils.getConfigTextFor(fieldsThatWillBeConCatenated, "FieldsThatWillBeConCatenated");
     }
 
     @Override
-    public void setConfig(Map<String, String> cfg)
+    public final void setConfig(final Map<String, String> cfg)
     {
         conCatSeparator = cfg.get("ConCatSeparator");
-        FieldThatMustBeEqual = JobUtils.getStringArrayFromSettingMap(cfg, "FieldThatMustBeEqual");
-        FieldsThatWillBeConCatenated = JobUtils.getStringArrayFromSettingMap(cfg, "FieldsThatWillBeConCatenated");
+        fieldThatMustBeEqual = JobUtils.getStringArrayFromSettingMap(cfg, "FieldThatMustBeEqual");
+        fieldsThatWillBeConCatenated = JobUtils.getStringArrayFromSettingMap(cfg, "FieldsThatWillBeConCatenated");
     }
 
     @Override
-    public String getName()
+    public final String getName()
     {
         return "ConCatFilter";
     }

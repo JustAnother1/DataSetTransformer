@@ -37,10 +37,13 @@ import org.Transformer.importer.UrlListImporter;
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
-public class Factory
+public final class Factory
 {
+    private Factory()
+    {
+    }
 
-    public static Importer createImporterFor(String type)
+    public static Importer createImporterFor(final String type)
     {
         Importer res = null;
         // All Importers
@@ -73,7 +76,7 @@ public class Factory
         return res;
     }
 
-    public static ImportSelector createImportSelectorFor(String type)
+    public static ImportSelector createImportSelectorFor(final String type)
     {
         ImportSelector res = null;
         // All Importers
@@ -95,7 +98,7 @@ public class Factory
         return res;
     }
 
-    public static DataFilter createDataFilterFor(String type)
+    public static DataFilter createDataFilterFor(final String type)
     {
         DataFilter res = null;
         // All Importers
@@ -123,7 +126,7 @@ public class Factory
         return res;
     }
 
-    public static Exporter createExporterFor(String type)
+    public static Exporter createExporterFor(final String type)
     {
         Exporter res = null;
         // All Importers
@@ -141,7 +144,7 @@ public class Factory
         return res;
     }
 
-    public static ExportStyle createExportStyleFor(String type)
+    public static ExportStyle createExportStyleFor(final String type)
     {
         ExportStyle res = null;
         // All Importers

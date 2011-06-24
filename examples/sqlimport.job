@@ -1,0 +1,25 @@
+[Importer]
+type = JdbcImporter
+dbDriver = com.mysql.jdbc.Driver
+dbUrl = jdbc:mysql://localhost/javatestdb
+dbUser = javauser
+dbPassword = javaPassword
+
+[Import Selector]
+type = SqlImportSelector
+SqlQuery = SELECT * FROM testtable;
+
+[Data Filter]
+type = RemoveEmptyLinesFilter
+
+[Exporter]
+type = FileExporter
+target = sqlexported.csv
+
+[Export Style]
+type = CsvExportStyle
+separator = ,
+mapping_0 = german
+mapping_1 = number
+mapping_2 = english
+

@@ -20,6 +20,8 @@ package org.Transformer.exporter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.Transformer.JobSerialize;
 import org.Transformer.dataset.DataSet;
@@ -30,5 +32,7 @@ import org.Transformer.dataset.DataSet;
  */
 public abstract class ExportStyle implements JobSerialize
 {
-    public abstract boolean formatTheData(DataSet[] theData, OutputStream out) throws IOException;
+    public abstract void setOutputStream(OutputStream out);
+    public abstract void setDatabaseConnection(Connection dbconnection);
+    public abstract boolean formatTheData(DataSet[] theData) throws IOException, SQLException;
 }

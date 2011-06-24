@@ -74,7 +74,8 @@ public class FileImporter extends Importer
             {
                 final FileInputStream fin = new FileInputStream(sourceFile);
                 System.out.println("Reading Data from " + sourceFile.getAbsolutePath());
-                if(true == infilt.parseToDataSets(fin))
+                infilt.setInputStream(fin);
+                if(true == infilt.parseToDataSets())
                 {
                     setTheData(infilt.getTheData());
                     setSuccessfullyCompleted(true);

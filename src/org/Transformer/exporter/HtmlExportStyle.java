@@ -20,6 +20,7 @@ package org.Transformer.exporter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Connection;
 import java.util.Map;
 
 import org.Transformer.dataset.DataSet;
@@ -32,6 +33,7 @@ import org.apache.log4j.Logger;
 public class HtmlExportStyle extends ExportStyle
 {
     private final Logger log = Logger.getLogger(this.getClass().getName());
+    private OutputStream out;
     /**
      * Structure of the HTML File before and After the Row data. Row Data is inserted at the Point labeled with %ROW%.
      * Simple Example: "<html><head></head><body>%ROW%</body></html>"
@@ -51,7 +53,7 @@ public class HtmlExportStyle extends ExportStyle
     {
     }
 
-    private boolean formatARow(final DataSet theData, final OutputStream out) throws IOException
+    private boolean formatARow(final DataSet theData) throws IOException
     {
         final String usedRowStyle = rowStyleDefinition;
         if(null == usedRowStyle)
@@ -83,7 +85,7 @@ public class HtmlExportStyle extends ExportStyle
     }
 
     @Override
-    public final boolean formatTheData(final DataSet[] theData, final OutputStream out) throws IOException
+    public final boolean formatTheData(final DataSet[] theData) throws IOException
     {
         final String usedStyle = globalStyleDefinition;
         if(null == usedStyle)
@@ -109,7 +111,7 @@ public class HtmlExportStyle extends ExportStyle
         }
         for(int g = 0; g < theData.length; g++)
         {
-            if(false == formatARow(theData[g], out))
+            if(false == formatARow(theData[g]))
             {
                 System.err.println("Row output failed at row " + g + " !");
                 return false;
@@ -154,6 +156,18 @@ public class HtmlExportStyle extends ExportStyle
     public final String getName()
     {
         return "HtmlExportStyle";
+    }
+
+    @Override
+    public final void setOutputStream(final OutputStream newOut)
+    {
+        out = newOut;
+    }
+
+    @Override
+    public final void setDatabaseConnection(final Connection dbconnection)
+    {
+        // not possible
     }
 
 }

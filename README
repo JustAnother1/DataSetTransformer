@@ -32,6 +32,7 @@ Contents
    currently supported input formats:
     - CSV (character separated values)
     - HTML
+    - SQL Database (MySql,...)
 
    currently supported data filters:
     - combine fields
@@ -41,6 +42,7 @@ Contents
    currently supported output formats:
     - CSV (character separated values)
     - HTML
+    - SQL Database (MySql,...)
 
 
 2. License
@@ -142,6 +144,21 @@ Contents
        ----------
        SourceUrl = URL from that the bytes will be read.
 
+4.1.6. JDBC Importer
+       -------------
+       type = JdbcImporter
+
+       Description
+       -----------
+       Opens the Connection to a JDBC Database.
+
+       Parameters
+       ----------
+       dbDriver = the class name of the database driver. (example: com.mysql.jdbc.Driver)
+       dbUrl =  the URL needed to acces the database. (example: jdbc:mysql://localhost/javatestdb)
+       dbUser = the username needed to access the database. May be empty or missing.
+       dbPassword = the password needed to access the database. May be empty or missing.
+
 4.2. Import Selector
      ---------------
      currently available Import Selectors:
@@ -206,9 +223,24 @@ Contents
        Mapping_Position_1 = position of the second data element.
        Mapping_Position_N = position of the (N+1)th data element.
 
+4.2.3. SQL Import Selector
+       --------------------
+       type = SqlImportSelector
+
+       Description
+       -----------
+       Executes the SQL Query and creates data sets for each returned row.
+       The name of the data element is the column name.
+
+       Parameters
+       ----------
+       SqlQuery = the SQL Query that will be executed to get the Data. (example: SELECT * FROM testtable;)
+
+
 4.3. Data Filter
      -----------
      currently available Data Filters:
+
 4.3.1. Concatenate Filter
        ------------------
        type = ConCatFilter
@@ -273,6 +305,21 @@ Contents
        ----------
        target = File Name of result file.
 
+4.4.2. JDBC Exporter
+       -------------
+       type = JdbcExporter
+
+       Description
+       -----------
+       Opens the Connection to a JDBC Database.
+
+       Parameters
+       ----------
+       dbDriver = the class name of the database driver. (example: com.mysql.jdbc.Driver)
+       dbUrl =  the URL needed to acces the database. (example: jdbc:mysql://localhost/javatestdb)
+       dbUser = the username needed to access the database. May be empty or missing.
+       dbPassword = the password needed to access the database. May be empty or missing.
+
 4.5. Export Style
      ------------
      currently available Export Styles:
@@ -312,6 +359,21 @@ Contents
        ----------
        GlobalStyleDefinition = specifies the HTML tags before and after the data.
        RowStyleDefinition = specifies the HTML tags used for each data set row.
+
+4.5.3. SQL Export Style
+       ----------------
+       type = SqlExportStyle
+
+       Description
+       -----------
+       Inserts the Data into a SQL Database Table. It does a "" for each data set
+
+       Parameters
+       ----------
+       tableName = Name of the SQL table that shall receive the data.
+       fieldNames = Names of all fields/columns of the table that shall receive data elements.
+       mapping = list of data elements that will be written into the table. "mapping_0" will be inserted into the
+                 column specified by the first column name in the fieldNames parameter.
 
 
 5. Example Job File

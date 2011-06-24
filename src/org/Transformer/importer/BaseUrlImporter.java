@@ -78,7 +78,8 @@ public abstract class BaseUrlImporter extends Importer
                 System.out.println("Using cached Data for " + sourceUrl);
             }
             final FileInputStream fin = new FileInputStream(cacheFile);
-            if(true == infilt.parseToDataSets(fin))
+            infilt.setInputStream(fin);
+            if(true == infilt.parseToDataSets())
             {
                 setTheData(infilt.getTheData());
                 setSuccessfullyCompleted(true);

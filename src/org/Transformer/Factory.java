@@ -24,11 +24,15 @@ import org.Transformer.exporter.ExportStyle;
 import org.Transformer.exporter.Exporter;
 import org.Transformer.exporter.FileExporter;
 import org.Transformer.exporter.HtmlExportStyle;
+import org.Transformer.exporter.JdbcExporter;
+import org.Transformer.exporter.SqlExportStyle;
 import org.Transformer.importer.CsvImportSelector;
 import org.Transformer.importer.FileImporter;
 import org.Transformer.importer.ImportSelector;
 import org.Transformer.importer.Importer;
+import org.Transformer.importer.JdbcImporter;
 import org.Transformer.importer.PagedUrlImporter;
+import org.Transformer.importer.SqlImportSelector;
 import org.Transformer.importer.TreeImportSelector;
 import org.Transformer.importer.UrlImporter;
 import org.Transformer.importer.UrlListImporter;
@@ -67,6 +71,11 @@ public final class Factory
             res = new FileImporter();
         }
 
+        if(true == "JdbcImporter".equals(type))
+        {
+            res = new JdbcImporter();
+        }
+
         if(null == res)
         {
             System.out.println("Invalid Importer type of " + type);
@@ -89,6 +98,12 @@ public final class Factory
         {
             res = new TreeImportSelector();
         }
+
+        if(true == "SqlImportSelector".equals(type))
+        {
+            res = new SqlImportSelector();
+        }
+
         if(null == res)
         {
             System.out.println("Invalid ImportSelector type of " + type);
@@ -135,6 +150,11 @@ public final class Factory
             res = new FileExporter();
         }
 
+        if(true == "JdbcExporter".equals(type))
+        {
+            res = new JdbcExporter();
+        }
+
         if(null == res)
         {
             System.out.println("Invalid Exporter type of " + type);
@@ -156,6 +176,11 @@ public final class Factory
         if(true == "HtmlExportStyle".equals(type))
         {
             res = new HtmlExportStyle();
+        }
+
+        if(true == "SqlExportStyle".equals(type))
+        {
+            res = new SqlExportStyle();
         }
 
         if(null == res)

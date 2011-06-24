@@ -21,6 +21,7 @@ package org.Transformer.exporter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Map;
 
 import org.Transformer.dataset.DataSet;
@@ -47,7 +48,8 @@ public class FileExporter extends Exporter
         try
         {
             out = new FileOutputStream(target);
-            if(true == expStyle.formatTheData(theData, out))
+            expStyle.setOutputStream(out);
+            if(true == expStyle.formatTheData(theData))
             {
                 out.flush();
                 exportSuccessfullyExecuted = true;
@@ -65,6 +67,12 @@ public class FileExporter extends Exporter
             exportSuccessfullyExecuted = false;
         }
         catch(final IOException e)
+        {
+            e.printStackTrace();
+            System.out.println("Export failed !");
+            exportSuccessfullyExecuted = false;
+        }
+        catch(final SQLException e)
         {
             e.printStackTrace();
             System.out.println("Export failed !");

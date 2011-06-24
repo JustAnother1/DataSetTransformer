@@ -19,6 +19,7 @@
 package org.Transformer.importer;
 
 import java.io.InputStream;
+import java.sql.Connection;
 
 import org.Transformer.JobSerialize;
 import org.Transformer.dataset.DataSet;
@@ -39,7 +40,10 @@ public abstract class ImportSelector implements JobSerialize
         data[0] = new DataSet();
     }
 
-    public abstract boolean parseToDataSets(InputStream src);
+    public abstract void setInputStream(InputStream src);
+    public abstract void setDatabaseConnection(Connection dbconnection);
+
+    public abstract boolean parseToDataSets();
 
     protected final void setDataSet(final DataSet[] curData)
     {

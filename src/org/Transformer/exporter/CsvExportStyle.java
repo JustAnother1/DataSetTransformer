@@ -20,6 +20,7 @@ package org.Transformer.exporter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Connection;
 import java.util.Map;
 
 import org.Transformer.JobUtils;
@@ -33,6 +34,7 @@ public class CsvExportStyle extends ExportStyle
 {
     private String[] mapping;
     private String separator = ",";
+    private OutputStream out = null;
 
     /**
      *
@@ -55,7 +57,7 @@ public class CsvExportStyle extends ExportStyle
      * @see org.Transformer.exporter.ExportStyle#formatTheData(org.Transformer.dataset.DataSet[], java.io.OutputStream)
      */
     @Override
-    public final boolean formatTheData(final DataSet[] theData, final OutputStream out) throws IOException
+    public final boolean formatTheData(final DataSet[] theData) throws IOException
     {
         if((null == mapping) || (null == theData) || (null == out))
         {
@@ -111,6 +113,18 @@ public class CsvExportStyle extends ExportStyle
     public final String getName()
     {
         return "CsvExportStyle";
+    }
+
+    @Override
+    public final void setOutputStream(final OutputStream newOut)
+    {
+        out = newOut;
+    }
+
+    @Override
+    public final void setDatabaseConnection(final Connection dbconnection)
+    {
+        // not possible
     }
 
 }

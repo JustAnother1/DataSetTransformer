@@ -171,7 +171,7 @@ public class Job
 
     private static DataFilter readDataFilter(final ConfigParser cfgp)
     {
-        final Map<String, String> settings = cfgp.getSettingsOfSection(IMPORTER_LINE);
+        final Map<String, String> settings = cfgp.getSettingsOfSection(DATA_FILTER_LINE);
         if(null != settings)
         {
             final String classType = settings.get(CLASS_TYPE_NAME);

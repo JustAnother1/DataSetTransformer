@@ -1,0 +1,29 @@
+[Importer]
+type = FileImporter
+FileName = examples/testData/small.csv
+
+[Import Selector]
+type = CsvImportSelector
+separator = ,
+mapping_0 = a
+mapping_1 = s
+mapping_2 = d
+
+[Data Filter]
+type = RemoveEmptyLinesFilter
+
+[Exporter]
+type = JdbcExporter
+dbDriver = com.mysql.jdbc.Driver
+dbUrl = jdbc:mysql://localhost/javatestdb
+dbUser = javauser
+dbPassword = javaPassword
+
+[Export Style]
+type = SqlExportStyle
+tableName = testtable
+fieldNames = number,german,english
+mapping_0 = a
+mapping_1 = s
+mapping_2 = d
+

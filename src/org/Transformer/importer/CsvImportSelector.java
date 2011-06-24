@@ -21,6 +21,7 @@ package org.Transformer.importer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Connection;
 import java.util.Map;
 import java.util.Vector;
 
@@ -35,6 +36,7 @@ public class CsvImportSelector extends ImportSelector
 {
     private String separator = ",";
     private String[] mapping = new String[0];
+    private InputStream src;
 
     /**
      *
@@ -59,7 +61,7 @@ public class CsvImportSelector extends ImportSelector
      * @see org.Transformer.importer.ImportFilter#parseToDataSets(java.io.InputStream)
      */
     @Override
-    public final boolean parseToDataSets(final InputStream src)
+    public final boolean parseToDataSets()
     {
         final Vector<DataSet> res = new Vector<DataSet>();
         final InputStreamReader in = new InputStreamReader(src);
@@ -161,6 +163,18 @@ public class CsvImportSelector extends ImportSelector
     public final String getName()
     {
         return "CsvImportSelector";
+    }
+
+    @Override
+    public final void setInputStream(final InputStream newSrc)
+    {
+        src = newSrc;
+    }
+
+    @Override
+    public final void setDatabaseConnection(final Connection dbconnection)
+    {
+        // not possible
     }
 
 }

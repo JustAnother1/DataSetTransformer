@@ -19,6 +19,7 @@
 package org.Transformer.importer;
 
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.Map;
 import java.util.Vector;
 
@@ -33,6 +34,7 @@ public class TreeImportSelector extends ImportSelector
 {
     private String[] mappingPosition;
     private String[] mappingName;
+    private InputStream src;
 
     /**
      *
@@ -49,7 +51,7 @@ public class TreeImportSelector extends ImportSelector
     }
 
     @Override
-    public final boolean parseToDataSets(final InputStream src)
+    public final boolean parseToDataSets()
     {
         final TreeStructure Tree = new HtmlTreeStructure(src);
         if((null == mappingPosition) || (null == mappingName))
@@ -109,6 +111,18 @@ public class TreeImportSelector extends ImportSelector
     public final String getName()
     {
         return "TreeImportSelector";
+    }
+
+    @Override
+    public final void setInputStream(final InputStream newSrc)
+    {
+        src = newSrc;
+    }
+
+    @Override
+    public final void setDatabaseConnection(final Connection dbconnection)
+    {
+        // not possible
     }
 
 }

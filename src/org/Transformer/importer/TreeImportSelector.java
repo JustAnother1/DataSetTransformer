@@ -88,7 +88,7 @@ public class TreeImportSelector extends ImportSelector
                     curRow = new DataSet();
                     res.add(k, curRow);
                 }
-                log.debug("String " + k + " : " + Val[k]);
+                // log.debug("String " + k + " : " + Val[k]);
                 curRow.addDataAtom(Val[k], mappingName[i]);
             }
         }

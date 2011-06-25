@@ -21,6 +21,7 @@ package org.Transformer.exporter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
@@ -94,17 +95,27 @@ public class SqlExportStyle extends ExportStyle
         }
         try {
           st = dbConnection.createStatement();
+          String sql = "insert into " + dbTable + "(" + FieldNames + ") VALUES(";
+          for(int i = 0; i < mapping.length -1; i++)
+          {
+              sql = sql + "? , ";
+          }
+          // last value
+          sql = sql + "? );";
+          log.debug("Prepared Statement : {}", sql);
+          final PreparedStatement ps = dbConnection.prepareStatement (sql);
           for(int k = 0; k < theData.length; k++)
           {
-              String sql = "insert into " + dbTable + "(" + FieldNames + ") VALUES(";
-              for(int i = 0; i < mapping.length -1; i++)
+              for(int i = 0; i < mapping.length; i++)
               {
-                  sql = sql + "'" + theData[k].getDataAtom(mapping[i]) + "' , ";
+                  String hlp = theData[k].getDataAtom(mapping[i]);
+                  if(null == hlp)
+                  {
+                      hlp = "";
+                  }
+                  ps.setString(i + 1, hlp); // SQL starts with 1 instead of 0 !
               }
-              // last value
-              sql = sql + "'" + theData[k].getDataAtom(mapping[mapping.length -1]) + "');";
-              log.debug(sql);
-              st.executeUpdate(sql);
+              ps.executeUpdate();
           }
 
           result = true;

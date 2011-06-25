@@ -37,7 +37,6 @@ public abstract class ImportSelector implements JobSerialize
      */
     public ImportSelector()
     {
-        data[0] = new DataSet();
     }
 
     public abstract void setInputStream(InputStream src);

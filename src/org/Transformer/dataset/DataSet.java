@@ -36,6 +36,11 @@ public class DataSet
     {
     }
 
+    /** adds or replaces(updates) the data element.
+     *
+     * @param da Value of data element.
+     * @param Name Name of the Data element.
+     */
     public final void addDataAtom(final String da, final String Name)
     {
         if((null != da) && (null != Name))
@@ -44,6 +49,11 @@ public class DataSet
         }
     }
 
+    /** retrieves a data element.
+     *
+     * @param Name Name of data element
+     * @return the requested data element or null
+     */
     public final String getDataAtom(final String Name)
     {
         return data.get(Name);

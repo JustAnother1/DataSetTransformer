@@ -289,6 +289,22 @@ Contents
        ----------
        no parameters available
 
+4.3.4. Search and Replace Filter
+       -------------------------
+       type = ReplaceFilter
+
+       Description
+       -----------
+       replaces all occurrences of the searched for string with the replacement in the specified data element off all
+       data sets.
+
+       Parameters
+       ----------
+       Element to change = Name of the data element to change
+       Search for = string that will be removed if found
+       Replace with = replacement for the found string
+
+
 4.4. Exporter
      --------
      currently available Exporters:

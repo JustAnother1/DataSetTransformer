@@ -61,6 +61,38 @@ public class HtmlTreeStructure extends TreeStructure
         setValid(true);
     }
 
+    /**
+     * @param pos if the String starts with \@html\@ then the HTML code will be returned,
+     *            otherwise the displayed text will be returned.
+     */
+    @Override
+    public final String[] getLeafsFor(final String pos)
+    {
+        if((false == isValid()) || (null == pos) || (true == "".equals(pos)))
+        {
+            return new String[0];
+        }
+
+        // Output format = HTML ?
+        final boolean htmlOutput = hasHtmlOutputPrefix(pos);
+        final String hlp;
+        if(true == htmlOutput)
+        {
+            hlp = removeHtmlOutputPrefix(pos);
+        }
+        else
+        {
+            hlp = pos;
+        }
+
+        final String[] path = hlp.split("/");
+
+        final NodeList nl = doc.getChildNodes();
+        res = new Vector<String>();
+        getStringsForPath(path, nl, htmlOutput, 0);
+        return res.toArray(new String[0]);
+    }
+
     private boolean hasHtmlOutputPrefix(final String pos)
     {
         if(true == pos.startsWith("@html@"))
@@ -78,25 +110,20 @@ public class HtmlTreeStructure extends TreeStructure
         return pos.substring(6);
     }
 
-    private String[] getStringsForPath(final String[] path,
-                                       final NodeList nl,
-                                       final boolean htmlOutput,
-                                       final int index)
+    private void getStringsForPath(final String[] path,
+                                   final NodeList nl,
+                                   final boolean htmlOutput,
+                                   final int index)
     {
-        if(null == path)
+        if( (null == path) || (null == nl))
         {
-            return new String[0];
+            return;
         }
         if(index >= path.length)
         {
-            return new String[0];
-        }
-        if(null == nl)
-        {
-            return new String[0];
+            return;
         }
 
-        res = new Vector<String>();
         // curPath has now only the tag name in it
         if(true == "*".equals(path[index]))
         {
@@ -106,7 +133,6 @@ public class HtmlTreeStructure extends TreeStructure
         {
             handlePathElement(nl, path, index, htmlOutput);
         }
-        return res.toArray(new String[1]);
     }
 
     private void handlePathElement(final NodeList nl, final String[] path, final int index, final boolean htmlOutput)
@@ -163,24 +189,14 @@ public class HtmlTreeStructure extends TreeStructure
                     }
                     else
                     {
-                        final String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
-                        if(null != hlp)
-                        {
-                            for(int i = 0; i < hlp.length; i++)
-                            {
-                                if(null != hlp[i])
-                                {
-                                    res.add(hlp[i]);
-                                }
-                            }
-                        }
+                        getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
                     }
                 }
                 else
                 {
                     if(true == attributeValueEquals(attrValue, attrName, n))
                     {
-                        if(index == path.length)
+                        if(index == path.length - 1)
                         {
                             if(null == selectedData)
                             {
@@ -201,17 +217,7 @@ public class HtmlTreeStructure extends TreeStructure
                         }
                         else
                         {
-                            final String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
-                            if(null != hlp)
-                            {
-                                for(int i = 0; i < hlp.length; i++)
-                                {
-                                    if(null != hlp[i])
-                                    {
-                                        res.add(hlp[i]);
-                                    }
-                                }
-                            }
+                            getStringsForPath(path, n.getChildNodes(), htmlOutput, index + 1);
                         }
                     }
                 }
@@ -228,63 +234,10 @@ public class HtmlTreeStructure extends TreeStructure
         for(int k = 0; k < nl.getLength(); k++)
         {
             final Node n = nl.item(k);
-            final String[] hlp = getStringsForPath(path, n.getChildNodes(), htmlOutput, index);
-            if(null != hlp)
-            {
-                for(int i = 0; i < hlp.length; i++)
-                {
-                    if(null != hlp[i])
-                    {
-                        res.add(hlp[i]);
-                    }
-                }
-            }
+            getStringsForPath(path, n.getChildNodes(), htmlOutput, index);
         }
         // find in the tags of this node the next path element
-        final String[] hlp = getStringsForPath(path, nl, htmlOutput, index + 1);
-        if(null != hlp)
-        {
-            for(int i = 0; i < hlp.length; i++)
-            {
-                if(null != hlp[i])
-                {
-                    res.add(hlp[i]);
-                }
-            }
-        }
-    }
-
-    /**
-     * @param pos if the String starts with \@html\@ then the HTML code will be returned,
-     *            otherwise the displayed text will be returned.
-     */
-    @Override
-    public final String[] getLeafsFor(final String pos)
-    {
-        if((false == isValid()) || (null == pos))
-        {
-            return new String[0];
-        }
-        if(true == "".equals(pos))
-        {
-            return new String[0];
-        }
-
-        // Output format = HTML ?
-        final boolean htmlOutput = hasHtmlOutputPrefix(pos);
-        final String hlp;
-        if(true == htmlOutput)
-        {
-            hlp = removeHtmlOutputPrefix(pos);
-        }
-        else
-        {
-            hlp = pos;
-        }
-        final String[] path = hlp.split("/");
-        final NodeList nl = doc.getChildNodes();
-
-        return getStringsForPath(path, nl, htmlOutput, 0);
+        getStringsForPath(path, nl, htmlOutput, index + 1);
     }
 
     private String getAttributeFromNode(final Node n, final String Name)

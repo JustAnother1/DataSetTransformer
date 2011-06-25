@@ -172,6 +172,8 @@ public class Executor
 
     private void printDataSetArray(final DataSet[] theData)
     {
+        log.debug("current Data Set has {} Entries", theData.length);
+        /*
         log.info("=== Current Data Set ===");
         log.debug("Data Set Entries:");
         for(int k = 0; k < theData.length; k++)
@@ -192,6 +194,7 @@ public class Executor
             }
         }
         log.info("========================");
+        */
     }
 
 }

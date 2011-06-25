@@ -19,6 +19,7 @@ import org.Transformer.dataset.ConCatFilter;
 import org.Transformer.dataset.DataFilter;
 import org.Transformer.dataset.RegExpFilter;
 import org.Transformer.dataset.RemoveEmptyLinesFilter;
+import org.Transformer.dataset.ReplaceFilter;
 import org.Transformer.exporter.CsvExportStyle;
 import org.Transformer.exporter.ExportStyle;
 import org.Transformer.exporter.Exporter;
@@ -134,6 +135,11 @@ public final class Factory
         if(true == "RemoveEmptyLinesFilter".equals(type))
         {
             res = new RemoveEmptyLinesFilter();
+        }
+
+        if(true == "ReplaceFilter".equals(type))
+        {
+            res = new ReplaceFilter();
         }
 
         if(null == res)

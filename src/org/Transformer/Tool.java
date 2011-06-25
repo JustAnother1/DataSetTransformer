@@ -42,7 +42,7 @@ public final class Tool
         {
             vec.add(sc.nextLine());
         }
-        return vec.toArray(new String[1]);
+        return vec.toArray(new String[0]);
     }
 
 }

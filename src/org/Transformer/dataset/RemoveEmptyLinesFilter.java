@@ -47,7 +47,7 @@ public class RemoveEmptyLinesFilter extends DataFilter
             }
             // else skip empty Line
         }
-        return res.toArray(new DataSet[1]);
+        return res.toArray(new DataSet[0]);
     }
 
     @Override

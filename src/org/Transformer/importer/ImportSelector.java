@@ -30,7 +30,7 @@ import org.Transformer.dataset.DataSet;
  */
 public abstract class ImportSelector implements JobSerialize
 {
-    private DataSet[] data = new DataSet[1];
+    private DataSet[] data = new DataSet[0];
 
     /**
      *

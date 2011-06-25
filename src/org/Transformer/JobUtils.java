@@ -49,6 +49,6 @@ public final class JobUtils
             i++;
             val = cfg.get(Name + "_" + i);
         }
-        return vec.toArray(new String[1]);
+        return vec.toArray(new String[0]);
     }
 }

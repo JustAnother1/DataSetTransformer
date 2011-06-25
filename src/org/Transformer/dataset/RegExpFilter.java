@@ -67,7 +67,7 @@ public class RegExpFilter extends DataFilter
             }
             // else skip not matching Data Set
         }
-        return res.toArray(new DataSet[1]);
+        return res.toArray(new DataSet[0]);
     }
 
     @Override

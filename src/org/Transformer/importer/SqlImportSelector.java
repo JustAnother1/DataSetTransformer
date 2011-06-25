@@ -108,7 +108,7 @@ public class SqlImportSelector extends ImportSelector
               res.add(curRow);
           }
           log.debug("Found " + res.size() + " Data Sets !");
-          final DataSet[] hlp = res.toArray(new DataSet[1]);
+          final DataSet[] hlp = res.toArray(new DataSet[0]);
           log.debug("Data Set array has " + hlp.length + " entries !");
           setDataSet(hlp);
           result = true;

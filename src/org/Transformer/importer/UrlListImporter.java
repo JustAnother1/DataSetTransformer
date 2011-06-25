@@ -88,7 +88,7 @@ public class UrlListImporter extends Importer
                             sb = new StringBuffer(); // Delete all characters
                             if(false == partImport(line, infilt))
                             {
-                                setTheData(resultCollect.toArray(new DataSet[1]));
+                                setTheData(resultCollect.toArray(new DataSet[0]));
                                 return;
                             }
                         }
@@ -101,13 +101,13 @@ public class UrlListImporter extends Importer
                             final String line = sb.toString();
                             if(false == partImport(line, infilt))
                             {
-                                setTheData(resultCollect.toArray(new DataSet[1]));
+                                setTheData(resultCollect.toArray(new DataSet[0]));
                                 return;
                             }
                         }
                     }
                 }while(r != -1);
-                setTheData(resultCollect.toArray(new DataSet[1]));
+                setTheData(resultCollect.toArray(new DataSet[0]));
             }
             catch(final FileNotFoundException e)
             {

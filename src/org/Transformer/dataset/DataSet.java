@@ -52,7 +52,7 @@ public class DataSet
     public final String[] getNamesOfAllDataAtoms()
     {
         final Set<String> hlp = data.keySet();
-        return hlp.toArray(new String[1]);
+        return hlp.toArray(new String[0]);
     }
 
     public final int getNumberOfAtoms()

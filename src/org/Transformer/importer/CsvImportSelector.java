@@ -107,7 +107,7 @@ public class CsvImportSelector extends ImportSelector
             res.add(LineSet);
         }
 
-        setDataSet(res.toArray(new DataSet[1]));
+        setDataSet(res.toArray(new DataSet[0]));
         return true;
     }
 

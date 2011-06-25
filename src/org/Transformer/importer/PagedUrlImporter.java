@@ -87,7 +87,7 @@ public class PagedUrlImporter extends BaseUrlImporter
                 }
             }
         } while(0 < nextPageUrl.length());
-        setTheData(res.toArray(new DataSet[1]));
+        setTheData(res.toArray(new DataSet[0]));
     }
 
     @Override

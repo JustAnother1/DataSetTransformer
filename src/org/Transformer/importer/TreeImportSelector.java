@@ -92,7 +92,7 @@ public class TreeImportSelector extends ImportSelector
                 curRow.addDataAtom(Val[k], mappingName[i]);
             }
         }
-        setDataSet((DataSet[])res.toArray(new DataSet[1]));
+        setDataSet((DataSet[])res.toArray(new DataSet[0]));
         return true;
     }
 

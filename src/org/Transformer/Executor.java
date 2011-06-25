@@ -122,6 +122,10 @@ public class Executor
         {
             return true;
         }
+        if(null == someData[0])
+        {
+            return true;
+        }
         for(int i = 0; i < someData.length; i++)
         {
             if(someData[i].getNumberOfAtoms() > 0)

@@ -58,9 +58,12 @@ public abstract class BaseUrlImporter extends Importer
         {
             // already cached ?
             final File cacheFolder = new File("cache");
-            if(false == cacheFolder.mkdir())
+            if(false == cacheFolder.isDirectory())
             {
-                log.error("Could not create cache folder !");
+                if(false == cacheFolder.mkdir())
+                {
+                    log.error("Could not create cache folder !");
+                }
             }
             final String cacheName = "cache/DataTransformer_cache" + onlyAllowedChars(sourceUrl) + ".dtc";
             final File cacheFile = new File(cacheName);

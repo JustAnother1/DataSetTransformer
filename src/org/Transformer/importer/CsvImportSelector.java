@@ -27,6 +27,8 @@ import java.util.Vector;
 
 import org.Transformer.JobUtils;
 import org.Transformer.dataset.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -34,6 +36,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class CsvImportSelector extends ImportSelector
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private String separator = ",";
     private String[] mapping = new String[0];
     private InputStream src;
@@ -111,18 +114,18 @@ public class CsvImportSelector extends ImportSelector
 
     private DataSet parseLineToDataSet(final String line)
     {
-        System.out.println("Line : " + line);
+        log.debug("Line : " + line);
         final String[] Values = line.split(separator);
-        System.out.println("Split with Separator : " + separator + " !");
+        log.debug("Split with Separator : " + separator + " !");
         for(int i = 0; i < Values.length; i++)
         {
-            System.out.println("Atom " + i + " : " + Values[i]);
+            log.debug("Atom " + i + " : " + Values[i]);
         }
         final DataSet row = new DataSet();
-        System.out.println("mapping.length : " + mapping.length);
+        log.debug("mapping.length : " + mapping.length);
         for(int i = 0; i < mapping.length; i++)
         {
-            System.out.println("Mapping " + i + " : " + mapping[i]);
+            log.debug("Mapping " + i + " : " + mapping[i]);
         }
         int maxLength;
         if(mapping.length > Values.length)

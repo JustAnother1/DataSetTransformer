@@ -23,7 +23,8 @@ import org.Transformer.exporter.ExportStyle;
 import org.Transformer.exporter.Exporter;
 import org.Transformer.importer.ImportSelector;
 import org.Transformer.importer.Importer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -31,7 +32,7 @@ import org.apache.log4j.Logger;
  */
 public class Executor
 {
-    private final Logger log = Logger.getLogger(this.getClass().getName());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private IntReporter progRep = null;;
 
     /**

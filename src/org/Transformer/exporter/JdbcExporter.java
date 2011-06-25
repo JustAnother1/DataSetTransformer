@@ -25,6 +25,8 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import org.Transformer.dataset.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -32,6 +34,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class JdbcExporter extends Exporter
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private boolean jdbcWasSuccessfull = false;
 
     private String dbDriver;
@@ -76,9 +79,9 @@ public class JdbcExporter extends Exporter
         if((dbDriver == null) || (dbDriver.length() == 0) ||
            (dbUrl == null)    || (dbUrl.length() == 0)       )
         {
-            System.err.println("Configuration missing !");
-            System.err.println("Driver : " + dbDriver);
-            System.err.println("URL : " + dbUrl);
+            log.error("Configuration missing !");
+            log.info("Driver : " + dbDriver);
+            log.info("URL : " + dbUrl);
             return;
         }
         Connection cn = null;
@@ -99,7 +102,7 @@ public class JdbcExporter extends Exporter
         }
         catch(final ClassNotFoundException e)
         {
-            System.err.println("Driver is invalid !\nDriver was " + dbDriver + " !\n");
+            log.error("Driver is invalid !\nDriver was " + dbDriver + " !\n");
             jdbcWasSuccessfull = false;
         }
         catch(final SQLException e)

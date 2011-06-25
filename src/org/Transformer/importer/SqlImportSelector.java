@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.Transformer.dataset.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -35,6 +37,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class SqlImportSelector extends ImportSelector
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private Connection dbConnection;
     private String SqlQuery;
 
@@ -93,20 +96,20 @@ public class SqlImportSelector extends ImportSelector
           // Get meta data:
           final ResultSetMetaData rsmd = rs.getMetaData();
           final int numcol = rsmd.getColumnCount();
-          System.out.println("Found " + numcol + " columns in the database !");
+          log.debug("Found " + numcol + " columns in the database !");
           while(true == rs.next())
           {
               final DataSet curRow = new DataSet();
               for(int i = 1; i <= numcol; i++) // Attention: first column with 1 instead of 0
               {
-                  System.out.println("Adding : " + rs.getString(i) + " : " + rsmd.getColumnName(i));
+                  log.debug("Adding : " + rs.getString(i) + " : " + rsmd.getColumnName(i));
                   curRow.addDataAtom(rs.getString(i), rsmd.getColumnName(i));
               }
               res.add(curRow);
           }
-          System.out.println("Found " + res.size() + " Data Sets !");
+          log.debug("Found " + res.size() + " Data Sets !");
           final DataSet[] hlp = res.toArray(new DataSet[1]);
-          System.out.println("Data Set array has " + hlp.length + " entries !");
+          log.debug("Data Set array has " + hlp.length + " entries !");
           setDataSet(hlp);
           result = true;
         }

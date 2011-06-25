@@ -27,6 +27,8 @@ import java.util.Map;
 
 import org.Transformer.JobUtils;
 import org.Transformer.dataset.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -34,6 +36,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class SqlExportStyle extends ExportStyle
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private Connection dbConnection;
     private String dbTable;
     private String FieldNames;
@@ -100,7 +103,7 @@ public class SqlExportStyle extends ExportStyle
               }
               // last value
               sql = sql + "'" + theData[k].getDataAtom(mapping[mapping.length -1]) + "');";
-              System.out.println(sql);
+              log.debug(sql);
               st.executeUpdate(sql);
           }
 

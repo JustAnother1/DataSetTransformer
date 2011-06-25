@@ -23,12 +23,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
 public class JdbcImporter extends Importer
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private String dbDriver;
     private String dbUrl;
     private String dbUser;
@@ -77,7 +81,7 @@ public class JdbcImporter extends Importer
         if((dbDriver == null) || (dbDriver.length() == 0) ||
            (dbUrl == null)    || (dbUrl.length() == 0)       )
         {
-            System.err.println("Configuration missing !");
+            log.error("Configuration missing !");
             return;
         }
         Connection cn = null;

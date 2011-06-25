@@ -21,6 +21,8 @@ package org.Transformer.dataset;
 import java.util.Map;
 
 import org.Transformer.JobUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -28,6 +30,7 @@ import org.Transformer.JobUtils;
  */
 public class ConCatFilter extends DataFilter
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private String[] fieldThatMustBeEqual = new String[0];
     private String[] fieldsThatWillBeConCatenated = new String[0];
     private String conCatSeparator = "";
@@ -89,14 +92,14 @@ public class ConCatFilter extends DataFilter
                     final String is = theData[i].getDataAtom(fieldThatMustBeEqual[k]);
                     if(false == should.equals(is))
                     {
-                        System.out.println("Checked field is different !(" + should + "|" + is + ")");
+                        log.error("Checked field is different !(" + should + "|" + is + ")");
                         return false;
                     }
                 }
             }
             else
             {
-                System.out.println("Checked field should Value is null !");
+                log.error("Checked field should Value is null !");
             }
         }
         return true;

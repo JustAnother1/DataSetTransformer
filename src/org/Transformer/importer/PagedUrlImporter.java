@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.Transformer.dataset.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -29,6 +31,8 @@ import org.Transformer.dataset.DataSet;
  */
 public class PagedUrlImporter extends BaseUrlImporter
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     /**
      *
      */
@@ -55,7 +59,7 @@ public class PagedUrlImporter extends BaseUrlImporter
         do
         {
             // Parse the Page
-            System.out.println("Importing Page : " + nextPageUrl);
+            log.debug("Importing Page : " + nextPageUrl);
             setSource(nextPageUrl);
             baseImportData(infilt);
             if(false == super.wasSuccessfull())

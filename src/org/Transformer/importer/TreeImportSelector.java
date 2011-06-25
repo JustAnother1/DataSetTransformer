@@ -25,6 +25,8 @@ import java.util.Vector;
 
 import org.Transformer.JobUtils;
 import org.Transformer.dataset.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -32,6 +34,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class TreeImportSelector extends ImportSelector
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private String[] mappingPosition;
     private String[] mappingName;
     private InputStream src;
@@ -56,11 +59,11 @@ public class TreeImportSelector extends ImportSelector
         final TreeStructure Tree = new HtmlTreeStructure(src);
         if((null == mappingPosition) || (null == mappingName))
         {
-            System.out.println("No Mapping !");
+            log.error("No Mapping !");
             return false;
         }
         final Vector<DataSet> res = new Vector<DataSet>();
-        System.out.println("Importing with " + mappingPosition.length + " Mapping Positions.");
+        log.debug("Importing with " + mappingPosition.length + " Mapping Positions.");
         for(int i = 0; i < mappingPosition.length; i++)
         {
             final String[] Val = Tree.getLeafsFor(mappingPosition[i]);
@@ -72,7 +75,7 @@ public class TreeImportSelector extends ImportSelector
             {
                 continue;
             }
-            System.out.println("Found " + Val.length + " Strings.");
+            log.debug("Found " + Val.length + " Strings.");
             for(int k = 0; k < Val.length; k++)
             {
                 DataSet curRow;
@@ -85,7 +88,7 @@ public class TreeImportSelector extends ImportSelector
                     curRow = new DataSet();
                     res.add(k, curRow);
                 }
-                System.out.println("String " + k + " : " + Val[k]);
+                log.debug("String " + k + " : " + Val[k]);
                 curRow.addDataAtom(Val[k], mappingName[i]);
             }
         }

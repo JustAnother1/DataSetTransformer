@@ -36,6 +36,8 @@ import org.Transformer.importer.SqlImportSelector;
 import org.Transformer.importer.TreeImportSelector;
 import org.Transformer.importer.UrlImporter;
 import org.Transformer.importer.UrlListImporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -78,7 +80,8 @@ public final class Factory
 
         if(null == res)
         {
-            System.out.println("Invalid Importer type of " + type);
+            final Logger log = LoggerFactory.getLogger(Factory.class);
+            log.error("Invalid Importer type of " + type);
             return null;
         }
 
@@ -106,7 +109,8 @@ public final class Factory
 
         if(null == res)
         {
-            System.out.println("Invalid ImportSelector type of " + type);
+            final Logger log = LoggerFactory.getLogger(Factory.class);
+            log.error("Invalid ImportSelector type of " + type);
             return null;
         }
 
@@ -134,7 +138,8 @@ public final class Factory
 
         if(null == res)
         {
-            System.out.println("Invalid DataFilter type of " + type);
+            final Logger log = LoggerFactory.getLogger(Factory.class);
+            log.error("Invalid DataFilter type of " + type);
             return null;
         }
 
@@ -157,7 +162,8 @@ public final class Factory
 
         if(null == res)
         {
-            System.out.println("Invalid Exporter type of " + type);
+            final Logger log = LoggerFactory.getLogger(Factory.class);
+            log.error("Invalid Exporter type of " + type);
             return null;
         }
 
@@ -185,7 +191,8 @@ public final class Factory
 
         if(null == res)
         {
-            System.out.println("Invalid ExportStyle type of " + type);
+            final Logger log = LoggerFactory.getLogger(Factory.class);
+            log.error("Invalid ExportStyle type of " + type);
             return null;
         }
 

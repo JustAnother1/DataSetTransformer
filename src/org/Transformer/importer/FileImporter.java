@@ -23,12 +23,16 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Lars P&ouml;tter
  * (<a href=mailto:Lars_Poetter@gmx.de>Lars_Poetter@gmx.de</a>)
  */
 public class FileImporter extends Importer
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private String fileName = "";
 
     /**
@@ -67,13 +71,13 @@ public class FileImporter extends Importer
             final File sourceFile = new File(fileName);
             if((false == sourceFile.exists()) || (false == sourceFile.canRead()))
             {
-                System.err.println("Could not read Data from " + fileName);
+                log.error("Could not read Data from " + fileName);
                 setSuccessfullyCompleted(false);
             }
             else
             {
                 final FileInputStream fin = new FileInputStream(sourceFile);
-                System.out.println("Reading Data from " + sourceFile.getAbsolutePath());
+                log.debug("Reading Data from " + sourceFile.getAbsolutePath());
                 infilt.setInputStream(fin);
                 if(true == infilt.parseToDataSets())
                 {

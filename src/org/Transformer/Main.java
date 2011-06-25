@@ -19,13 +19,8 @@ package org.Transformer;
 
 import java.io.File;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Layout;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Main Class of DataSet Transformer Project.
  * parses the command line and then starts Job Processing or the Wizard(GUI).
@@ -47,10 +42,10 @@ public final class Main
      *
      * @param Parameter Filename of File containing Job definitions
      */
-    public static void execute(final String Parameter)
+    public static void execute(final String Parameter, final Logger log)
     {
         final File configFile = new File(Parameter);
-        System.out.println("Parameter is : " + Parameter);
+        log.info("Parameter is : " + Parameter);
 
         if(true == configFile.canRead())
         {
@@ -64,14 +59,14 @@ public final class Main
             }
             else
             {
-                System.err.println("The Job " + Parameter + " can not be executed !");
+                log.error("The Job " + Parameter + " can not be executed !");
             }
         }
         else
         {
             // complain
-            System.err.println("Could not read Job File " + Parameter + " !");
-            System.out.println("Provide a job File as Parameter !");
+            log.error("Could not read Job File " + Parameter + " !");
+            log.info("Provide a job File as Parameter !");
         }
     }
 
@@ -80,29 +75,15 @@ public final class Main
      */
     public static void main(final String[] args)
     {
-        Logger rootlog = null;
-        // Start Log4J Logger
-        if(true == (new File("log4j.xml")).canRead())
-        {
-            DOMConfigurator.configureAndWatch("log4j.xml");
-        }
-        else
-        {
-            // Fall Back - No log4j.xml to configure Logging
-            rootlog = Logger.getRootLogger();
-            rootlog.setLevel(Level.DEBUG); // TODO ERROR
-            final Layout layout = new SimpleLayout();
-            final Appender app = new ConsoleAppender(layout);
-            rootlog.addAppender(app);
-        }
+        final Logger logger = LoggerFactory.getLogger(Main.class);
 
         if(0 < args.length)
         {
-            execute(args[0]);
+            execute(args[0], logger);
         }
         else
         {
-            System.out.println("Provide name of Job File as parameter !");
+            logger.info("Provide name of Job File as parameter !");
         }
     }
 

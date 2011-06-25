@@ -26,6 +26,9 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * @author Lars P&ouml;tter
@@ -33,6 +36,7 @@ import java.net.URL;
  */
 public abstract class BaseUrlImporter extends Importer
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private String sourceUrl = "";
 
     public final void setSource(final String src)
@@ -56,14 +60,14 @@ public abstract class BaseUrlImporter extends Importer
             final File cacheFolder = new File("cache");
             if(false == cacheFolder.mkdir())
             {
-                System.err.println("Could not create cache folder !");
+                log.error("Could not create cache folder !");
             }
             final String cacheName = "cache/DataTransformer_cache" + onlyAllowedChars(sourceUrl) + ".dtc";
             final File cacheFile = new File(cacheName);
 
             if(false == cacheFile.exists())
             {
-                System.out.println("Getting Source Data from " + sourceUrl);
+                log.debug("Getting Source Data from " + sourceUrl);
                 // not cached load the file
                 final URL src = new URL(sourceUrl);
                 final InputStream is = src.openStream();
@@ -75,7 +79,7 @@ public abstract class BaseUrlImporter extends Importer
             }
             else
             {
-                System.out.println("Using cached Data for " + sourceUrl);
+                log.debug("Using cached Data for " + sourceUrl);
             }
             final FileInputStream fin = new FileInputStream(cacheFile);
             infilt.setInputStream(fin);
@@ -92,7 +96,7 @@ public abstract class BaseUrlImporter extends Importer
         }
         catch(final MalformedURLException e)
         {
-            System.err.println("Could not parse the URL : " + sourceUrl);
+            log.error("Could not parse the URL : " + sourceUrl);
             //e.printStackTrace();
             setSuccessfullyCompleted(false);
         }

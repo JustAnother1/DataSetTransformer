@@ -25,6 +25,8 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import org.Transformer.dataset.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -32,6 +34,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class FileExporter extends Exporter
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private boolean exportSuccessfullyExecuted = false;
     private String target = "";
 
@@ -53,29 +56,29 @@ public class FileExporter extends Exporter
             {
                 out.flush();
                 exportSuccessfullyExecuted = true;
-                System.out.println("Export successfully !");
+                log.info("Export successfully !");
             }
             else
             {
-                System.out.println("Export failed !");
+                log.error("Export failed !");
             }
         }
         catch(final FileNotFoundException e)
         {
             e.printStackTrace();
-            System.out.println("Export failed !");
+            log.error("Export failed !");
             exportSuccessfullyExecuted = false;
         }
         catch(final IOException e)
         {
             e.printStackTrace();
-            System.out.println("Export failed !");
+            log.error("Export failed !");
             exportSuccessfullyExecuted = false;
         }
         catch(final SQLException e)
         {
             e.printStackTrace();
-            System.out.println("Export failed !");
+            log.error("Export failed !");
             exportSuccessfullyExecuted = false;
         }
         if(null != out)

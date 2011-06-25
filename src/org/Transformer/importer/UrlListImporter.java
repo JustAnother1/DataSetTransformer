@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.Transformer.dataset.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -33,6 +35,7 @@ import org.Transformer.dataset.DataSet;
  */
 public class UrlListImporter extends Importer
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private String source = null;
     private UrlImporter singleImporter = new UrlImporter();
     private Vector<DataSet> resultCollect = new Vector<DataSet>();
@@ -133,7 +136,7 @@ public class UrlListImporter extends Importer
 
     private boolean partImport(final String line, final ImportSelector infilt)
     {
-        System.out.println("Importing : " + line);
+        log.info("Importing : " + line);
         singleImporter.setSource(line);
         singleImporter.importData(infilt);
         if(true == singleImporter.wasSuccessfull())

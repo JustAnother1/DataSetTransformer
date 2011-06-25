@@ -29,6 +29,8 @@ import org.Transformer.exporter.ExportStyle;
 import org.Transformer.exporter.Exporter;
 import org.Transformer.importer.ImportSelector;
 import org.Transformer.importer.Importer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /** Representation of the Job to do.
@@ -135,12 +137,14 @@ public class Job
             }
             else
             {
-                System.err.println("Could not create the Importer : " + classType);
+                final Logger log = LoggerFactory.getLogger(Job.class);
+                log.error("Could not create the Importer : " + classType);
             }
         }
         else
         {
-            System.err.println("File did not contain an Importer !");
+            final Logger log = LoggerFactory.getLogger(Job.class);
+            log.error("File did not contain an Importer !");
         }
         return null;
     }
@@ -159,12 +163,14 @@ public class Job
             }
             else
             {
-                System.err.println("Could not create the Import Selector : " + classType);
+                final Logger log = LoggerFactory.getLogger(Job.class);
+                log.error("Could not create the Import Selector : " + classType);
             }
         }
         else
         {
-            System.err.println("File did not contain an Import Selector !");
+            final Logger log = LoggerFactory.getLogger(Job.class);
+            log.error("File did not contain an Import Selector !");
         }
         return null;
     }
@@ -183,12 +189,14 @@ public class Job
             }
             else
             {
-                System.err.println("Could not create the Data Filter : " + classType);
+                final Logger log = LoggerFactory.getLogger(Job.class);
+                log.error("Could not create the Data Filter : " + classType);
             }
         }
         else
         {
-            System.err.println("File did not contain a Data Filter !");
+            final Logger log = LoggerFactory.getLogger(Job.class);
+            log.error("File did not contain a Data Filter !");
         }
         return null;
     }
@@ -207,12 +215,14 @@ public class Job
             }
             else
             {
-                System.err.println("Could not create the Exporter : " + classType);
+                final Logger log = LoggerFactory.getLogger(Job.class);
+                log.error("Could not create the Exporter : " + classType);
             }
         }
         else
         {
-            System.err.println("File did not contain an Exporter !");
+            final Logger log = LoggerFactory.getLogger(Job.class);
+            log.error("File did not contain an Exporter !");
         }
         return null;
     }
@@ -231,12 +241,14 @@ public class Job
             }
             else
             {
-                System.err.println("Could not create the Export Style : " + classType);
+                final Logger log = LoggerFactory.getLogger(Job.class);
+                log.error("Could not create the Export Style : " + classType);
             }
         }
         else
         {
-            System.err.println("File did not contain an Export Style !");
+            final Logger log = LoggerFactory.getLogger(Job.class);
+            log.error("File did not contain an Export Style !");
         }
         return null;
     }

@@ -24,7 +24,8 @@ import java.sql.Connection;
 import java.util.Map;
 
 import org.Transformer.dataset.DataSet;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lars P&ouml;tter
@@ -32,7 +33,7 @@ import org.apache.log4j.Logger;
  */
 public class HtmlExportStyle extends ExportStyle
 {
-    private final Logger log = Logger.getLogger(this.getClass().getName());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private OutputStream out;
     /**
      * Structure of the HTML File before and After the Row data. Row Data is inserted at the Point labeled with %ROW%.
@@ -75,7 +76,7 @@ public class HtmlExportStyle extends ExportStyle
                 final Object variable = theData.getDataAtom(parts[i]);
                 if(null == variable)
                 {
-                    System.err.println("Could not resolve Variable ! (" + parts[i] + ") !");
+                    log.error("Could not resolve Variable ! (" + parts[i] + ") !");
                     return false;
                 }
                 out.write(variable.toString().getBytes());// TODO charset ?
@@ -105,7 +106,7 @@ public class HtmlExportStyle extends ExportStyle
         {
             if(false == "ROW".equalsIgnoreCase(globalParts[1]))
             {
-                System.err.println("Global Style Definition invalid ! (" + globalParts[1] + ") !");
+                log.error("Global Style Definition invalid ! (" + globalParts[1] + ") !");
                 return false;
             }
         }
@@ -113,7 +114,7 @@ public class HtmlExportStyle extends ExportStyle
         {
             if(false == formatARow(theData[g]))
             {
-                System.err.println("Row output failed at row " + g + " !");
+                log.error("Row output failed at row " + g + " !");
                 return false;
             }
         }

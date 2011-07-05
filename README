@@ -78,9 +78,10 @@ Contents
    A Job File must have the following sections:
     - "Importer"
     - "Import Selector"
-    - "Data Filter"
     - "Exporter"
     - "Export Style"
+   A Job File may also have the following sections:
+    - "Data Filter", "Data Filter_0", "Data Filter_1", ... "Data Filter_99"
    These sections directly correspond to the 5 steps needed for the transformation. Each of these steps can be thought
    of as a separate module. Each section must have at least on setting. That setting is the "type"-setting. The type
    selects the kind of module used in this step. The different kind of modules may have different settings. Refer to
@@ -88,6 +89,12 @@ Contents
 
 4.1. Importer
      --------
+
+     Description
+     -----------
+     The Importer opens the data source and gives the Import Selector access to the raw data.
+     There must be exactly one Importer in each Job.
+
      currently available Importers:
 
 4.1.1. File Importer
@@ -161,6 +168,12 @@ Contents
 
 4.2. Import Selector
      ---------------
+
+     Description
+     -----------
+     The Import Selector reads the raw data and extracts the data sets.
+     There must be exactly one Import Selector in each Job.
+
      currently available Import Selectors:
 
 4.2.1. CSV Import Selector
@@ -239,6 +252,13 @@ Contents
 
 4.3. Data Filter
      -----------
+
+     Description
+     -----------
+     The data filter reads the data sets and applies the filter. The result are the changed/ filtered data sets.
+     There can be zero to 100 data filters in each job. The data filters will be executed according their number
+     starting with 0 and going up to 99. A data filter section without number will be executed before data filter 0.
+
      currently available Data Filters:
 
 4.3.1. Concatenate Filter
@@ -402,12 +422,18 @@ FileName = testData/small.csv
 [Import Selector]
 type = CsvImportSelector
 separator = ,
-mapping_0 = a
-mapping_1 = s
-mapping_2 = d
+mapping_0 = number
+mapping_1 = german
+mapping_2 = english
 
-[Data Filter]
+[Data Filter_0]
 type = RemoveEmptyLinesFilter
+
+[Data Filter_1]
+type = ReplaceFilter
+Element to change = english
+Search for = pi
+Replace with = pie
 
 [Exporter]
 type = FileExporter
@@ -416,7 +442,7 @@ target = exported.csv
 [Export Style]
 type = CsvExportStyle
 separator = ,
-mapping_0 = d
-mapping_1 = s
-mapping_2 = a
+mapping_0 = number
+mapping_1 = english
+mapping_2 = german
 

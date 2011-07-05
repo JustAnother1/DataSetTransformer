@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Vector;
 
 import org.Transformer.dataset.DataFilter;
 import org.Transformer.exporter.ExportStyle;
@@ -40,6 +41,8 @@ import org.slf4j.LoggerFactory;
  */
 public class Job
 {
+    public static final int MAX_DATA_FILTER_NUMBER = 100;
+
     private static final String IMPORTER_LINE = "Importer";
     private static final String IMPORT_SELECTOR_LINE = "Import Selector";
     private static final String DATA_FILTER_LINE = "Data Filter";
@@ -49,7 +52,7 @@ public class Job
 
     private Importer theImporter;
     private ImportSelector theImportSelector;
-    private DataFilter theDataFilter;
+    private Vector<DataFilter> theDataFilters;
     private Exporter theExporter;
     private ExportStyle theExportStyle;
 
@@ -74,6 +77,7 @@ public class Job
                 fw.write(CLASS_TYPE_NAME + " = " + imp.getName() + "\n");
                 fw.write(imp.getConfig() + "\n");
             }
+
             final ImportSelector impsel = job.getImportSelector();
             if(null != impsel)
             {
@@ -81,13 +85,18 @@ public class Job
                 fw.write(CLASS_TYPE_NAME + " = " + impsel.getName() + "\n");
                 fw.write(impsel.getConfig() + "\n");
             }
-            final DataFilter df = job.getDataFilter();
-            if(null != df)
+
+            for(int i = 0; i < job.getNumberOfDataFilters(); i++)
             {
-                fw.write("[" + DATA_FILTER_LINE + "]\n");
-                fw.write(CLASS_TYPE_NAME + " = " + df.getName() + "\n");
-                fw.write(df.getConfig() + "\n");
+                final DataFilter df = job.getDataFilter(i);
+                if(null != df)
+                {
+                    fw.write("[" + DATA_FILTER_LINE + "_" + i + "]\n");
+                    fw.write(CLASS_TYPE_NAME + " = " + df.getName() + "\n");
+                    fw.write(df.getConfig() + "\n");
+                }
             }
+
             final Exporter exp = job.getExporter();
             if(null != exp)
             {
@@ -95,6 +104,7 @@ public class Job
                 fw.write(CLASS_TYPE_NAME + " = " + exp.getName() + "\n");
                 fw.write(exp.getConfig() + "\n");
             }
+
             final ExportStyle expsty = job.getExportStyle();
             if(null != expsty)
             {
@@ -175,9 +185,8 @@ public class Job
         return null;
     }
 
-    private static DataFilter readDataFilter(final ConfigParser cfgp)
+    private static void addSingleDataFilter(final Map<String, String> settings, final Job job)
     {
-        final Map<String, String> settings = cfgp.getSettingsOfSection(DATA_FILTER_LINE);
         if(null != settings)
         {
             final String classType = settings.get(CLASS_TYPE_NAME);
@@ -185,7 +194,7 @@ public class Job
             if(null != df)
             {
                 df.setConfig(settings);
-                return df;
+                job.addDataFilter(df);
             }
             else
             {
@@ -193,12 +202,24 @@ public class Job
                 log.error("Could not create the Data Filter : " + classType);
             }
         }
-        else
+        // else nothing to do
+    }
+
+    private static void readDataFilter(final ConfigParser cfgp, final Job job)
+    {
+        addSingleDataFilter(cfgp.getSettingsOfSection(DATA_FILTER_LINE), job);
+        for(int i = 0; i < MAX_DATA_FILTER_NUMBER; i++)
         {
-            final Logger log = LoggerFactory.getLogger(Job.class);
-            log.error("File did not contain a Data Filter !");
+            final Map<String, String> hlp = cfgp.getSettingsOfSection(DATA_FILTER_LINE + "_" + i);
+            if(null == hlp)
+            {
+                break;
+            }
+            else
+            {
+                addSingleDataFilter(hlp, job);
+            }
         }
-        return null;
     }
 
     private static Exporter readExporter(final ConfigParser cfgp)
@@ -268,7 +289,7 @@ public class Job
 
             result.setImporter(readImporter(cfgp));
             result.setImportSelector(readImportSelector(cfgp));
-            result.setDataFilter(readDataFilter(cfgp));
+            readDataFilter(cfgp, result);
             result.setExporter(readExporter(cfgp));
             result.setExportStyle(readExportStyle(cfgp));
 
@@ -325,14 +346,19 @@ public class Job
         return theExportStyle;
     }
 
-    public final void setDataFilter(final DataFilter filter)
+    public final void addDataFilter(final DataFilter filter)
     {
-        theDataFilter = filter;
+        theDataFilters.add(filter);
     }
 
-    public final DataFilter getDataFilter()
+    public final DataFilter getDataFilter(final int index)
     {
-        return theDataFilter;
+        return theDataFilters.get(index);
+    }
+
+    public final int getNumberOfDataFilters()
+    {
+        return theDataFilters.size();
     }
 
     public final boolean isExecuteable()
@@ -342,10 +368,6 @@ public class Job
             return false;
         }
         if(null == theImportSelector)
-        {
-            return false;
-        }
-        if(null == theDataFilter)
         {
             return false;
         }

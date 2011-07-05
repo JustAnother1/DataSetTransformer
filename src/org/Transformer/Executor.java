@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 public class Executor
 {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private IntReporter progRep = null;;
 
     /**
      *
@@ -42,41 +41,23 @@ public class Executor
     {
     }
 
-    public final void addProgressReporter(final IntReporter rep)
-    {
-        progRep = rep;
-    }
-
-    private void reportProgress(final int progress)
-    {
-        if(null != progRep)
-        {
-            progRep.reportProgress(progress);
-        }
-        // else no reporting
-    }
-
     private DataSet[] importData(final Job job)
     {
         final Importer imp = job.getImporter();
         log.debug("Importer is : " + imp.getName());
         log.debug("Importer Configuration is : " + imp.getConfig());
-        reportProgress(1);
 
         // Import Data using Import Filter
         final ImportSelector impSelector = job.getImportSelector();
         log.debug("Import Selector is : " + impSelector.getName());
         log.debug("Import Selector Configuration is : " + impSelector.getConfig());
         imp.importData(impSelector);
-        reportProgress(20);
 
         if(false == imp.wasSuccessfull())
         {
             log.error("Import Failed");
-            reportProgress(21);
             return new DataSet[0];
         }
-        reportProgress(33);
 
         // Importing worked !
         // Get Data Set from Importer
@@ -85,29 +66,28 @@ public class Executor
 
     private DataSet[] filterData(final Job job, final DataSet[] theData)
     {
-        final DataFilter filter = job.getDataFilter();
-        if(null != filter)
+        DataSet[] myData = theData;
+        for(int i = 0; i < job.getNumberOfDataFilters(); i++)
         {
-            log.debug("Data Filter is : " + filter.getName());
-            final DataSet[] res = filter.applyFilterTo(theData);
-            return res;
+            final DataFilter filter = job.getDataFilter(i);
+            if(null != filter)
+            {
+                log.debug("Data Filter is : " + filter.getName());
+                myData = filter.applyFilterTo(myData);
+            }
+            // else nothing to do
         }
-        else
-        {
-            return theData;
-        }
+        return myData;
     }
 
     private Boolean exportData(final Job job, final DataSet[] theData)
     {
         final Exporter exp = job.getExporter();
         log.debug("Exporter is : " + exp.getName());
-        reportProgress(68);
 
         final ExportStyle expStyle = job.getExportStyle();
         log.debug("Export Style is : " + expStyle.getName());
         exp.export(theData, expStyle);
-        reportProgress(98);
 
         return exp.wasSuccessfull();
     }
@@ -138,7 +118,6 @@ public class Executor
 
     public final void executeJob(final Job job)
     {
-        reportProgress(0);
         log.info("=== Starting ===");
         final DataSet[] theData = importData(job);
         if(true == isEmpty(theData))
@@ -146,7 +125,6 @@ public class Executor
             log.error("Importer could not import any Data !");
             return;
         }
-        reportProgress(35);
         log.info("=== Imported the Data ===");
         printDataSetArray(theData);
 
@@ -156,17 +134,14 @@ public class Executor
             log.error("No Data leaft after filtering !");
             return;
         }
-        reportProgress(66);
         log.info("=== Filtered the Data ===");
         printDataSetArray(theData);
 
         if(false == exportData(job, theData))
         {
             log.error("Export Failed");
-            reportProgress(99);
             return;
         }
-        reportProgress(100);
         log.info("=== Success ===");
     }
 

@@ -348,17 +348,35 @@ public class Job
 
     public final void addDataFilter(final DataFilter filter)
     {
+        if(null == theDataFilters)
+        {
+            theDataFilters = new Vector<DataFilter>();
+        }
         theDataFilters.add(filter);
     }
 
     public final DataFilter getDataFilter(final int index)
     {
-        return theDataFilters.get(index);
+        if(null != theDataFilters)
+        {
+            return theDataFilters.get(index);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public final int getNumberOfDataFilters()
     {
-        return theDataFilters.size();
+        if(null != theDataFilters)
+        {
+            return theDataFilters.size();
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public final boolean isExecuteable()

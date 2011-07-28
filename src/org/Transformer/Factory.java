@@ -15,6 +15,7 @@
 
 package org.Transformer;
 
+import org.Transformer.dataset.AddIndexDataElementFilter;
 import org.Transformer.dataset.ConCatFilter;
 import org.Transformer.dataset.DataFilter;
 import org.Transformer.dataset.RegExpFilter;
@@ -26,6 +27,7 @@ import org.Transformer.exporter.Exporter;
 import org.Transformer.exporter.FileExporter;
 import org.Transformer.exporter.HtmlExportStyle;
 import org.Transformer.exporter.JdbcExporter;
+import org.Transformer.exporter.OneFilePerRowExporter;
 import org.Transformer.exporter.SqlExportStyle;
 import org.Transformer.importer.CsvImportSelector;
 import org.Transformer.importer.FileImporter;
@@ -142,6 +144,11 @@ public final class Factory
             res = new ReplaceFilter();
         }
 
+        if(true == "AddIndexDataElementFilter".equals(type))
+        {
+            res = new AddIndexDataElementFilter();
+        }
+
         if(null == res)
         {
             final Logger log = LoggerFactory.getLogger(Factory.class);
@@ -159,6 +166,11 @@ public final class Factory
         if(true == "FileExporter".equals(type))
         {
             res = new FileExporter();
+        }
+
+        if(true == "OneFilePerRowExporter".equals(type))
+        {
+            res = new OneFilePerRowExporter();
         }
 
         if(true == "JdbcExporter".equals(type))

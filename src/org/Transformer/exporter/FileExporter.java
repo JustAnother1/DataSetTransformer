@@ -100,15 +100,6 @@ public class FileExporter extends Exporter
         return exportSuccessfullyExecuted;
     }
 
-    public final void setTarget(final String trg)
-    {
-        if(null != trg)
-        {
-            target = trg;
-        }
-    }
-
-
     @Override
     public final String getConfig()
     {

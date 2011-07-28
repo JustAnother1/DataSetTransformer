@@ -324,6 +324,18 @@ Contents
        Search for = string that will be removed if found
        Replace with = replacement for the found string
 
+4.3.5. Add Index data element Filter
+       -----------------------------
+       type = AddIndexDataElementFilter
+
+       Description
+       -----------
+       adds a data element to each data set that contains the index/ row number of the data set.
+       Counting starts with 0.
+
+       Parameters
+       ----------
+       Index element name = name of the added data element
 
 4.4. Exporter
      --------
@@ -341,7 +353,22 @@ Contents
        ----------
        target = File Name of result file.
 
-4.4.2. JDBC Exporter
+4.4.1. One File per Row Exporter
+       -------------------------
+       type = OneFilePerRowExporter
+
+       Description
+       -----------
+       creates a file for each data set.
+       The filenames for these files are created by prefix + <value of data element> + postfix.
+
+       Parameters
+       ----------
+       filename prefix = the prefix
+       filename postfix = the postfix
+       filename data element = the name of the data element used to construct the filename
+
+4.4.3. JDBC Exporter
        -------------
        type = JdbcExporter
 

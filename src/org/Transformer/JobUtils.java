@@ -16,6 +16,7 @@
 package org.Transformer;
 
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -50,5 +51,47 @@ public final class JobUtils
             val = cfg.get(Name + "_" + i);
         }
         return vec.toArray(new String[0]);
+    }
+
+    public static String[] stringToArray(final String text)
+    {
+        final Scanner sc = new Scanner(text);
+        final Vector<String> vec = new Vector<String>();
+        while(sc.hasNextLine())
+        {
+            vec.add(sc.nextLine());
+        }
+        return vec.toArray(new String[0]);
+    }
+
+    private static boolean isValidChar(final char c)
+    {
+        final char[] validChars = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                                   'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                                   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                                   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        for(int i = 0; i < validChars.length; i++)
+        {
+            if(c == validChars[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String onlyAllowedChars(final String src)
+    {
+        final StringBuffer dst = new StringBuffer();
+        for(int i = 0; i < src.length(); i++)
+        {
+            final char cur = src.charAt(i);
+            if(true == isValidChar(cur))
+            {
+                dst.append(cur);
+            }
+        }
+        return dst.toString();
     }
 }

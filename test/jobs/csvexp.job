@@ -1,0 +1,25 @@
+[Importer]
+type = FileImporter
+FileName = srcData/small.csv
+
+[Import Selector]
+type = CsvImportSelector
+separator = ,
+mapping_0 = a
+mapping_1 = s
+mapping_2 = d
+
+[Data Filter]
+type = RemoveEmptyLinesFilter
+
+[Exporter]
+type = FileExporter
+target = resultData/exported.csv
+
+[Export Style]
+type = CsvExportStyle
+separator = ,
+mapping_0 = d
+mapping_1 = s
+mapping_2 = a
+

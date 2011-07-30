@@ -47,7 +47,6 @@
         <mkdir dir="${build}"/>
         <mkdir dir="${javadoc}"/>
         <mkdir dir="${rel}"/>
-        <mkdir dir="${relcfg}"/>
         <mkdir dir="${rellib}"/>
     </target>
 
@@ -83,7 +82,7 @@
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Built-Date" value="${TODAY}"/>
                 <attribute name="Main-Class" value="${ServerMainClass}"/>
-                <attribute name="Class-Path" value="lib/jdom.jar lib/log4j-1.2.15.jar lib/jericho-html-3.1 lib/jtidy-r938.jar"/>
+                <attribute name="Class-Path" value="lib/jdom.jar lib/log4j-1.2.15.jar lib/jericho-html-3.1 lib/jtidy-r938.jar lib/slf4j-api-1.6.1.jar lib/slf4j-simple-1.6.1.jar"/>
             </manifest>
         </jar>
         <copy todir="${rellib}">

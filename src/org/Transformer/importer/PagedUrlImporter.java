@@ -67,13 +67,15 @@ public class PagedUrlImporter extends BaseUrlImporter
                 setSuccessfullyCompleted(false);
                 return;
             }
-            // has more pages ?
-            nextPageUrl = "";
+            // copy the data
             final DataSet[] curRes = super.getTheData();
             for(int i = 0; i < curRes.length; i++)
             {
                 res.add(curRes[i]);
             }
+            // has more pages ?
+            log.debug("Searching for next Page...");
+            nextPageUrl = "";
             for(int i = 0; i < curRes.length; i++)
             {
                 final String curNext = curRes[i].getDataAtom("Next");
@@ -81,12 +83,22 @@ public class PagedUrlImporter extends BaseUrlImporter
                 {
                     if(0 < curNext.length())
                     {
+                        log.debug("Next Atom is : {}", curNext);
                         nextPageUrl = curNext;
                         break;
                     }
+                    else
+                    {
+                        log.debug("Next Atom is empty !");
+                    }
+                }
+                else
+                {
+                    log.debug("Entry has no Next Atom !");
                 }
             }
         } while(0 < nextPageUrl.length());
+        log.debug("No more pages found !");
         setTheData(res.toArray(new DataSet[0]));
     }
 

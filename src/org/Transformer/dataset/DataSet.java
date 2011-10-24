@@ -59,6 +59,29 @@ public class DataSet
         return data.get(Name);
     }
 
+
+    /** retrieves a data element.
+     *
+     * @param Name Name of data element
+     * @param maxLength the maximum length of the returned string
+     * @return the requested data element or null
+     */
+    public final String getDataAtom(final String Name, int maxLength)
+    {
+        String res = data.get(Name);
+        if(null == res)
+        {
+            return "";
+        }
+        if(maxLength > res.length())
+        {
+            return res;
+        }
+        res = res.substring(0, maxLength - 3);
+        res = res + "...";
+        return res;
+    }
+
     public final String[] getNamesOfAllDataAtoms()
     {
         final Set<String> hlp = data.keySet();

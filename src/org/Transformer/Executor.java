@@ -119,7 +119,7 @@ public class Executor
     public final void executeJob(final Job job)
     {
         log.info("=== Starting ===");
-        final DataSet[] theData = importData(job);
+        DataSet[] theData = importData(job);
         if(true == isEmpty(theData))
         {
             log.error("Importer could not import any Data !");
@@ -128,7 +128,7 @@ public class Executor
         log.info("=== Imported the Data ===");
         printDataSetArray(theData);
 
-        filterData(job, theData);
+        theData = filterData(job, theData);
         if(true == isEmpty(theData))
         {
             log.error("No Data leaft after filtering !");
@@ -148,19 +148,20 @@ public class Executor
     private void printDataSetArray(final DataSet[] theData)
     {
         log.debug("current Data Set has {} Entries", theData.length);
-        /*
-        log.info("=== Current Data Set ===");
+
+        log.debug("=== Current Data Set ===");
         log.debug("Data Set Entries:");
         for(int k = 0; k < theData.length; k++)
         {
             final DataSet curSet = theData[k];
             if(null != curSet)
             {
-                log.debug("Entry " + k + " has " + theData[k].getNumberOfAtoms() + " Data Atoms !");
+                log.debug("Entry {} has {} Data Atoms !", k,  theData[k].getNumberOfAtoms());
                 final String[] names = theData[k].getNamesOfAllDataAtoms();
                 for (int h = 0; h < names.length; h++)
                 {
-                    log.debug("(" + names[h] + " : " + theData[k].getDataAtom(names[h]) + ")");
+                    String help = theData[k].getDataAtom(names[h], 30);
+                    log.debug("[{} : {}]", names[h], help);
                 }
             }
             else
@@ -168,8 +169,8 @@ public class Executor
                 log.debug("DataSet number " + k + " is null !");
             }
         }
-        log.info("========================");
-        */
+        log.debug("========================");
+
     }
 
 }

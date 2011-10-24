@@ -164,7 +164,7 @@ public class HtmlTreeStructure extends TreeStructure
         for(int k = 0; k < nl.getLength(); k++)
         {
             final Node n = nl.item(k);
-            if(true == curPath.equals(n.getNodeName()))
+            if(true == pathValueMatches(curPath, n.getNodeName()))
             {
                 if(null == attrName)
                 {
@@ -294,6 +294,19 @@ public class HtmlTreeStructure extends TreeStructure
         }
     }
 
+    private boolean pathValueMatches(final String path, final String pattern)
+    {
+        if(true == path.contains("*"))
+        {
+            String help = path.replaceAll("\\*", "");
+            return help.contains(pattern);
+        }
+        else
+        {
+            return path.equals(pattern);
+        }
+    }
+
     private boolean attributeValueEquals(final String attrValue, final String attrName, final Node n)
     {
         if((null == attrValue) || (null == n))
@@ -310,7 +323,16 @@ public class HtmlTreeStructure extends TreeStructure
         {
             return false;
         }
-        return attrValue.equals(attribute.getNodeValue());
+        if(true == attrValue.contains("*"))
+        {
+            String searched = attrValue.replaceAll("\\*", "");
+            String searcharea = attribute.getNodeValue();
+            return searcharea.contains(searched);
+        }
+        else
+        {
+            return attrValue.equals(attribute.getNodeValue());
+        }
     }
 
 }

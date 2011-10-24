@@ -24,8 +24,6 @@
     <property name="ServerJar" location="${rel}/${ant.project.name}.jar"/>
     <property name="ServerMainClass" value="org.Transformer.Main"/>
     <property name="javadoc" location="${rel}/doc"/>
-    <!--<property name="test.class.name" value="org.FriendsUnited.AllTests" />
-    <property name="JunitJar" location="${lib}/junit-4.6.jar"/> -->
 
     <path id="project.class.path">
       <fileset dir="lib" includes="*.jar"/>
@@ -82,7 +80,7 @@
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Built-Date" value="${TODAY}"/>
                 <attribute name="Main-Class" value="${ServerMainClass}"/>
-                <attribute name="Class-Path" value="lib/jdom.jar lib/log4j-1.2.15.jar lib/jericho-html-3.1 lib/jtidy-r938.jar lib/slf4j-api-1.6.1.jar lib/slf4j-simple-1.6.1.jar"/>
+                <attribute name="Class-Path" value=". lib/jdom.jar lib/log4j-1.2.15.jar lib/jericho-html-3.1 lib/jtidy-r938.jar lib/slf4j-api-1.6.1.jar lib/slf4j-log4j12-1.6.1.jar"/>
             </manifest>
         </jar>
         <copy todir="${rellib}">

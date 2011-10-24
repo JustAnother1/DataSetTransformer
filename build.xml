@@ -73,7 +73,9 @@
 
     <!-- create the jar file -->
     <target name="jar" depends="compile" description="create the Jar File">
+        <copy file="log4j.properties" todir="${build}"/>
         <jar destfile="${ServerJar}"
+             includesfile="log4j.properties"
              includes="**/*.class">
             <fileset dir="${build}"/>
             <manifest>

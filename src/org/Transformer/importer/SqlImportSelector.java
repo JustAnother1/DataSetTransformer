@@ -49,19 +49,16 @@ public class SqlImportSelector extends ImportSelector
         super();
     }
 
-    @Override
     public final String getConfig()
     {
         return "SqlQuery = " + SqlQuery;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         SqlQuery = cfg.get("SqlQuery");
     }
 
-    @Override
     public final String getName()
     {
         return "SqlImportSelector";

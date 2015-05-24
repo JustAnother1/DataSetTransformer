@@ -27,9 +27,6 @@ import java.util.Map;
 public class UrlImporter extends BaseUrlImporter
 {
 
-    /**
-     *
-     */
     public UrlImporter()
     {
     }
@@ -39,19 +36,16 @@ public class UrlImporter extends BaseUrlImporter
         baseImportData(infilt);
     }
 
-    @Override
     public final String getConfig()
     {
         return "SourceUrl = " + getSource();
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         setSource(cfg.get("SourceUrl"));
     }
 
-    @Override
     public final String getName()
     {
         return "UrlImporter";

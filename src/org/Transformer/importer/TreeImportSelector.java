@@ -96,21 +96,18 @@ public class TreeImportSelector extends ImportSelector
         return true;
     }
 
-    @Override
     public final String getConfig()
     {
         return "" + JobUtils.getConfigTextFor(mappingPosition, "Mapping_Position") + "\n"
                   + JobUtils.getConfigTextFor(mappingName, "Mapping_Name");
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         mappingPosition = JobUtils.getStringArrayFromSettingMap(cfg, "Mapping_Position");
         mappingName = JobUtils.getStringArrayFromSettingMap(cfg, "Mapping_Name");
     }
 
-    @Override
     public final String getName()
     {
         return "TreeImportSelector";

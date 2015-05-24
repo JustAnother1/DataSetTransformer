@@ -149,7 +149,6 @@ public class ConCatFilter extends DataFilter
         return res;
     }
 
-    @Override
     public final String getConfig()
     {
         return "ConCatSeparator = " + conCatSeparator + "\n"
@@ -157,7 +156,6 @@ public class ConCatFilter extends DataFilter
                + JobUtils.getConfigTextFor(fieldsThatWillBeConCatenated, "FieldsThatWillBeConCatenated");
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         conCatSeparator = cfg.get("ConCatSeparator");
@@ -165,7 +163,6 @@ public class ConCatFilter extends DataFilter
         fieldsThatWillBeConCatenated = JobUtils.getStringArrayFromSettingMap(cfg, "FieldsThatWillBeConCatenated");
     }
 
-    @Override
     public final String getName()
     {
         return "ConCatFilter";

@@ -50,7 +50,6 @@ public class SqlExportStyle extends ExportStyle
     {
     }
 
-    @Override
     public final String getConfig()
     {
         return "tableName = " + dbTable +
@@ -58,7 +57,6 @@ public class SqlExportStyle extends ExportStyle
              JobUtils.getConfigTextFor(mapping, "mapping");
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         mapping = JobUtils.getStringArrayFromSettingMap(cfg, "mapping");
@@ -66,7 +64,6 @@ public class SqlExportStyle extends ExportStyle
         FieldNames = cfg.get("fieldNames");
     }
 
-    @Override
     public final String getName()
     {
         return "SqlExportStyle";

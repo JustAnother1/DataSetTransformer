@@ -70,21 +70,18 @@ public class RegExpFilter extends DataFilter
         return res.toArray(new DataSet[0]);
     }
 
-    @Override
     public final String getConfig()
     {
         return "NameOfAtom = " + nameOfAtom + "\n"
                + "RegularExpression = " + regularExpression;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         nameOfAtom = cfg.get("NameOfAtom");
         regularExpression = cfg.get("RegularExpression");
     }
 
-    @Override
     public final String getName()
     {
         return "RegExpFilter";

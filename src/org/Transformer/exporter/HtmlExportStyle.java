@@ -139,21 +139,19 @@ public class HtmlExportStyle extends ExportStyle
             rowStyleDefinition = RowDef;
         }
     }
-    @Override
+
     public final String getConfig()
     {
         return "GlobalStyleDefinition = " + globalStyleDefinition + "\n"
                + "RowStyleDefinition = " + rowStyleDefinition;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         globalStyleDefinition = cfg.get("GlobalStyleDefinition");
         rowStyleDefinition = cfg.get("RowStyleDefinition");
     }
 
-    @Override
     public final String getName()
     {
         return "HtmlExportStyle";

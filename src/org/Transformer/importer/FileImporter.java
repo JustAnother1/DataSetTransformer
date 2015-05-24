@@ -42,13 +42,11 @@ public class FileImporter extends Importer
     {
     }
 
-    @Override
     public final String getConfig()
     {
         return "FileName = " + fileName;
     }
 
-    @Override
     public final String getName()
     {
         return "FileImporter";
@@ -103,7 +101,6 @@ public class FileImporter extends Importer
         }
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         fileName = cfg.get("FileName");

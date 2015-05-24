@@ -33,20 +33,15 @@ public class PagedUrlImporter extends BaseUrlImporter
 {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    /**
-     *
-     */
     public PagedUrlImporter()
     {
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         setSource(cfg.get("SourceUrl"));
     }
 
-    @Override
     public final String getConfig()
     {
         return "SourceUrl = " + getSource();
@@ -102,7 +97,6 @@ public class PagedUrlImporter extends BaseUrlImporter
         setTheData(res.toArray(new DataSet[0]));
     }
 
-    @Override
     public final String getName()
     {
         return "PagedUrlImporter";

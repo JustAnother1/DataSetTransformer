@@ -38,14 +38,10 @@ public class JdbcImporter extends Importer
     private String dbUser;
     private String dbPassword;
 
-    /**
-     *
-     */
     public JdbcImporter()
     {
     }
 
-    @Override
     public final String getConfig()
     {
         return "dbDriver = " + dbDriver
@@ -54,7 +50,6 @@ public class JdbcImporter extends Importer
            + "\ndbPassword = " + dbPassword;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         dbDriver = cfg.get("dbDriver");
@@ -63,7 +58,6 @@ public class JdbcImporter extends Importer
         dbPassword = cfg.get("dbPassword");
     }
 
-    @Override
     public final String getName()
     {
         return "JdbcImporter";

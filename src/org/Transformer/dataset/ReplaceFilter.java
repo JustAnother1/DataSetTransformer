@@ -37,7 +37,6 @@ public class ReplaceFilter extends DataFilter
     {
     }
 
-    @Override
     public final String getConfig()
     {
         return "Element to change = " + elementToChange
@@ -45,7 +44,6 @@ public class ReplaceFilter extends DataFilter
           + "\nReplace with = " + replaceWith;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         elementToChange = cfg.get("Element to change");
@@ -53,7 +51,6 @@ public class ReplaceFilter extends DataFilter
         replaceWith = cfg.get("Replace with");
     }
 
-    @Override
     public final String getName()
     {
         return "ReplaceFilter";

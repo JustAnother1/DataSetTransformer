@@ -42,14 +42,10 @@ public class JdbcExporter extends Exporter
     private String dbUser;
     private String dbPassword;
 
-    /**
-     *
-     */
     public JdbcExporter()
     {
     }
 
-    @Override
     public final String getConfig()
     {
         return "dbDriver = " + dbDriver
@@ -58,7 +54,6 @@ public class JdbcExporter extends Exporter
            + "\ndbPassword = " + dbPassword;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         dbDriver = cfg.get("dbDriver");
@@ -67,7 +62,6 @@ public class JdbcExporter extends Exporter
         dbPassword = cfg.get("dbPassword");
     }
 
-    @Override
     public final String getName()
     {
         return "JdbcExporter";

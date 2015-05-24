@@ -35,19 +35,16 @@ public class AddIndexDataElementFilter extends DataFilter
     {
     }
 
-    @Override
     public final String getConfig()
     {
         return "Index element name = " + IndexElementName;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         IndexElementName = cfg.get("Index element name");
     }
 
-    @Override
     public final String getName()
     {
         return "AddIndexDataElementFilter";

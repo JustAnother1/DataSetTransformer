@@ -40,25 +40,16 @@ public class UrlListImporter extends Importer
     private UrlImporter singleImporter = new UrlImporter();
     private Vector<DataSet> resultCollect = new Vector<DataSet>();
 
-    /**
-     *
-     */
     public UrlListImporter()
     {
     }
 
-    /**
-     * @see org.Transformer.importer.Importer#setSource(java.lang.String)
-     */
     @Override
     public final void setSource(final String src)
     {
         source = src;
     }
 
-    /**
-     * @see org.Transformer.importer.Importer#importData(org.Transformer.importer.ImportSelector)
-     */
     @Override
     public final void importData(final ImportSelector infilt)
     {
@@ -154,19 +145,16 @@ public class UrlListImporter extends Importer
         }
     }
 
-    @Override
     public final String getConfig()
     {
         return "source = " + source;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         source = cfg.get("source");
     }
 
-    @Override
     public final String getName()
     {
         return "UrlListImporter";

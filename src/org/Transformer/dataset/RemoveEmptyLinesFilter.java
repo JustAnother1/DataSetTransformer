@@ -50,18 +50,15 @@ public class RemoveEmptyLinesFilter extends DataFilter
         return res.toArray(new DataSet[0]);
     }
 
-    @Override
     public final String getConfig()
     {
         return "";
     }
 
-    @Override
     public void setConfig(final Map<String, String> cfg)
     {
     }
 
-    @Override
     public final String getName()
     {
         return "RemoveEmptyLinesFilter";

@@ -94,22 +94,18 @@ public class CsvExportStyle extends ExportStyle
         return true;
     }
 
-
-    @Override
     public final String getConfig()
     {
         return "separator = " + separator + "\n"
                + JobUtils.getConfigTextFor(mapping, "mapping");
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         mapping = JobUtils.getStringArrayFromSettingMap(cfg, "mapping");
         separator = cfg.get("separator");
     }
 
-    @Override
     public final String getName()
     {
         return "CsvExportStyle";

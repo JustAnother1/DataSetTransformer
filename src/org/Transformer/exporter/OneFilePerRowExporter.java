@@ -37,14 +37,11 @@ public class OneFilePerRowExporter extends Exporter
     private String FileNamePrefix = "";
     private String FileNamePostfix = "";
     private String FileNameDataElementName = null;
-    /**
-     *
-     */
+
     public OneFilePerRowExporter()
     {
     }
 
-    @Override
     public final String getConfig()
     {
         return "filename prefix = " + FileNamePrefix +
@@ -52,7 +49,6 @@ public class OneFilePerRowExporter extends Exporter
                "filename data element = " + FileNameDataElementName;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         FileNamePrefix = cfg.get("filename prefix");
@@ -60,7 +56,6 @@ public class OneFilePerRowExporter extends Exporter
         FileNameDataElementName = cfg.get("filename data element");
     }
 
-    @Override
     public final String getName()
     {
         return "OneFilePerRowExporter";

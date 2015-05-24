@@ -100,19 +100,16 @@ public class FileExporter extends Exporter
         return exportSuccessfullyExecuted;
     }
 
-    @Override
     public final String getConfig()
     {
         return "target = " + target;
     }
 
-    @Override
     public final void setConfig(final Map<String, String> cfg)
     {
         target = cfg.get("target");
     }
 
-    @Override
     public final String getName()
     {
         return "FileExporter";

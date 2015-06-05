@@ -25,6 +25,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.security.cert.Certificate;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 import org.Transformer.JobUtils;
 import org.slf4j.Logger;
@@ -74,7 +79,14 @@ public abstract class BaseUrlImporter extends Importer
                 log.debug("Getting Source Data from " + sourceUrl);
                 // not cached load the file
                 final URL src = new URL(sourceUrl);
-                final InputStream is = src.openStream();
+                URLConnection con = src.openConnection();
+                if(con instanceof HttpsURLConnection)
+                {
+                    HttpsURLConnection scon = (HttpsURLConnection)con;
+                    // print_https_cert(scon);
+                }
+                con.connect();
+                final InputStream is =con.getInputStream();
                 final FileOutputStream cache = new FileOutputStream(cacheName);
                 copy(is, cache);
                 is.close();
@@ -111,6 +123,41 @@ public abstract class BaseUrlImporter extends Importer
         }
     }
 
+    /*
+    private void print_https_cert(HttpsURLConnection con)
+    {
+        if(con!=null)
+        {
+            try
+            {
+                System.out.println("Response Code : " + con.getResponseCode());
+                System.out.println("Cipher Suite : " + con.getCipherSuite());
+                System.out.println("\n");
+
+                Certificate[] certs = con.getServerCertificates();
+                for(Certificate cert : certs)
+                {
+                    System.out.println("Cert Type : " + cert.getType());
+                    System.out.println("Cert Hash Code : " + cert.hashCode());
+                    System.out.println("Cert Public Key Algorithm : "
+                                                 + cert.getPublicKey().getAlgorithm());
+                    System.out.println("Cert Public Key Format : "
+                                                 + cert.getPublicKey().getFormat());
+                    System.out.println("\n");
+                }
+            }
+            catch (SSLPeerUnverifiedException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+    */
+
     /**
      * Copy the content of the input stream into the output stream, using a temporary
      * byte array buffer whose size is 4 * 1024.
@@ -120,14 +167,17 @@ public abstract class BaseUrlImporter extends Importer
      *
      * @throws IOException If any error occurs during the copy.
      */
-    private static void copy(final InputStream in, final OutputStream out) throws IOException
+    private void copy(final InputStream in, final OutputStream out) throws IOException
     {
+        long length = 0;
         final byte[] b = new byte[4 * 1024];
         int read;
         while ((read = in.read(b)) != -1)
         {
+            length = length + read;
             out.write(b, 0, read);
         }
+        log.debug("Copied " + length + " bytes !");
     }
 
 }

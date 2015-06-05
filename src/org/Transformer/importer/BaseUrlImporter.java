@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -58,6 +59,40 @@ public abstract class BaseUrlImporter extends Importer
         return sourceUrl;
     }
 
+    private URLConnection checkConnection(URL src) throws IOException
+    {
+        URLConnection con = src.openConnection();
+
+        if(con instanceof HttpURLConnection)
+        {
+            HttpURLConnection conn = (HttpURLConnection)con;
+            // normally, 3xx is redirect
+            int status = conn.getResponseCode();
+            if (status != HttpURLConnection.HTTP_OK)
+            {
+                if(   status == HttpURLConnection.HTTP_MOVED_TEMP
+                   || status == HttpURLConnection.HTTP_MOVED_PERM
+                   || status == HttpURLConnection.HTTP_SEE_OTHER   )
+                {
+                    // get redirect url from "location" header field
+                    String newUrl = conn.getHeaderField("Location");
+                    // open the new connection again
+                    log.debug("Redirect to URL : " + newUrl);
+                    src =  new URL(newUrl);
+                    con = checkConnection(src);
+                }
+            }
+        }
+
+        // to debug https use the VM argument : " -Djavax.net.debug=all "
+        if(con instanceof HttpsURLConnection)
+        {
+            HttpsURLConnection scon = (HttpsURLConnection)con;
+            print_https_cert(scon);
+        }
+        return con;
+    }
+
     protected final void baseImportData(final ImportSelector infilt)
     {
         try
@@ -78,15 +113,10 @@ public abstract class BaseUrlImporter extends Importer
             {
                 log.debug("Getting Source Data from " + sourceUrl);
                 // not cached load the file
-                final URL src = new URL(sourceUrl);
-                URLConnection con = src.openConnection();
-                if(con instanceof HttpsURLConnection)
-                {
-                    HttpsURLConnection scon = (HttpsURLConnection)con;
-                    // print_https_cert(scon);
-                }
+                URL src = new URL(sourceUrl);
+                URLConnection con = checkConnection(src);
                 con.connect();
-                final InputStream is =con.getInputStream();
+                final InputStream is = con.getInputStream();
                 final FileOutputStream cache = new FileOutputStream(cacheName);
                 copy(is, cache);
                 is.close();
@@ -123,7 +153,6 @@ public abstract class BaseUrlImporter extends Importer
         }
     }
 
-    /*
     private void print_https_cert(HttpsURLConnection con)
     {
         if(con!=null)
@@ -156,7 +185,6 @@ public abstract class BaseUrlImporter extends Importer
             }
         }
     }
-    */
 
     /**
      * Copy the content of the input stream into the output stream, using a temporary

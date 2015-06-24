@@ -61,6 +61,7 @@ public final class JobUtils
         {
             vec.add(sc.nextLine());
         }
+        sc.close();
         return vec.toArray(new String[0]);
     }
 

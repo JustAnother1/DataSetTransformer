@@ -90,6 +90,8 @@ public abstract class BaseUrlImporter extends Importer
             HttpsURLConnection scon = (HttpsURLConnection)con;
             print_https_cert(scon);
         }
+        con.setConnectTimeout(20000); // in ms
+        con.setReadTimeout(30000); // in ms
         return con;
     }
 

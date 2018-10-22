@@ -73,11 +73,17 @@ public class PagedUrlImporter extends BaseUrlImporter
             nextPageUrl = "";
             for(int i = 0; i < curRes.length; i++)
             {
-                final String curNext = curRes[i].getDataAtom("Next");
+                String curNext = curRes[i].getDataAtom("Next");
                 if(null != curNext)
                 {
                     if(0 < curNext.length())
                     {
+                        if(curNext.startsWith("//"))
+                        {
+                            // https is missing -> Browsers fix that
+                            // -> so let us do the same
+                            curNext = "https:" + curNext;
+                        }
                         log.debug("Next Atom is : {}", curNext);
                         nextPageUrl = curNext;
                         break;

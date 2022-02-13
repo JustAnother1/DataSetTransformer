@@ -31,6 +31,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -43,6 +45,7 @@ import org.w3c.tidy.Tidy;
  */
 public class HtmlTreeStructure extends TreeStructure
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private Document doc;
     private Vector<String> res;
 
@@ -70,6 +73,7 @@ public class HtmlTreeStructure extends TreeStructure
     {
         if((false == isValid()) || (null == pos) || (true == "".equals(pos)))
         {
+            log.warn("Position is invalid !");
             return new String[0];
         }
 
@@ -117,10 +121,12 @@ public class HtmlTreeStructure extends TreeStructure
     {
         if( (null == path) || (null == nl))
         {
+            log.warn("Path is null !");
             return;
         }
         if(index >= path.length)
         {
+            log.warn("Path is empty !");
             return;
         }
 

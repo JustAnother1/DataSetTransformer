@@ -51,6 +51,7 @@ public class PagedUrlImporter extends BaseUrlImporter
     {
         final Vector<DataSet> res = new Vector<DataSet>();
         String nextPageUrl = getSource();
+        String lastPageUrl = nextPageUrl;
         do
         {
             // Parse the Page
@@ -84,7 +85,14 @@ public class PagedUrlImporter extends BaseUrlImporter
                             // -> so let us do the same
                             curNext = "https:" + curNext;
                         }
+                        if(false == curNext.startsWith("http"))
+                        {
+                            // relative link not absolute -> convert
+                            String host = lastPageUrl.substring(0, lastPageUrl.indexOf('/', 8));
+                            curNext = host + curNext;
+                        }
                         log.debug("Next Atom is : {}", curNext);
+                        lastPageUrl = nextPageUrl;
                         nextPageUrl = curNext;
                         break;
                     }

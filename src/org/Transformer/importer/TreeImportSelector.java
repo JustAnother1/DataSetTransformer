@@ -63,16 +63,20 @@ public class TreeImportSelector extends ImportSelector
             return false;
         }
         final Vector<DataSet> res = new Vector<DataSet>();
-        log.debug("Importing with " + mappingPosition.length + " Mapping Positions.");
+        log.debug("Importing with {} Mapping Positions.", mappingPosition.length);
         for(int i = 0; i < mappingPosition.length; i++)
         {
+            log.debug("Name: {}, Position: {}", mappingName[i], mappingPosition[i]);
             final String[] Val = Tree.getLeafsFor(mappingPosition[i]);
+            log.debug("Val : {}", Val);
             if(null == Val)
             {
+                log.warn("Val : is null !");
                 continue;
             }
             if(1 > Val.length)
             {
+                log.warn("Val : has no entries !");
                 continue;
             }
             log.debug("Found " + Val.length + " Strings.");

@@ -71,7 +71,6 @@ public class PagedUrlImporter extends BaseUrlImporter
             }
             // has more pages ?
             log.debug("Searching for next Page...");
-            nextPageUrl = "";
             for(int i = 0; i < curRes.length; i++)
             {
                 String curNext = curRes[i].getDataAtom("Next");
@@ -88,22 +87,27 @@ public class PagedUrlImporter extends BaseUrlImporter
                         if(false == curNext.startsWith("http"))
                         {
                             // relative link not absolute -> convert
+                            log.debug("extracting host from {}", lastPageUrl);
                             String host = lastPageUrl.substring(0, lastPageUrl.indexOf('/', 8));
                             curNext = host + curNext;
                         }
                         log.debug("Next Atom is : {}", curNext);
                         lastPageUrl = nextPageUrl;
                         nextPageUrl = curNext;
+                        log.debug("lastPageUrl is : {}", lastPageUrl);
+                        log.debug("nextPageUrl is : {}", nextPageUrl);
                         break;
                     }
                     else
                     {
                         log.debug("Next Atom is empty !");
+                        nextPageUrl = "";
                     }
                 }
                 else
                 {
                     log.debug("Entry has no Next Atom !");
+                    nextPageUrl = "";
                 }
             }
         } while(0 < nextPageUrl.length());
